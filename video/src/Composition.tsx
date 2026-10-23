@@ -57,7 +57,7 @@ export const TeksAnimasi: React.FC = () => {
       }}
     >
       <Interactive.Div
-        name="Halo"
+        name="Helo"
         style={{
           fontSize: 200,
           fontWeight: 800,
@@ -75,7 +75,7 @@ export const TeksAnimasi: React.FC = () => {
           }),
         }}
       >
-        Halo!
+        Helo!
       </Interactive.Div>
       <Interactive.Div
         name="Subjudul"
@@ -95,7 +95,7 @@ export const TeksAnimasi: React.FC = () => {
           }),
         }}
       >
-        Selamat datang di
+        Selamat datang ke
       </Interactive.Div>
       <Interactive.Div
         name="Nama proyek"
