@@ -25,3 +25,7 @@ src/        Application source
 tests/      Tests (*.test.ts)
 dist/       Build output (git-ignored)
 ```
+
+## Projek: Sistem Infaq dan Menang Goldbar YAPEIM Sarawak
+
+Lihat folder [`infaq/`](infaq/README.md) — sistem penyertaan kempen (Google Apps Script + Google Sheets).

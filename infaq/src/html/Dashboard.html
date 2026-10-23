@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>/*__GAYA__*/
+body { font-size: 15px; }
+.bar { background: var(--hijau-gelap); color: #fff; padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 0; z-index: 5; }
+.bar .nama-sistem { font-weight: 700; flex: 1; min-width: 180px; }
+.bar .emas { color: var(--emas); }
+.bar button { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.4); border-radius: 8px; padding: 6px 10px; font-size: 13px; cursor: pointer; }
+nav.tab { display: flex; gap: 4px; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--garis); padding: 0 8px; position: sticky; top: 50px; z-index: 4; }
+nav.tab button { border: none; background: none; padding: 14px 12px; font-size: 15px; font-weight: 600; color: var(--teks-lembut); border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap; font-family: inherit; }
+nav.tab button.aktif { color: var(--hijau); border-bottom-color: var(--hijau); }
+.isi { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.statistik { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); border-top: 4px solid var(--garis); }
+.stat .n { font-size: 1.9rem; font-weight: 800; line-height: 1.1; }
+.stat .l { color: var(--teks-lembut); font-size: .88rem; margin-top: 4px; }
+.stat.hijau { border-top-color: var(--hijau); } .stat.oren { border-top-color: var(--oren); } .stat.merah { border-top-color: var(--merah); } .stat.emas { border-top-color: var(--emas); }
+.alat { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.alat input:not([type=checkbox]), .alat select { width: auto; min-width: 140px; flex: 1; min-height: 42px; padding: 8px 12px; font-size: 15px; }
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eef1ee; vertical-align: top; font-size: 14px; }
+th { background: #f7f9f7; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; color: var(--teks-lembut); }
+tbody tr { cursor: pointer; } tbody tr:hover { background: #f6faf7; }
+.mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+.kecil { font-size: 12px; color: var(--teks-lembut); }
+.halaman { display: flex; gap: 8px; justify-content: center; align-items: center; margin: 14px 0; }
+.modal-latar { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 20; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 16px; }
+.modal { background: #fff; border-radius: 14px; max-width: 900px; width: 100%; padding: 20px; position: relative; margin: auto 0; }
+.modal .tutup { position: absolute; right: 12px; top: 12px; background: #eef1ee; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 20px; cursor: pointer; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.resit { background: #f2f4f2; border-radius: 10px; min-height: 240px; display: flex; align-items: center; justify-content: center; overflow: auto; }
+.resit img { max-width: 100%; }
+.resit iframe { width: 100%; height: 520px; border: 0; }
+dl.butiran { display: grid; grid-template-columns: 130px 1fr; gap: 6px 10px; margin: 0; }
+dl.butiran dt { color: var(--teks-lembut); font-size: 13px; } dl.butiran dd { margin: 0; font-weight: 600; word-break: break-word; }
+.tindakan { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.notis { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--teks); color: #fff; padding: 12px 18px; border-radius: 10px; z-index: 30; max-width: 90vw; }
+.log-masuk { max-width: 400px; margin: 40px auto; }
+.kolum-borang label { display: block; font-weight: 600; margin: 12px 0 4px; font-size: 14px; }
+.kolum-borang .grid2 > div { min-width: 0; }
+.pemenang-hasil { background: var(--emas-muda); border: 1px solid var(--emas); border-radius: 10px; padding: 10px 12px; margin: 6px 0; }
+@media (max-width: 720px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .sorok-mudah-alih { display: none; }
+  th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+
+<section id="vLogMasuk" class="log-masuk bekas">
+  <div class="kad">
+    <h2>Log Masuk Pentadbir</h2>
+    <p class="kecil">Infaq dan Menang Goldbar · YAPEIM Sarawak</p>
+    <form id="fLogMasuk" class="kolum-borang">
+      <label for="lmPengguna">Nama pengguna</label>
+      <input type="text" id="lmPengguna" autocomplete="username" autocapitalize="none" required>
+      <label for="lmKata">Kata laluan</label>
+      <input type="password" id="lmKata" autocomplete="current-password" required>
+      <div id="lmRalat" class="kotak-amaran tersembunyi" style="margin-top:12px"></div>
+      <button class="butang butang-utama" id="lmButang">Log Masuk</button>
+    </form>
+  </div>
+</section>
+
+<section id="vTukarKata" class="log-masuk bekas tersembunyi">
+  <div class="kad">
+    <h2>Tukar Kata Laluan</h2>
+    <p class="kecil" id="tkNota">Kata laluan baharu: sekurang-kurangnya 10 aksara, mengandungi huruf dan nombor.</p>
+    <form id="fTukarKata" class="kolum-borang">
+      <label for="tkLama">Kata laluan semasa / sementara</label>
+      <input type="password" id="tkLama" autocomplete="current-password" required>
+      <label for="tkBaru">Kata laluan baharu</label>
+      <input type="password" id="tkBaru" autocomplete="new-password" required>
+      <label for="tkBaru2">Ulang kata laluan baharu</label>
+      <input type="password" id="tkBaru2" autocomplete="new-password" required>
+      <div id="tkRalat" class="kotak-amaran tersembunyi" style="margin-top:12px"></div>
+      <button class="butang butang-utama">Simpan Kata Laluan</button>
+      <button type="button" class="butang butang-garis" style="width:100%;margin-top:8px" id="tkBatal">Batal</button>
+    </form>
+  </div>
+</section>
+
+<section id="vUtama" class="tersembunyi">
+  <div class="bar">
+    <div class="nama-sistem">INFAQ &amp; MENANG <span class="emas">GOLDBAR</span> · Dashboard</div>
+    <span id="barPengguna" class="kecil" style="color:#fff"></span>
+    <button id="bTukarKata">Tukar kata laluan</button>
+    <button id="bLogKeluar">Log keluar</button>
+  </div>
+  <nav class="tab" id="nav">
+    <button data-v="ringkasan" class="aktif">Ringkasan</button>
+    <button data-v="penyertaan">Penyertaan</button>
+    <button data-v="terpantas">Peserta Terpantas</button>
+    <button data-v="cabutan">Cabutan</button>
+    <button data-v="audit">Sejarah Tindakan</button>
+    <button data-v="tetapan" class="utama-sahaja">Tetapan</button>
+    <button data-v="pentadbir" class="utama-sahaja">Pentadbir</button>
+  </nav>
+
+  <div class="isi">
+    <!-- RINGKASAN -->
+    <section data-paparan="ringkasan">
+      <div id="rgKempen" class="kotak-info" style="margin-bottom:12px"></div>
+      <div class="statistik">
+        <div class="stat"><div class="n" id="sJumlah">–</div><div class="l">Jumlah penyertaan</div></div>
+        <div class="stat oren"><div class="n" id="sMenunggu">–</div><div class="l">Menunggu pengesahan</div></div>
+        <div class="stat merah"><div class="n" id="sSemakan">–</div><div class="l">Perlu semakan manual (ditanda)</div></div>
+        <div class="stat hijau"><div class="n" id="sLulus">–</div><div class="l">Penyertaan sah (lulus)</div></div>
+        <div class="stat"><div class="n" id="sDitolak">–</div><div class="l">Ditolak</div></div>
+        <div class="stat"><div class="n" id="sPembetulan">–</div><div class="l">Perlu pembetulan</div></div>
+        <div class="stat emas"><div class="n" id="sLayak">–</div><div class="l">Layak untuk cabutan</div></div>
+      </div>
+      <div class="statistik">
+        <div class="stat"><div class="n" id="sRmDirekod">–</div><div class="l"><strong>Jumlah sumbangan DIREKOD</strong> — dilaporkan peserta, <u>belum disahkan</u> (tidak termasuk yang ditolak)</div></div>
+        <div class="stat hijau"><div class="n" id="sRmDisahkan">–</div><div class="l"><strong>Jumlah sumbangan DISAHKAN</strong> — resit telah diluluskan pentadbir</div></div>
+      </div>
+      <div class="kad">
+        <h3>Semakan integriti data</h3>
+        <p class="kecil">Memeriksa sama ada cap masa, nombor telefon, jumlah atau log audit telah diubah secara manual dalam Google Sheet.</p>
+        <button class="butang butang-garis" id="bIntegriti">Jalankan semakan</button>
+        <div id="hasilIntegriti" style="margin-top:10px"></div>
+      </div>
+    </section>
+
+    <!-- PENYERTAAN -->
+    <section data-paparan="penyertaan" class="tersembunyi">
+      <div class="alat">
+        <input type="search" id="pCarian" placeholder="Cari nama, telefon, ID, tarikh (YYYY-MM-DD) atau no. rujukan">
+        <select id="pStatus">
+          <option value="">Semua status</option>
+          <option>MENUNGGU PENGESAHAN</option><option>PERLU SEMAKAN MANUAL</option><option>LULUS</option>
+          <option>DITOLAK</option><option>PERLU PEMBETULAN</option>
+        </select>
+        <input type="date" id="pDari" title="Diterima dari">
+        <input type="date" id="pHingga" title="Diterima hingga">
+        <select id="pSusun"><option value="baru">Terbaru dahulu</option><option value="awal">Terawal dahulu</option></select>
+      </div>
+      <div class="alat">
+        <label class="semak" style="margin:0"><input type="checkbox" id="pUjian"> <span>Papar data ujian sahaja</span></label>
+        <span style="flex:1"></span>
+        <button class="butang butang-garis butang-kecil" id="bCari">Cari</button>
+        <button class="butang butang-hijau butang-kecil" id="bEksport">⬇ Eksport CSV (Excel)</button>
+      </div>
+      <div id="pJumlah" class="kecil" style="margin-bottom:6px"></div>
+      <table>
+        <thead><tr><th>ID / Diterima</th><th>Nama</th><th class="sorok-mudah-alih">Telefon</th><th>Jumlah</th><th>Status</th><th class="sorok-mudah-alih">Kelayakan</th></tr></thead>
+        <tbody id="pBadan"></tbody>
+      </table>
+      <div class="halaman"><button class="butang butang-garis butang-kecil" id="pSebelum">‹ Sebelum</button><span id="pHalaman"></span><button class="butang butang-garis butang-kecil" id="pSelepas">Seterusnya ›</button></div>
+    </section>
+
+    <!-- TERPANTAS -->
+    <section data-paparan="terpantas" class="tersembunyi">
+      <div class="alat"><label class="semak" style="margin:0"><input type="checkbox" id="tUjian"> <span>Data ujian</span></label>
+        <button class="butang butang-garis butang-kecil" id="bMuatTerpantas">Muat semula</button></div>
+      <div id="tAmaran" class="kotak-info" style="margin-bottom:12px"></div>
+      <table>
+        <thead><tr><th>#</th><th>ID</th><th>Nama</th><th class="sorok-mudah-alih">Telefon</th><th>Diterima (cap masa pelayan)</th><th class="sorok-mudah-alih">Turutan</th></tr></thead>
+        <tbody id="tBadan"></tbody>
+      </table>
+      <p class="kecil">Kedudukan berdasarkan cap masa pelayan semasa borang diterima. Pemutus seri: nombor turutan penerimaan. Hanya penyertaan LULUS & layak dikira. Baris selepas garisan emas ialah calon simpanan.</p>
+    </section>
+
+    <!-- CABUTAN -->
+    <section data-paparan="cabutan" class="tersembunyi">
+      <div class="kad kolum-borang utama-sahaja">
+        <h3>Jalankan Cabutan / Umumkan Keputusan</h3>
+        <div class="grid2">
+          <div><label for="cKaedah">Kaedah</label>
+            <select id="cKaedah"><option value="RAWAK">B. Cabutan bertuah rawak</option><option value="TERPANTAS">A. Peserta terpantas (sah)</option></select></div>
+          <div><label for="cJenis">Jenis</label>
+            <select id="cJenis"><option value="UJIAN">UJIAN (data ujian sahaja, tidak rasmi)</option><option value="RASMI">RASMI</option></select></div>
+          <div><label for="cPemenang">Bilangan pemenang</label><input type="number" id="cPemenang" min="1" max="100" value="1"></div>
+          <div><label for="cSimpanan">Bilangan pemenang simpanan</label><input type="number" id="cSimpanan" min="0" max="100" value="2"></div>
+        </div>
+        <label for="cHadiah">Hadiah</label><input type="text" id="cHadiah" maxlength="100">
+        <div id="cInfo" class="kotak-info" style="margin-top:12px"></div>
+        <button class="butang butang-emas" style="margin-top:12px" id="bCabut">🎲 Jalankan</button>
+        <div id="cHasil" style="margin-top:14px"></div>
+      </div>
+      <div class="kad">
+        <h3>Rekod Cabutan</h3>
+        <p class="kecil">Paparan untuk siaran langsung (tiada telefon/resit, nama ditopeng):
+          <a id="lPaparan" href="#" target="_blank" rel="noopener">Keputusan rasmi</a> ·
+          <a id="lPaparanUjian" href="#" target="_blank" rel="noopener">Keputusan ujian</a></p>
+        <div id="cSenarai"></div>
+      </div>
+    </section>
+
+    <!-- AUDIT -->
+    <section data-paparan="audit" class="tersembunyi">
+      <p class="kecil">300 tindakan terkini. Log ini dirantai dengan tandatangan — sebarang pengubahan akan dikesan oleh "Semakan integriti".</p>
+      <table><thead><tr><th>Masa</th><th>Pentadbir</th><th>Tindakan</th><th>Sasaran</th><th class="sorok-mudah-alih">Butiran</th></tr></thead><tbody id="aBadan"></tbody></table>
+    </section>
+
+    <!-- TETAPAN -->
+    <section data-paparan="tetapan" class="tersembunyi">
+      <form class="kad kolum-borang" id="fTetapan">
+        <h3>Tetapan Kempen</h3>
+        <div class="kotak-amaran kecil">Semua perubahan direkodkan dalam Sejarah Tindakan. Elakkan menukar tarikh atau syarat selepas kempen bermula.</div>
+        <label>Nama kempen</label><input type="text" name="namaKempen" maxlength="150">
+        <div class="grid2">
+          <div><label>Tarikh &amp; masa MULA (waktu Malaysia)</label><input type="datetime-local" name="tarikhMula"></div>
+          <div><label>Tarikh &amp; masa TAMAT (waktu Malaysia)</label><input type="datetime-local" name="tarikhTamat"></div>
+          <div><label>Sumbangan minimum (RM)</label><input type="number" name="minSumbangan" min="0" step="0.01"></div>
+          <div><label>Bilangan peserta terpantas</label><input type="number" name="bilTerpantas" min="0"></div>
+          <div><label>Tandakan semakan jika jumlah ≥ (RM)</label><input type="number" name="hadJumlahSemakan" min="0"></div>
+          <div><label>Had penyertaan setiap telefon</label><input type="number" name="hadPenyertaanSetiapTelefon" min="1"></div>
+        </div>
+        <label>Hadiah</label><input type="text" name="hadiah" maxlength="150">
+        <label>Kaedah sumbangan (satu baris satu pilihan)</label><textarea name="saluran" rows="4"></textarea>
+        <div class="grid2">
+          <div><label>Emel pertanyaan data</label><input type="text" name="emelPertanyaan"></div>
+          <div><label>Telefon pertanyaan</label><input type="text" name="telefonPertanyaan"></div>
+        </div>
+        <label>Tempoh simpanan data</label><input type="text" name="tempohSimpanData">
+        <label class="semak"><input type="checkbox" name="satuPeluangSetiapTelefon"> <span>Satu peluang sahaja bagi setiap nombor telefon (terpantas &amp; cabutan)</span></label>
+        <label class="semak"><input type="checkbox" name="tarikhSumbanganDalamTempoh"> <span>Tarikh sumbangan mesti dalam tempoh kempen</span></label>
+        <label class="semak"><input type="checkbox" name="benarkanUjian"> <span>Benarkan mod ujian (<span class="mono">?ujian=1</span>) — <strong>MATIKAN sebelum kempen dilancarkan</strong></span></label>
+        <button class="butang butang-utama">Simpan Tetapan</button>
+      </form>
+      <div class="kad">
+        <h3>Data Ujian</h3>
+        <p class="kecil">Data palsu ditanda "UJIAN" dan tidak dikira dalam statistik, terpantas atau cabutan rasmi.</p>
+        <div class="tindakan">
+          <button class="butang butang-garis" id="bJanaUjian">Jana 30 penyertaan palsu</button>
+          <button class="butang butang-merah" id="bPadamUjian">Padam semua data ujian</button>
+        </div>
+        <p class="kecil">Borang mod ujian: <a id="lBorangUjian" href="#" target="_blank" rel="noopener"></a></p>
+      </div>
+    </section>
+
+    <!-- PENTADBIR -->
+    <section data-paparan="pentadbir" class="tersembunyi">
+      <div class="kad kolum-borang">
+        <h3>Tambah Pentadbir</h3>
+        <div class="grid2">
+          <div><label>Nama pengguna (huruf kecil)</label><input type="text" id="tpPengguna" autocapitalize="none"></div>
+          <div><label>Nama penuh staf</label><input type="text" id="tpNama"></div>
+        </div>
+        <label>Peranan</label>
+        <select id="tpPeranan"><option value="PENYEMAK">PENYEMAK — semak &amp; lulus resit</option><option value="UTAMA">UTAMA — semua termasuk cabutan &amp; tetapan</option></select>
+        <button class="butang butang-hijau" style="margin-top:12px" id="bTambahPentadbir">Tambah</button>
+      </div>
+      <table><thead><tr><th>Pengguna</th><th>Nama</th><th>Peranan</th><th>Status</th><th>Tindakan</th></tr></thead><tbody id="tpBadan"></tbody></table>
+    </section>
+  </div>
+</section>
+
+<div id="modal" class="modal-latar tersembunyi"><div class="modal" id="modalIsi"></div></div>
+<div id="notis" class="notis tersembunyi"></div>
+
+<script>
+var DATA = /*__DATA__*/null;
+var TOKEN = null, SAYA = null, halaman = 0, entriSemasa = {}, ringkasan = null;
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function rm(n) { return 'RM ' + Number(n || 0).toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function notis(m) { var n = $('notis'); n.textContent = m; n.classList.remove('tersembunyi'); clearTimeout(notis.t); notis.t = setTimeout(function () { n.classList.add('tersembunyi'); }, 4000); }
+function simpan(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) {} }
+function baca(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+function lencana(s, ujian) {
+  var k = { 'MENUNGGU PENGESAHAN': 'l-menunggu', 'PERLU SEMAKAN MANUAL': 'l-semakan', 'LULUS': 'l-lulus', 'DITOLAK': 'l-ditolak', 'PERLU PEMBETULAN': 'l-pembetulan' }[s] || '';
+  return '<span class="lencana ' + k + '">' + esc(s) + '</span>' + (ujian ? ' <span class="lencana l-ujian">UJIAN</span>' : '');
+}
+
+/** Panggil fungsi pelayan dan kendalikan sesi tamat. */
+function panggil(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function (ok, gagal) {
+    var r = google.script.run.withSuccessHandler(function (res) {
+      if (res && res.sesiTamat) { logKeluar(true); return gagal(new Error(res.ralat)); }
+      if (res && res.mestiTukar) { tunjuk('vTukarKata'); return gagal(new Error(res.ralat)); }
+      if (!res || !res.ok) { notis((res && res.ralat) || 'Ralat'); return gagal(new Error(res && res.ralat)); }
+      ok(res.data);
+    }).withFailureHandler(function (e) { notis('Sambungan gagal. Cuba lagi.'); gagal(e); });
+    r[fn].apply(r, [TOKEN].concat(args));
+  });
+}
+
+function tunjuk(v) { ['vLogMasuk', 'vTukarKata', 'vUtama'].forEach(function (x) { $(x).classList.toggle('tersembunyi', x !== v); }); }
+
+function logKeluar(tamat) {
+  if (TOKEN && !tamat) google.script.run.adminLogKeluar(TOKEN);
+  TOKEN = null; SAYA = null; simpan('tk', null); simpan('saya', null);
+  tunjuk('vLogMasuk');
+  if (tamat) { $('lmRalat').textContent = 'Sesi tamat. Sila log masuk semula.'; $('lmRalat').classList.remove('tersembunyi'); }
+}
+
+$('fLogMasuk').onsubmit = function (e) {
+  e.preventDefault();
+  $('lmButang').disabled = true; $('lmRalat').classList.add('tersembunyi');
+  google.script.run.withSuccessHandler(function (res) {
+    $('lmButang').disabled = false; $('lmKata').value = '';
+    if (!res.ok) { $('lmRalat').textContent = res.ralat; $('lmRalat').classList.remove('tersembunyi'); return; }
+    TOKEN = res.token; SAYA = res; simpan('tk', TOKEN); simpan('saya', JSON.stringify(res));
+    if (res.mestiTukar) { $('tkNota').textContent = 'Ini log masuk pertama anda. Sila tukar kata laluan sementara. Minimum 10 aksara dengan huruf dan nombor.'; tunjuk('vTukarKata'); }
+    else masuk();
+  }).withFailureHandler(function () { $('lmButang').disabled = false; $('lmRalat').textContent = 'Sambungan gagal.'; $('lmRalat').classList.remove('tersembunyi'); })
+    .adminLogMasuk($('lmPengguna').value, $('lmKata').value);
+};
+
+$('fTukarKata').onsubmit = function (e) {
+  e.preventDefault();
+  $('tkRalat').classList.add('tersembunyi');
+  if ($('tkBaru').value !== $('tkBaru2').value) { $('tkRalat').textContent = 'Kata laluan baharu tidak sepadan.'; $('tkRalat').classList.remove('tersembunyi'); return; }
+  google.script.run.withSuccessHandler(function (res) {
+    if (!res.ok) { $('tkRalat').textContent = res.ralat; $('tkRalat').classList.remove('tersembunyi'); if (res.sesiTamat) logKeluar(true); return; }
+    $('fTukarKata').reset(); SAYA.mestiTukar = false; simpan('saya', JSON.stringify(SAYA));
+    notis('Kata laluan telah ditukar.'); masuk();
+  }).adminTukarKataLaluan(TOKEN, $('tkLama').value, $('tkBaru').value);
+};
+$('tkBatal').onclick = function () { if (SAYA && !SAYA.mestiTukar) tunjuk('vUtama'); else logKeluar(); };
+$('bTukarKata').onclick = function () { $('tkNota').textContent = 'Kata laluan baharu: sekurang-kurangnya 10 aksara, mengandungi huruf dan nombor.'; tunjuk('vTukarKata'); };
+$('bLogKeluar').onclick = function () { logKeluar(false); };
+
+function masuk() {
+  tunjuk('vUtama');
+  $('barPengguna').textContent = SAYA.nama + ' (' + SAYA.peranan + ')';
+  Array.prototype.forEach.call(document.querySelectorAll('.utama-sahaja'), function (el) { el.classList.toggle('tersembunyi', SAYA.peranan !== 'UTAMA'); });
+  $('lPaparan').href = DATA.url + '?p=paparan';
+  $('lPaparanUjian').href = DATA.url + '?p=paparan&ujian=1';
+  $('lBorangUjian').href = DATA.url + '?ujian=1'; $('lBorangUjian').textContent = DATA.url + '?ujian=1';
+  buka('ringkasan');
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('#nav button'), function (b) { b.onclick = function () { buka(b.dataset.v); }; });
+function buka(v) {
+  Array.prototype.forEach.call(document.querySelectorAll('#nav button'), function (b) { b.classList.toggle('aktif', b.dataset.v === v); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-paparan]'), function (s) { s.classList.toggle('tersembunyi', s.dataset.paparan !== v); });
+  ({ ringkasan: muatRingkasan, penyertaan: function () { halaman = 0; muatSenarai(); }, terpantas: muatTerpantas, cabutan: muatCabutan,
+     audit: muatAudit, tetapan: muatTetapan, pentadbir: muatPentadbir })[v]();
+}
+
+var NAMA_STATUS_KEMPEN = { BELUM_DITETAPKAN: 'Tarikh kempen BELUM DITETAPKAN — borang awam ditutup. Tetapkan di tab Tetapan.', BELUM_MULA: 'Kempen BELUM BERMULA.', DIBUKA: 'Kempen SEDANG BERJALAN — borang dibuka.', TAMAT: 'Kempen TELAH TAMAT — borang ditutup.' };
+
+function muatRingkasan() {
+  return panggil('adminRingkasan').then(function (r) {
+    ringkasan = r;
+    $('rgKempen').innerHTML = '<strong>' + esc(NAMA_STATUS_KEMPEN[r.statusKempen]) + '</strong>' +
+      (r.tetapan.tarikhMula ? '<br>Tempoh: ' + esc(r.tetapan.tarikhMula.replace('T', ' ')) + ' hingga ' + esc(r.tetapan.tarikhTamat.replace('T', ' ')) : '') +
+      '<br><span class="kecil">Masa pelayan: ' + esc(r.sekarang) + (r.tetapan.benarkanUjian ? ' · <strong style="color:var(--biru)">Mod ujian DIHIDUPKAN</strong>' : '') + '</span>';
+    $('sJumlah').textContent = r.jumlah; $('sMenunggu').textContent = r.menunggu; $('sSemakan').textContent = r.semakan;
+    $('sLulus').textContent = r.lulus; $('sDitolak').textContent = r.ditolak; $('sPembetulan').textContent = r.pembetulan;
+    $('sLayak').textContent = r.layak; $('sRmDirekod').textContent = rm(r.rmDirekod); $('sRmDisahkan').textContent = rm(r.rmDisahkan);
+    return r;
+  });
+}
+
+$('bIntegriti').onclick = function () {
+  $('hasilIntegriti').textContent = 'Menyemak…';
+  panggil('adminSemakIntegriti').then(function (r) {
+    $('hasilIntegriti').innerHTML = r.ok ? '<div class="kotak-info">✓ Tiada pengubahan dikesan.</div>'
+      : '<div class="kotak-amaran"><strong>Masalah dikesan:</strong><ul>' + r.masalah.map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul></div>';
+  });
+};
+
+function tapisSemasa() {
+  return { carian: $('pCarian').value, status: $('pStatus').value, dari: $('pDari').value, hingga: $('pHingga').value,
+    susun: $('pSusun').value, ujian: $('pUjian').checked, halaman: halaman };
+}
+function muatSenarai() {
+  $('pBadan').innerHTML = '<tr><td colspan="6">Memuatkan…</td></tr>';
+  panggil('adminSenarai', tapisSemasa()).then(function (r) {
+    entriSemasa = {};
+    $('pJumlah').textContent = r.jumlah + ' penyertaan dijumpai';
+    $('pBadan').innerHTML = r.entri.length ? r.entri.map(function (e) {
+      entriSemasa[e.id] = e;
+      return '<tr data-id="' + esc(e.id) + '"><td><span class="mono">' + esc(e.id) + '</span><div class="kecil">' + esc(e.diterima) + '</div></td>' +
+        '<td>' + esc(e.nama) + (e.bendera ? '<div class="kecil" style="color:var(--merah)">⚑ ' + esc(e.bendera) + '</div>' : '') + (e.integriti ? '' : '<div class="kecil" style="color:var(--merah)">⚠ GAGAL INTEGRITI</div>') + '</td>' +
+        '<td class="sorok-mudah-alih">' + esc(e.telefon) + '</td><td>' + rm(e.jumlah) + '</td><td>' + lencana(e.status, e.ujian) + '</td>' +
+        '<td class="sorok-mudah-alih kecil">' + (e.layak ? '<strong style="color:var(--hijau)">LAYAK</strong>' : esc(e.sebabKelayakan)) + '</td></tr>';
+    }).join('') : '<tr><td colspan="6">Tiada rekod.</td></tr>';
+    var bilHal = Math.max(1, Math.ceil(r.jumlah / r.saiz));
+    $('pHalaman').textContent = 'Halaman ' + (r.halaman + 1) + ' / ' + bilHal;
+    $('pSebelum').disabled = r.halaman <= 0; $('pSelepas').disabled = r.halaman + 1 >= bilHal;
+  });
+}
+$('pBadan').onclick = function (e) { var tr = e.target.closest('tr[data-id]'); if (tr) bukaEntri(tr.dataset.id); };
+$('bCari').onclick = function () { halaman = 0; muatSenarai(); };
+$('pCarian').onkeydown = function (e) { if (e.key === 'Enter') { halaman = 0; muatSenarai(); } };
+['pStatus', 'pSusun', 'pUjian', 'pDari', 'pHingga'].forEach(function (x) { $(x).onchange = function () { halaman = 0; muatSenarai(); }; });
+$('pSebelum').onclick = function () { halaman--; muatSenarai(); };
+$('pSelepas').onclick = function () { halaman++; muatSenarai(); };
+
+function muatTurun(nama, kandungan, jenis) {
+  var b = kandungan instanceof Blob ? kandungan : new Blob([kandungan], { type: jenis });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = nama; document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+$('bEksport').onclick = function () {
+  var t = tapisSemasa(); delete t.halaman;
+  panggil('adminEksportCsv', t).then(function (r) { muatTurun(r.namaFail, r.csv, 'text/csv;charset=utf-8'); notis(r.bil + ' rekod dieksport.'); });
+};
+
+function tutupModal() { $('modal').classList.add('tersembunyi'); $('modalIsi').innerHTML = ''; }
+$('modal').onclick = function (e) { if (e.target === $('modal')) tutupModal(); };
+
+function bukaEntri(id) {
+  var e = entriSemasa[id];
+  $('modalIsi').innerHTML = '<button class="tutup" aria-label="Tutup">×</button>' +
+    '<h3 class="mono">' + esc(e.id) + '</h3><div>' + lencana(e.status, e.ujian) + '</div>' +
+    (e.integriti ? '' : '<div class="kotak-amaran" style="margin-top:8px">⚠ Rekod ini gagal semakan integriti — data asal telah diubah secara manual.</div>') +
+    (e.bendera ? '<div class="kotak-amaran" style="margin-top:8px"><strong>Ditanda untuk semakan manual:</strong> ' + esc(e.bendera) + '</div>' : '') +
+    '<div class="grid2" style="margin-top:14px"><div><dl class="butiran">' +
+    '<dt>Diterima</dt><dd>' + esc(e.diterima) + ' <span class="kecil">(turutan #' + e.turutan + ')</span></dd>' +
+    '<dt>Nama</dt><dd>' + esc(e.nama) + '</dd><dt>Telefon</dt><dd>' + esc(e.telefon) + '</dd>' +
+    '<dt>Jumlah</dt><dd>' + rm(e.jumlah) + '</dd><dt>Tarikh sumbangan</dt><dd>' + esc(e.tarikh) + '</dd>' +
+    '<dt>Kaedah</dt><dd>' + esc(e.saluran) + '</dd><dt>No. rujukan</dt><dd>' + esc(e.rujukan || '-') + '</dd>' +
+    '<dt>Kelayakan</dt><dd>' + (e.layak ? 'LAYAK' : esc(e.sebabKelayakan)) + '</dd>' +
+    '<dt>Catatan</dt><dd>' + esc(e.catatan || '-') + '</dd><dt>Disemak</dt><dd>' + esc(e.oleh ? e.oleh + ' · ' + e.pada : '-') + '</dd></dl>' +
+    '<div class="kotak-info kecil" style="margin-top:12px">Semak: nama &amp; jumlah pada resit sepadan, tarikh dalam tempoh, penerima ialah akaun rasmi YAPEIM, dan resit tidak kelihatan diubah. Jika ragu, sahkan dengan penyata bank.</div>' +
+    '<label class="tajuk" for="mCatatan">Catatan / sebab (wajib untuk Tolak &amp; Pembetulan)</label><textarea id="mCatatan" rows="2" maxlength="500"></textarea>' +
+    '<div class="tindakan"><button class="butang butang-hijau" data-s="LULUS">✓ Luluskan</button>' +
+    '<button class="butang butang-merah" data-s="DITOLAK">✗ Tolak</button>' +
+    '<button class="butang butang-oren" data-s="PERLU PEMBETULAN">✎ Minta Pembetulan</button></div></div>' +
+    '<div><div class="resit" id="mResit">' + (e.adaResit ? '<button class="butang butang-garis" id="mLihat">🔒 Lihat resit</button>' : '<span class="kecil">Tiada fail (data ujian)</span>') + '</div>' +
+    '<div id="mResitAlat" class="kecil" style="margin-top:6px"></div></div></div>';
+  $('modal').classList.remove('tersembunyi');
+  $('modalIsi').querySelector('.tutup').onclick = tutupModal;
+  if (e.adaResit) $('mLihat').onclick = function () { lihatResit(e.id); };
+  Array.prototype.forEach.call($('modalIsi').querySelectorAll('[data-s]'), function (b) {
+    b.onclick = function () {
+      var s = b.dataset.s, c = $('mCatatan').value.trim();
+      if (s !== 'LULUS' && c.length < 3) { notis('Sila tulis sebab dalam catatan.'); $('mCatatan').focus(); return; }
+      if (!confirm('Tukar status ' + e.id + ' kepada ' + s + '?')) return;
+      b.disabled = true;
+      panggil('adminTukarStatus', e.id, s, c).then(function () { notis('Status dikemas kini.'); tutupModal(); muatSenarai(); }, function () { b.disabled = false; });
+    };
+  });
+}
+
+function lihatResit(id) {
+  $('mResit').innerHTML = '<span class="kecil">Memuatkan resit…</span>';
+  panggil('adminLihatResit', id).then(function (r) {
+    var bait = atob(r.data), arr = new Uint8Array(bait.length);
+    for (var i = 0; i < bait.length; i++) arr[i] = bait.charCodeAt(i);
+    var blob = new Blob([arr], { type: r.mime });
+    var url = URL.createObjectURL(blob);
+    $('mResit').innerHTML = r.mime === 'application/pdf' ? '<iframe src="' + url + '" title="Resit PDF"></iframe>' : '<img alt="Resit" src="' + url + '">';
+    $('mResitAlat').innerHTML = '';
+    var a = document.createElement('a'); a.href = url; a.download = r.nama; a.textContent = '⬇ Muat turun resit';
+    $('mResitAlat').appendChild(a);
+  });
+}
+
+function muatTerpantas() {
+  var ujian = $('tUjian').checked;
+  $('tBadan').innerHTML = '<tr><td colspan="6">Memuatkan…</td></tr>';
+  panggil('adminTerpantas', ujian).then(function (r) {
+    var amaran = [];
+    if (!ujian && r.statusKempen !== 'TAMAT') amaran.push('Kempen belum tamat — senarai ini SEMENTARA dan bukan keputusan rasmi.');
+    if (r.belumSelesai) amaran.push(r.belumSelesai + ' penyertaan belum disemak. Kedudukan boleh berubah.');
+    $('tAmaran').innerHTML = esc(amaran.join(' ') || 'Kempen tamat dan semua penyertaan telah disemak. Senarai ini boleh diumumkan melalui tab Cabutan (kaedah Peserta Terpantas, RASMI).');
+    $('tBadan').innerHTML = r.senarai.length ? r.senarai.map(function (e) {
+      return '<tr' + (e.kedudukan === r.bilTerpantas ? ' style="border-bottom:3px solid var(--emas)"' : '') + (e.kedudukan > r.bilTerpantas ? ' class="kecil"' : '') + '><td><strong>' + e.kedudukan + '</strong></td><td class="mono">' + esc(e.id) + '</td><td>' + esc(e.nama) +
+        '</td><td class="sorok-mudah-alih">' + esc(e.telefon) + '</td><td class="mono">' + esc(e.diterima) + '</td><td class="sorok-mudah-alih">' + e.turutan + '</td></tr>';
+    }).join('') : '<tr><td colspan="6">Belum ada penyertaan layak.</td></tr>';
+  });
+}
+$('bMuatTerpantas').onclick = muatTerpantas; $('tUjian').onchange = muatTerpantas;
+
+function kemasInfoCabutan() {
+  if (!ringkasan) return;
+  var ujian = $('cJenis').value === 'UJIAN';
+  var n = ujian ? ringkasan.layakUjian : ringkasan.layak;
+  var t = 'Jumlah peserta layak (' + (ujian ? 'data ujian' : 'rasmi') + '): <strong>' + n + '</strong>.';
+  if (!ujian) {
+    if (ringkasan.statusKempen !== 'TAMAT') t += '<br>⚠ Cabutan rasmi hanya dibenarkan selepas kempen tamat.';
+    if (ringkasan.menunggu + ringkasan.semakan > 0) t += '<br>⚠ Masih ada ' + (ringkasan.menunggu + ringkasan.semakan) + ' penyertaan belum disemak.';
+  }
+  $('cInfo').innerHTML = t;
+}
+['cJenis', 'cKaedah'].forEach(function (x) { $(x).onchange = kemasInfoCabutan; });
+
+function muatCabutan() {
+  muatRingkasan().then(function (r) { if (!$('cHadiah').value) $('cHadiah').value = r.tetapan.hadiah; kemasInfoCabutan(); });
+  panggil('adminSenaraiCabutan').then(function (senarai) {
+    $('cSenarai').innerHTML = senarai.length ? senarai.map(function (c) {
+      return '<div class="kad" style="border:1px solid var(--garis)"><div><strong class="mono">' + esc(c.id) + '</strong> ' +
+        '<span class="lencana ' + (c.jenis === 'RASMI' ? 'l-lulus' : 'l-ujian') + '">' + esc(c.jenis) + '</span> ' +
+        '<span class="lencana ' + (c.status === 'AKTIF' ? 'l-menunggu' : 'l-ditolak') + '">' + esc(c.status) + '</span></div>' +
+        '<div class="kecil">' + esc(c.kaedah === 'RAWAK' ? 'Cabutan bertuah' : 'Peserta terpantas') + ' · ' + esc(c.masa) + ' · oleh ' + esc(c.oleh) + ' · ' + c.bilLayak + ' layak · Hadiah: ' + esc(c.hadiah) + '</div>' +
+        '<div style="margin-top:6px">Pemenang: ' + c.pemenang.map(function (p) { return '<span class="mono">' + esc(p.id) + '</span> (' + esc(p.nama) + ')'; }).join(', ') + '</div>' +
+        (c.simpanan.length ? '<div class="kecil">Simpanan: ' + c.simpanan.map(function (p) { return esc(p.id); }).join(', ') + '</div>' : '') +
+        '<div class="kecil mono" style="word-break:break-all">Hash senarai: ' + esc(c.hashSenarai) + (c.benih !== '-' ? ' · Benih: ' + esc(c.benih) : '') + '</div>' +
+        (c.catatan ? '<div class="kecil">' + esc(c.catatan) + '</div>' : '') +
+        (c.status === 'AKTIF' && SAYA.peranan === 'UTAMA' ? '<button class="butang butang-garis butang-kecil" style="margin-top:8px" data-batal="' + esc(c.id) + '">Batalkan (dengan sebab)</button>' : '') + '</div>';
+    }).join('') : '<p class="kecil">Belum ada cabutan.</p>';
+    Array.prototype.forEach.call($('cSenarai').querySelectorAll('[data-batal]'), function (b) {
+      b.onclick = function () {
+        var sebab = prompt('Sebab pembatalan ' + b.dataset.batal + ' (akan direkod dalam audit):');
+        if (!sebab) return;
+        panggil('adminBatalCabutan', b.dataset.batal, sebab).then(function () { notis('Cabutan dibatalkan dan direkod.'); muatCabutan(); });
+      };
+    });
+  });
+}
+
+$('bCabut').onclick = function () {
+  var o = { kaedah: $('cKaedah').value, ujian: $('cJenis').value === 'UJIAN', bilPemenang: +$('cPemenang').value, bilSimpanan: +$('cSimpanan').value, hadiah: $('cHadiah').value };
+  var n = o.ujian ? ringkasan.layakUjian : ringkasan.layak;
+  if (!confirm((o.ujian ? 'CABUTAN UJIAN' : '⚠ CABUTAN RASMI — keputusan akan direkod secara kekal') + '\n\nKaedah: ' + (o.kaedah === 'RAWAK' ? 'Cabutan bertuah rawak' : 'Peserta terpantas') +
+    '\nPeserta layak: ' + n + '\nPemenang: ' + o.bilPemenang + ', Simpanan: ' + o.bilSimpanan + '\n\nTeruskan?')) return;
+  $('bCabut').disabled = true;
+  panggil('adminJalankanCabutan', o).then(function (c) {
+    $('bCabut').disabled = false;
+    $('cHasil').innerHTML = '<div class="kotak-info"><strong>Keputusan direkod: ' + esc(c.id) + '</strong> — buka <a href="' + esc(DATA.url + '?p=paparan' + (o.ujian ? '&ujian=1' : '')) + '" target="_blank" rel="noopener">paparan siaran langsung</a> untuk mendedahkan pemenang satu per satu.</div>' +
+      c.pemenang.map(function (p) { return '<div class="pemenang-hasil">🏆 #' + p.kedudukan + ' <strong class="mono">' + esc(p.id) + '</strong> ' + esc(p.nama) + '</div>'; }).join('') +
+      c.simpanan.map(function (p) { return '<div class="pemenang-hasil" style="background:#fff">Simpanan #' + p.kedudukan + ' <span class="mono">' + esc(p.id) + '</span> ' + esc(p.nama) + '</div>'; }).join('');
+    muatCabutan();
+  }, function () { $('bCabut').disabled = false; });
+};
+
+function muatAudit() {
+  $('aBadan').innerHTML = '<tr><td colspan="5">Memuatkan…</td></tr>';
+  panggil('adminAudit').then(function (r) {
+    $('aBadan').innerHTML = r.map(function (a) {
+      return '<tr><td class="kecil">' + esc(a.masa) + '</td><td>' + esc(a.pentadbir) + '</td><td>' + esc(a.tindakan) + '</td><td class="mono">' + esc(a.sasaran) + '</td><td class="sorok-mudah-alih kecil">' + esc(a.butiran) + '</td></tr>';
+    }).join('');
+  });
+}
+
+function muatTetapan() {
+  panggil('adminRingkasan').then(function (r) {
+    var f = $('fTetapan'), t = r.tetapan;
+    Object.keys(t).forEach(function (k) {
+      var el = f.elements[k]; if (!el) return;
+      if (el.type === 'checkbox') el.checked = !!t[k];
+      else if (k === 'saluran') el.value = t[k].join('\n');
+      else el.value = t[k];
+    });
+  });
+}
+$('fTetapan').onsubmit = function (e) {
+  e.preventDefault();
+  var f = this, t = {};
+  Array.prototype.forEach.call(f.elements, function (el) {
+    if (!el.name) return;
+    t[el.name] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  t.saluran = t.saluran.split('\n');
+  panggil('adminSimpanTetapan', t).then(function () { notis('Tetapan disimpan.'); muatTetapan(); });
+};
+$('bJanaUjian').onclick = function () { panggil('adminJanaDataUjian', 30).then(function (n) { notis(n + ' penyertaan ujian dijana.'); }); };
+$('bPadamUjian').onclick = function () { if (confirm('Padam SEMUA data ujian (termasuk fail resit ujian)?')) panggil('adminPadamDataUjian').then(function (n) { notis(n + ' rekod ujian dipadam.'); }); };
+
+function paparKata(r) {
+  $('modalIsi').innerHTML = '<button class="tutup">×</button><h3>Kata laluan sementara</h3><p>Berikan maklumat ini kepada staf secara peribadi (bukan dalam kumpulan WhatsApp). Ia hanya dipaparkan SEKALI.</p>' +
+    '<dl class="butiran"><dt>Nama pengguna</dt><dd class="mono">' + esc(r.pengguna) + '</dd><dt>Kata laluan</dt><dd class="mono" style="font-size:1.2rem">' + esc(r.kataSementara) + '</dd>' +
+    '<dt>Pautan</dt><dd class="mono" style="font-size:12px">' + esc(DATA.url + '?p=admin') + '</dd></dl>';
+  $('modal').classList.remove('tersembunyi');
+  $('modalIsi').querySelector('.tutup').onclick = tutupModal;
+}
+function muatPentadbir() {
+  panggil('adminSenaraiPentadbir').then(function (r) {
+    $('tpBadan').innerHTML = r.map(function (p) {
+      return '<tr><td class="mono">' + esc(p.pengguna) + '</td><td>' + esc(p.nama) + '</td><td>' + esc(p.peranan) + '</td><td>' + (p.aktif ? 'Aktif' : 'Tidak aktif') + (p.mestiTukar ? ' <span class="kecil">(belum tukar kata laluan)</span>' : '') + '</td>' +
+        '<td><button class="butang butang-garis butang-kecil" data-reset="' + esc(p.pengguna) + '">Set semula kata laluan</button> ' +
+        (p.pengguna !== SAYA.pengguna ? '<button class="butang butang-garis butang-kecil" data-aktif="' + esc(p.pengguna) + '" data-nilai="' + (!p.aktif) + '">' + (p.aktif ? 'Nyahaktif' : 'Aktifkan') + '</button>' : '') + '</td></tr>';
+    }).join('');
+    Array.prototype.forEach.call($('tpBadan').querySelectorAll('[data-reset]'), function (b) {
+      b.onclick = function () { if (confirm('Set semula kata laluan ' + b.dataset.reset + '?')) panggil('adminSetSemulaKata', b.dataset.reset).then(function (x) { paparKata(x); muatPentadbir(); }); };
+    });
+    Array.prototype.forEach.call($('tpBadan').querySelectorAll('[data-aktif]'), function (b) {
+      b.onclick = function () { panggil('adminTukarAktif', b.dataset.aktif, b.dataset.nilai === 'true').then(muatPentadbir); };
+    });
+  });
+}
+$('bTambahPentadbir').onclick = function () {
+  panggil('adminTambahPentadbir', { pengguna: $('tpPengguna').value, nama: $('tpNama').value, peranan: $('tpPeranan').value })
+    .then(function (r) { $('tpPengguna').value = ''; $('tpNama').value = ''; paparKata(r); muatPentadbir(); });
+};
+
+(function () {
+  TOKEN = baca('tk');
+  try { SAYA = JSON.parse(baca('saya') || 'null'); } catch (e) { SAYA = null; }
+  if (TOKEN && SAYA && !SAYA.mestiTukar) masuk(); else if (TOKEN && SAYA) tunjuk('vTukarKata');
+})();
+</script>
+</body>
+</html>

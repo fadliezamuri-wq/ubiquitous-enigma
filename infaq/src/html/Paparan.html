@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>/*__GAYA__*/
+body { background: radial-gradient(ellipse at top, #0f7a4e 0%, #073d27 60%, #04261a 100%); color: #fff; min-height: 100vh; }
+.pentas { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; text-align: center; }
+.pentas h1 { font-size: clamp(1.6rem, 4vw, 3rem); margin: 12px 0 0; }
+.pentas h1 .emas { color: var(--emas); }
+.sub { opacity: .85; font-size: clamp(1rem, 2vw, 1.3rem); margin-bottom: 20px; }
+.gulung { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: clamp(2rem, 7vw, 5rem); font-weight: 800; color: var(--emas);
+  background: rgba(0,0,0,.25); border: 3px solid var(--emas); border-radius: 20px; padding: 18px; margin: 18px auto; max-width: 760px; min-height: 1.6em; }
+.senarai { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 18px; text-align: left; }
+.pemenang { background: rgba(255,255,255,.08); border: 1px solid rgba(201,162,39,.6); border-radius: 14px; padding: 14px 16px; animation: muncul .6s ease-out; }
+.pemenang .no { color: var(--emas); font-weight: 800; font-size: .95rem; }
+.pemenang .idp { font-family: ui-monospace, Menlo, monospace; font-size: 1.25rem; font-weight: 700; }
+.pemenang .nm { opacity: .9; }
+.simpanan { border-color: rgba(255,255,255,.25); }
+@keyframes muncul { from { transform: scale(.85); opacity: 0; } to { transform: none; opacity: 1; } }
+.kawalan { margin-top: 24px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.audit { margin-top: 28px; font-size: .78rem; opacity: .7; word-break: break-all; }
+.tab { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 14px 0; }
+.tab button { background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+.tab button.aktif { background: var(--emas); color: #1d1600; border-color: var(--emas); }
+</style>
+</head>
+<body>
+<div class="pentas">
+  <!--__LOGO__-->
+  <div id="labelUjian" class="kotak-ujian tersembunyi" style="margin:12px auto;max-width:600px">PAPARAN UJIAN — BUKAN KEPUTUSAN RASMI</div>
+  <h1>INFAQ DAN MENANG <span class="emas">GOLDBAR</span></h1>
+  <div class="sub">YAPEIM Sarawak · <span id="tajukKaedah">Keputusan</span></div>
+  <div class="tab" id="tab"></div>
+  <div id="kosong" class="tersembunyi" style="margin-top:40px;font-size:1.3rem">Keputusan belum diumumkan.</div>
+  <div id="maklumat" class="sub"></div>
+  <div class="gulung" id="gulung">— — —</div>
+  <div class="kawalan">
+    <button class="butang butang-emas" id="dedah">▶ Dedahkan pemenang seterusnya</button>
+    <button class="butang butang-garis" id="dedahSemua">Dedahkan semua</button>
+  </div>
+  <h2 id="tajukPemenang" class="tersembunyi" style="margin-top:28px;color:var(--emas)">Pemenang</h2>
+  <div class="senarai" id="senaraiPemenang"></div>
+  <h3 id="tajukSimpanan" class="tersembunyi" style="margin-top:24px">Pemenang Simpanan</h3>
+  <div class="senarai" id="senaraiSimpanan"></div>
+  <div class="audit" id="audit"></div>
+</div>
+<script>
+var DATA = /*__DATA__*/null;
+var cabutan = [], semasa = null, didedah = 0, giliran = [], sedangGulung = false;
+function $(id) { return document.getElementById(id); }
+if (DATA.ujian) $('labelUjian').classList.remove('tersembunyi');
+
+google.script.run.withSuccessHandler(function (res) {
+  if (!res || !res.ok || !res.cabutan.length) { $('kosong').classList.remove('tersembunyi'); sorok(); return; }
+  cabutan = res.cabutan;
+  cabutan.forEach(function (c, i) {
+    var b = document.createElement('button');
+    b.className = 'butang butang-kecil';
+    b.textContent = c.kaedah === 'RAWAK' ? 'Cabutan Bertuah' : 'Peserta Terpantas';
+    b.onclick = function () { pilih(i); };
+    $('tab').appendChild(b);
+  });
+  pilih(0);
+}).withFailureHandler(function () { $('kosong').textContent = 'Keputusan tidak dapat dimuatkan.'; $('kosong').classList.remove('tersembunyi'); sorok(); })
+  .paparanKeputusan(!!DATA.ujian);
+
+function sorok() { ['gulung', 'dedah', 'dedahSemua'].forEach(function (x) { $(x).classList.add('tersembunyi'); }); }
+
+function pilih(i) {
+  semasa = cabutan[i];
+  Array.prototype.forEach.call($('tab').children, function (b, j) { b.classList.toggle('aktif', i === j); });
+  $('tajukKaedah').textContent = semasa.kaedah === 'RAWAK' ? 'Cabutan Bertuah' : 'Peserta Terpantas';
+  $('maklumat').textContent = (semasa.hadiah ? 'Hadiah: ' + semasa.hadiah + ' · ' : '') + semasa.bilLayak + ' penyertaan layak · ' + semasa.masa;
+  $('audit').textContent = 'ID Cabutan: ' + semasa.id + ' · Hash senarai layak: ' + semasa.hashSenarai + (semasa.benih !== '-' ? ' · Benih: ' + semasa.benih : '');
+  $('senaraiPemenang').innerHTML = ''; $('senaraiSimpanan').innerHTML = '';
+  $('tajukPemenang').classList.add('tersembunyi'); $('tajukSimpanan').classList.add('tersembunyi');
+  giliran = semasa.pemenang.map(function (p) { return { p: p, simpanan: false }; })
+    .concat(semasa.simpanan.map(function (p) { return { p: p, simpanan: true }; }));
+  didedah = 0;
+  $('gulung').textContent = '— — —';
+  $('dedah').disabled = false; $('dedahSemua').disabled = false;
+  $('dedah').classList.remove('tersembunyi'); $('dedahSemua').classList.remove('tersembunyi'); $('gulung').classList.remove('tersembunyi');
+}
+
+function kad(item) {
+  var d = document.createElement('div');
+  d.className = 'pemenang' + (item.simpanan ? ' simpanan' : '');
+  var no = document.createElement('div'); no.className = 'no';
+  no.textContent = (item.simpanan ? 'Simpanan ' : (semasa.kaedah === 'TERPANTAS' ? 'Kedudukan ' : 'Pemenang ')) + '#' + item.p.kedudukan;
+  var idp = document.createElement('div'); idp.className = 'idp'; idp.textContent = item.p.id;
+  var nm = document.createElement('div'); nm.className = 'nm'; nm.textContent = item.p.nama;
+  d.appendChild(no); d.appendChild(idp); d.appendChild(nm);
+  (item.simpanan ? $('senaraiSimpanan') : $('senaraiPemenang')).appendChild(d);
+  $(item.simpanan ? 'tajukSimpanan' : 'tajukPemenang').classList.remove('tersembunyi');
+}
+
+function dedah(segera) {
+  if (sedangGulung || didedah >= giliran.length) return;
+  var item = giliran[didedah++];
+  if (didedah >= giliran.length) { $('dedah').disabled = true; $('dedahSemua').disabled = true; }
+  if (segera || semasa.kaedah === 'TERPANTAS') { $('gulung').textContent = item.p.id; kad(item); return; }
+  sedangGulung = true;
+  var awalan = item.p.id.split('-')[0];
+  var mula = Date.now();
+  function rawak(n, aksara) { var s = ''; while (s.length < n) s += aksara.charAt(Math.floor(Math.random() * aksara.length)); return s; }
+  (function langkah() {
+    var t = Date.now() - mula;
+    if (t < 3000) {
+      // ID rawak semata-mata untuk kesan visual — keputusan sebenar telah ditetapkan & direkod oleh pelayan
+      $('gulung').textContent = awalan + '-' + rawak(5, '0123456789') + '-' + rawak(4, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789');
+      setTimeout(langkah, 40 + t / 30);
+    } else {
+      $('gulung').textContent = item.p.id;
+      kad(item);
+      sedangGulung = false;
+    }
+  })();
+}
+$('dedah').onclick = function () { dedah(false); };
+$('dedahSemua').onclick = function () { while (didedah < giliran.length) dedah(true); };
+document.addEventListener('keydown', function (e) { if (e.code === 'Space' || e.code === 'ArrowRight') { e.preventDefault(); dedah(false); } });
+</script>
+</body>
+</html>

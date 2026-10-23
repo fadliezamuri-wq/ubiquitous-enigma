@@ -1,0 +1,18 @@
+{
+  "name": "infaq-goldbar-yapeim-sarawak",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistem Infaq dan Menang Goldbar YAPEIM Sarawak (Google Apps Script + Google Sheets)",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node scripts/build.js && node --test tests/*.test.js",
+    "qr": "node scripts/qr.js",
+    "poster": "node scripts/poster.js",
+    "sahkan-cabutan": "node scripts/sahkan-cabutan.js"
+  },
+  "devDependencies": {
+    "jsqr": "^1.4.0",
+    "pngjs": "^7.0.0",
+    "qrcode": "^1.5.4"
+  }
+}

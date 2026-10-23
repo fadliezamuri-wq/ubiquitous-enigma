@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>/*__GAYA__*/ .kad h2 { font-size: 1.15rem; color: var(--hijau); margin-top: 1.2em; } .kad li { margin-bottom: 6px; }</style>
+</head>
+<body>
+<header class="kepala">
+  <!--__LOGO__-->
+  <h1>Notis Privasi &amp; Syarat Kempen</h1>
+  <p id="namaKempen"></p>
+</header>
+<main class="bekas">
+  <div class="kotak-amaran" style="margin-bottom:16px;font-size:.9rem"><strong>DRAF</strong> — Kandungan ini perlu disemak dan diluluskan oleh pihak pengurusan / penasihat undang-undang YAPEIM sebelum kempen dilancarkan.</div>
+  <article class="kad">
+    <h2 style="margin-top:0">A. Notis Privasi (Akta Perlindungan Data Peribadi 2010)</h2>
+    <ol>
+      <li><strong>Data yang dikumpul:</strong> nama penuh, nombor telefon, jumlah, tarikh dan kaedah sumbangan, nombor rujukan transaksi (jika diberi) serta salinan resit sumbangan.</li>
+      <li><strong>Tujuan:</strong> mengesahkan sumbangan, menentukan kelayakan dan pemenang kempen, menghubungi pemenang, serta rekod dan laporan dalaman YAPEIM Sarawak.</li>
+      <li><strong>Pendedahan:</strong> data anda tidak akan dijual atau didedahkan kepada pihak ketiga. Hanya pegawai YAPEIM yang diberi kuasa boleh melihat data dan resit. Semasa pengumuman pemenang, hanya ID penyertaan dan nama yang ditopeng sebahagiannya dipaparkan.</li>
+      <li><strong>Penyimpanan:</strong> data disimpan dalam akaun Google rasmi organisasi yang dilindungi, dan akan disimpan selama <span id="tempoh"></span>, kemudian dipadam atau diarkibkan mengikut dasar organisasi.</li>
+      <li><strong>Hak anda:</strong> anda boleh meminta akses, pembetulan atau penarikan balik data anda. Penarikan balik sebelum cabutan akan menyebabkan penyertaan tidak lagi layak.</li>
+      <li><strong>Pertanyaan berkaitan data:</strong> <span id="hubungi"></span></li>
+    </ol>
+
+    <h2>B. Syarat Kempen</h2>
+    <ol>
+      <li>Kempen terbuka kepada orang awam yang membuat sumbangan infaq kepada YAPEIM Sarawak dalam tempoh kempen: <strong id="tempohKempen"></strong>.</li>
+      <li id="syaratMin"></li>
+      <li>Setiap penyertaan mesti disertakan resit sumbangan yang sah. Semua resit akan disemak oleh pegawai YAPEIM. Penyertaan hanya layak selepas resit disahkan (status LULUS).</li>
+      <li>Penyertaan dengan maklumat palsu, resit yang diubah, resit berulang atau tidak dapat disahkan akan ditolak.</li>
+      <li id="syaratSatu"></li>
+      <li><strong>Peserta terpantas:</strong> kedudukan ditentukan oleh cap masa pelayan sistem semasa borang diterima (bukan tarikh yang diisi oleh peserta). Jika dua penyertaan mempunyai cap masa yang sama sehingga milisaat, penyertaan yang diproses dahulu oleh sistem (nombor turutan lebih kecil) diberi kedudukan lebih awal. Hanya penyertaan yang disahkan layak diambil kira.</li>
+      <li><strong>Cabutan bertuah:</strong> dibuat secara rawak oleh sistem selepas tempoh kempen tamat dan semua resit telah disemak, daripada senarai penyertaan yang layak sahaja. Setiap cabutan direkodkan bersama senarai peserta layak, nilai benih rawak dan pemenang supaya ia boleh diaudit.</li>
+      <li>Pemenang simpanan akan dipilih sekiranya pemenang utama tidak dapat dihubungi atau tidak layak.</li>
+      <li>Pemenang akan dihubungi melalui nombor telefon yang didaftarkan. YAPEIM tidak akan meminta sebarang bayaran untuk menuntut hadiah.</li>
+      <li>Keputusan YAPEIM Sarawak adalah muktamad. YAPEIM berhak meminda syarat dengan notis.</li>
+    </ol>
+  </article>
+  <p style="text-align:center"><a id="kembali" href="#" class="butang butang-garis">← Kembali ke borang</a></p>
+</main>
+<script>
+var DATA = /*__DATA__*/null;
+(function () {
+  var t = DATA.tetapan;
+  function teksMasa(s) {
+    var b = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/.exec(s || '');
+    return m ? (+m[3]) + ' ' + b[+m[2] - 1] + ' ' + m[1] + (m[4] ? ', ' + m[4] + ':' + m[5] : '') : 'akan diumumkan';
+  }
+  document.getElementById('namaKempen').textContent = t.namaKempen;
+  document.getElementById('tempoh').textContent = t.tempohSimpanData || 'tempoh yang diluluskan organisasi';
+  var h = [];
+  if (t.emelPertanyaan) h.push('emel ' + t.emelPertanyaan);
+  if (t.telefonPertanyaan) h.push('telefon ' + t.telefonPertanyaan);
+  document.getElementById('hubungi').textContent = h.length ? 'Hubungi YAPEIM Sarawak melalui ' + h.join(' atau ') + '.' : 'Hubungi pejabat YAPEIM Sarawak.';
+  document.getElementById('tempohKempen').textContent = teksMasa(t.tarikhMula) + ' hingga ' + teksMasa(t.tarikhTamat) + ' (waktu Malaysia)';
+  document.getElementById('syaratMin').textContent = 'Sumbangan minimum bagi setiap penyertaan ialah RM ' + Number(t.minSumbangan || 0).toFixed(2) + '.';
+  document.getElementById('syaratSatu').textContent = t.satuPeluangSetiapTelefon
+    ? 'Setiap nombor telefon hanya dikira SEKALI dalam senarai peserta terpantas dan cabutan bertuah (penyertaan layak yang terawal digunakan).'
+    : 'Setiap penyertaan yang layak dikira sebagai satu peluang.';
+  document.getElementById('kembali').href = DATA.url;
+})();
+</script>
+</body>
+</html>

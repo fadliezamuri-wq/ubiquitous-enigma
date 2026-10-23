@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>/*__GAYA__*/</style>
+</head>
+<body>
+<header class="kepala">
+  <!--__LOGO__-->
+  <h1>INFAQ DAN MENANG <span class="emas">GOLDBAR</span></h1>
+  <p>YAPEIM Sarawak</p>
+</header>
+
+<main class="bekas" style="margin-top:-16px">
+  <div id="kotakUjian" class="kotak-ujian tersembunyi" style="margin-bottom:12px">MOD UJIAN — penyertaan ini tidak dikira untuk kempen sebenar</div>
+
+  <section id="tutup" class="kad tersembunyi">
+    <h2 id="tutupTajuk">Kempen belum dibuka</h2>
+    <p id="tutupTeks"></p>
+  </section>
+
+  <form id="borang" class="kad tersembunyi" novalidate autocomplete="on">
+    <div class="kotak-info" id="info">Isi borang ini selepas anda membuat sumbangan. Sediakan gambar atau PDF resit sumbangan anda.</div>
+
+    <div class="medan" data-medan="nama">
+      <label class="tajuk" for="nama">Nama penuh <span class="wajib">*</span></label>
+      <input type="text" id="nama" name="nama" autocomplete="name" maxlength="100" required>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div class="medan" data-medan="telefon">
+      <label class="tajuk" for="telefon">Nombor telefon <span class="wajib">*</span></label>
+      <input type="tel" id="telefon" name="telefon" autocomplete="tel" inputmode="tel" placeholder="cth: 012-3456789" maxlength="16" required>
+      <div class="bantuan">Kami akan menghubungi nombor ini jika anda menang.</div>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div class="medan" data-medan="jumlah">
+      <label class="tajuk" for="jumlah">Jumlah sumbangan <span class="wajib">*</span></label>
+      <div class="awalan"><span>RM</span><input type="text" id="jumlah" name="jumlah" inputmode="decimal" placeholder="0.00" maxlength="12" required></div>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div class="medan" data-medan="tarikh">
+      <label class="tajuk" for="tarikh">Tarikh sumbangan <span class="wajib">*</span></label>
+      <input type="date" id="tarikh" name="tarikh" required>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div class="medan" data-medan="saluran">
+      <label class="tajuk" for="saluran">Kaedah sumbangan <span class="wajib">*</span></label>
+      <select id="saluran" name="saluran" required><option value="">— Pilih —</option></select>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div class="medan" data-medan="rujukan">
+      <label class="tajuk" for="rujukan">No. rujukan transaksi <span style="font-weight:400;color:var(--teks-lembut)">(jika ada)</span></label>
+      <input type="text" id="rujukan" name="rujukan" maxlength="40" autocapitalize="characters">
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div class="medan" data-medan="fail">
+      <label class="tajuk">Resit sumbangan <span class="wajib">*</span></label>
+      <label class="pilih-fail" for="fail">
+        <input type="file" id="fail" accept="image/jpeg,image/png,application/pdf">
+        <span id="failTeks"><strong>Tekan untuk pilih gambar atau PDF</strong><br><span class="bantuan">JPG, PNG atau PDF · maksimum 5 MB</span></span>
+      </label>
+      <div class="pratonton" id="pratonton"></div>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div style="position:absolute;left:-9999px" aria-hidden="true">
+      <label>Laman web <input type="text" id="laman" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <div class="medan" data-medan="pengesahan">
+      <label class="semak"><input type="checkbox" id="pengesahan"> <span>Saya mengesahkan bahawa maklumat dan resit yang diberikan adalah benar.</span></label>
+      <div class="mesej-salah"></div>
+    </div>
+    <div class="medan" data-medan="persetujuan">
+      <label class="semak"><input type="checkbox" id="persetujuan"> <span>Saya telah membaca dan bersetuju dengan <a id="pautanPrivasi" href="#" target="_blank" rel="noopener">Notis Privasi &amp; Syarat Kempen</a>.</span></label>
+      <div class="mesej-salah"></div>
+    </div>
+
+    <div id="ralatUmum" class="kotak-amaran tersembunyi" style="margin-top:16px" role="alert"></div>
+    <button type="submit" class="butang butang-utama" id="hantar">Hantar Penyertaan</button>
+    <div id="sedangHantar" class="tersembunyi" style="text-align:center;margin-top:10px">
+      <div class="bantuan">Sedang memuat naik resit… Jangan tutup halaman ini.</div>
+      <div class="kemajuan"><div></div></div>
+    </div>
+  </form>
+
+  <section id="berjaya" class="kad berjaya tersembunyi" aria-live="polite">
+    <div class="ikon">✓</div>
+    <h2>Terima kasih!</h2>
+    <p>Penyertaan anda telah diterima.</p>
+    <div>ID Penyertaan anda:</div>
+    <div class="id-besar" id="idPenyertaan"></div>
+    <p class="bantuan" id="masaDiterima"></p>
+    <div class="kotak-info" style="text-align:left">
+      <strong>Status: MENUNGGU PENGESAHAN</strong><br>
+      Resit anda akan disemak oleh pegawai YAPEIM. Sila <strong>tangkap layar (screenshot)</strong> halaman ini dan simpan ID penyertaan anda sebagai rujukan.
+    </div>
+    <p id="mesejPendua" class="bantuan tersembunyi">Penyertaan dengan resit yang sama telah diterima sebelum ini — ini ialah ID asal anda.</p>
+    <button class="butang butang-garis" style="margin-top:16px" onclick="location.reload()">Hantar penyertaan lain</button>
+  </section>
+</main>
+<footer class="kaki">
+  <span id="kakiKempen"></span><br>
+  <a id="pautanPrivasi2" href="#" target="_blank" rel="noopener">Notis Privasi &amp; Syarat Kempen</a>
+</footer>
+
+<script>
+var DATA = /*__DATA__*/null;
+var failDipilih = null;
+
+function $(id) { return document.getElementById(id); }
+function teksMasa(s) {
+  if (!s) return '';
+  var b = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+  var m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/.exec(s);
+  return m ? (+m[3]) + ' ' + b[+m[2] - 1] + ' ' + m[1] + (m[4] ? ', ' + m[4] + ':' + m[5] : '') : s;
+}
+
+(function mula() {
+  var t = DATA.tetapan;
+  var urlPrivasi = DATA.url + '?p=privasi';
+  $('pautanPrivasi').href = urlPrivasi; $('pautanPrivasi2').href = urlPrivasi;
+  $('kakiKempen').textContent = t.tarikhMula && t.tarikhTamat ? 'Tempoh kempen: ' + teksMasa(t.tarikhMula) + ' hingga ' + teksMasa(t.tarikhTamat) : '';
+  t.saluran.forEach(function (s) { var o = document.createElement('option'); o.value = s; o.textContent = s; $('saluran').appendChild(o); });
+  $('tarikh').max = DATA.hariIni;
+  if (Number(t.minSumbangan) > 0) $('info').innerHTML += '<br>Sumbangan minimum: <strong>RM ' + Number(t.minSumbangan).toFixed(2) + '</strong>.';
+
+  if (DATA.ujian) { $('kotakUjian').classList.remove('tersembunyi'); $('borang').classList.remove('tersembunyi'); return; }
+  if (DATA.statusKempen === 'DIBUKA') { $('borang').classList.remove('tersembunyi'); return; }
+  $('tutup').classList.remove('tersembunyi');
+  if (DATA.statusKempen === 'TAMAT') {
+    $('tutupTajuk').textContent = 'Kempen telah tamat';
+    $('tutupTeks').textContent = 'Terima kasih atas sokongan anda. Penyertaan tidak lagi diterima. Keputusan akan diumumkan oleh YAPEIM Sarawak.';
+  } else {
+    $('tutupTeks').textContent = t.tarikhMula ? 'Kempen akan dibuka pada ' + teksMasa(t.tarikhMula) + '.' : 'Tarikh kempen akan diumumkan.';
+  }
+})();
+
+function tandaSalah(medan, mesej) {
+  var el = document.querySelector('[data-medan="' + medan + '"]');
+  if (!el) return;
+  el.classList.toggle('salah', !!mesej);
+  el.querySelector('.mesej-salah').textContent = mesej || '';
+}
+
+function semakTempatan() {
+  var r = {};
+  var nama = $('nama').value.trim();
+  if (nama.length < 3) r.nama = 'Sila masukkan nama penuh.';
+  var tel = $('telefon').value.replace(/[\s\-().]/g, '').replace(/^\+?60/, '0');
+  if (!/^0(1\d{8,9}|[3-9]\d{7,8})$/.test(tel)) r.telefon = 'Nombor telefon tidak sah. Contoh: 012-3456789';
+  var j = $('jumlah').value.replace(/[,\s]/g, '');
+  if (!/^\d{1,7}(\.\d{1,2})?$/.test(j) || +j <= 0) r.jumlah = 'Masukkan jumlah dalam RM, contoh: 50 atau 50.00';
+  else if (+j < Number(DATA.tetapan.minSumbangan || 0)) r.jumlah = 'Jumlah minimum ialah RM ' + Number(DATA.tetapan.minSumbangan).toFixed(2);
+  if (!$('tarikh').value) r.tarikh = 'Sila pilih tarikh sumbangan.';
+  else if ($('tarikh').value > DATA.hariIni) r.tarikh = 'Tarikh sumbangan tidak boleh pada masa hadapan.';
+  if (!$('saluran').value) r.saluran = 'Sila pilih kaedah sumbangan.';
+  if (!failDipilih) r.fail = 'Sila muat naik resit sumbangan.';
+  if (!$('pengesahan').checked) r.pengesahan = 'Sila sahkan bahawa maklumat adalah benar.';
+  if (!$('persetujuan').checked) r.persetujuan = 'Sila bersetuju dengan notis privasi dan syarat kempen.';
+  return r;
+}
+
+function paparRalat(r) {
+  ['nama','telefon','jumlah','tarikh','saluran','rujukan','fail','pengesahan','persetujuan'].forEach(function (m) { tandaSalah(m, r[m]); });
+  var pertama = document.querySelector('.salah');
+  if (pertama) pertama.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function bacaDataUrl(blob) {
+  return new Promise(function (ok, gagal) {
+    var fr = new FileReader();
+    fr.onload = function () { ok(fr.result); };
+    fr.onerror = gagal;
+    fr.readAsDataURL(blob);
+  });
+}
+
+/** Kecilkan gambar besar supaya muat naik pantas di talian mudah alih. */
+function kecilkanGambar(fail) {
+  return new Promise(function (ok) {
+    if (fail.type === 'application/pdf' || fail.size < 1.2 * 1024 * 1024) return ok(fail);
+    var img = new Image();
+    var url = URL.createObjectURL(fail);
+    img.onload = function () {
+      var maks = 2000, w = img.naturalWidth, h = img.naturalHeight;
+      var s = Math.min(1, maks / Math.max(w, h));
+      var c = document.createElement('canvas');
+      c.width = Math.round(w * s); c.height = Math.round(h * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      c.toBlob(function (b) { ok(b && b.size < fail.size ? b : fail); }, 'image/jpeg', 0.85);
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); ok(fail); };
+    img.src = url;
+  });
+}
+
+$('fail').addEventListener('change', function () {
+  var f = this.files[0];
+  failDipilih = null;
+  var p = $('pratonton');
+  p.style.display = 'none'; p.innerHTML = '';
+  if (!f) return;
+  if (['image/jpeg', 'image/png', 'application/pdf'].indexOf(f.type) === -1) { tandaSalah('fail', 'Hanya fail JPG, PNG atau PDF diterima.'); return; }
+  if (f.type === 'application/pdf' && f.size > 5 * 1024 * 1024) { tandaSalah('fail', 'Saiz fail melebihi 5 MB.'); return; }
+  kecilkanGambar(f).then(function (b) {
+    if (b.size > 5 * 1024 * 1024) { tandaSalah('fail', 'Saiz fail melebihi 5 MB.'); return; }
+    failDipilih = b;
+    tandaSalah('fail', '');
+    var nama = document.createElement('span');
+    nama.textContent = '✓ ' + f.name + ' (' + (b.size / 1024 / 1024).toFixed(2) + ' MB)';
+    if (b.type !== 'application/pdf') { var im = document.createElement('img'); im.src = URL.createObjectURL(b); p.appendChild(im); }
+    p.appendChild(nama);
+    p.style.display = 'flex';
+    $('failTeks').innerHTML = '<strong>Tukar fail</strong>';
+  });
+});
+
+$('borang').addEventListener('submit', function (ev) {
+  ev.preventDefault();
+  $('ralatUmum').classList.add('tersembunyi');
+  var r = semakTempatan();
+  paparRalat(r);
+  if (Object.keys(r).length) return;
+  $('hantar').disabled = true;
+  $('hantar').innerHTML = '<span class="pemutar"></span> Sedang menghantar…';
+  $('sedangHantar').classList.remove('tersembunyi');
+  bacaDataUrl(failDipilih).then(function (dataUrl) {
+    var payload = {
+      nama: $('nama').value, telefon: $('telefon').value, jumlah: $('jumlah').value, tarikh: $('tarikh').value,
+      saluran: $('saluran').value, rujukan: $('rujukan').value, pengesahan: $('pengesahan').checked,
+      persetujuan: $('persetujuan').checked, laman: $('laman').value, token: DATA.token, ujian: !!DATA.ujian,
+      fail: { data: dataUrl.split(',')[1] }
+    };
+    google.script.run.withSuccessHandler(selesai).withFailureHandler(function () {
+      selesai({ ok: false, mesej: 'Sambungan terputus. Semak internet anda dan cuba lagi.' });
+    }).hantarPenyertaan(payload);
+  });
+});
+
+function selesai(res) {
+  $('hantar').disabled = false;
+  $('hantar').textContent = 'Hantar Penyertaan';
+  $('sedangHantar').classList.add('tersembunyi');
+  if (res && res.ok) {
+    $('borang').classList.add('tersembunyi');
+    $('idPenyertaan').textContent = res.id;
+    $('masaDiterima').textContent = 'Diterima pada ' + res.masa + ' (waktu Malaysia)';
+    if (res.pendua) $('mesejPendua').classList.remove('tersembunyi');
+    $('berjaya').classList.remove('tersembunyi');
+    window.scrollTo(0, 0);
+    return;
+  }
+  paparRalat((res && res.ralat) || {});
+  $('ralatUmum').textContent = (res && res.mesej) || 'Penghantaran gagal. Sila cuba lagi.';
+  $('ralatUmum').classList.remove('tersembunyi');
+}
+</script>
+</body>
+</html>
