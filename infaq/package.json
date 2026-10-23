@@ -1,6 +1,6 @@
 {
   "name": "infaq-goldbar-yapeim-sarawak",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Sistem Infaq dan Menang Goldbar YAPEIM Sarawak (Google Apps Script + Google Sheets)",
   "scripts": {

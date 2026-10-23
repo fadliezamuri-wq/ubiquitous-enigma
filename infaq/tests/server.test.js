@@ -351,3 +351,18 @@ test('halaman HTML: viewport mudah alih, data selamat disuntik', () => {
   assert.equal(borang(g2).tetapan.hadiah, "</script><script>alert(1)</script> $' $&", 'corak $ tidak merosakkan halaman');
   assert.ok(!g2.gs.doGet({ parameter: {} }).getContent().includes('</script><script>alert(1)'), 'tiada XSS melalui tetapan');
 });
+
+test('data ujian boleh diuji sebelum tarikh kempen ditetapkan', () => {
+  const g = cipta({ senyap: true });
+  const kata = /Kata laluan sementara: (\S+)/.exec(g.gs.sediakanSistem())[1];
+  const token = g.gs.adminLogMasuk('admin', kata).token;
+  g.gs.adminTukarKataLaluan(token, kata, 'KataBaru12345');
+  assert.equal(j(g.gs.adminRingkasan(token)).data.statusKempen, 'BELUM_DITETAPKAN');
+  assert.equal(j(g.gs.adminJanaDataUjian(token, 30)).data, 30);
+  assert.equal(j(g.gs.adminRingkasan(token)).data.layakUjian, 18);
+  assert.equal(j(g.gs.adminTerpantas(token, true)).data.senarai.length, 18);
+  const c = j(g.gs.adminJalankanCabutan(token, { kaedah: 'RAWAK', ujian: true, bilPemenang: 1, bilSimpanan: 2 }));
+  assert.equal(c.ok, true, c.ralat);
+  assert.equal(c.data.pemenang.length, 1);
+  assert.match(g.gs.adminJalankanCabutan(token, { kaedah: 'RAWAK', bilPemenang: 1 }).ralat, /selepas tempoh kempen tamat/);
+});

@@ -1,6 +1,6 @@
 /**
  * SISTEM INFAQ DAN MENANG GOLDBAR YAPEIM SARAWAK
- * Versi 1.0.0 — fail ini DIJANA oleh scripts/build.js. Jangan sunting terus;
+ * Versi 1.0.1 — fail ini DIJANA oleh scripts/build.js. Jangan sunting terus;
  * sunting fail dalam folder src/ dan jalankan "npm run build".
  * Salin KESELURUHAN fail ini ke Code.gs dalam editor Apps Script.
  */
@@ -239,7 +239,8 @@ function kiraKelayakan(e, tetapan) {
   if (e.status === STATUS.DITOLAK) return { layak: false, sebab: 'Ditolak' };
   if (e.status !== STATUS.LULUS) return { layak: false, sebab: 'Belum disahkan' };
   var t = tempohKempen(tetapan);
-  if (!t.sah) return { layak: false, sebab: 'Tempoh kempen belum ditetapkan' };
+  // Data ujian tidak bergantung pada tarikh kempen (boleh diuji sebelum tarikh ditetapkan)
+  if (!t.sah && !e.ujian) return { layak: false, sebab: 'Tempoh kempen belum ditetapkan' };
   if (!e.ujian && (e.capMasa < t.mula || e.capMasa > t.tamat)) return { layak: false, sebab: 'Dihantar di luar tempoh kempen' };
   if (Number(e.jumlah) < Number(tetapan.minSumbangan || 0)) return { layak: false, sebab: 'Bawah jumlah minimum' };
   if (tetapan.tarikhSumbanganDalamTempoh && !e.ujian &&
