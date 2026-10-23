@@ -1,9 +1,11 @@
 /**
  * SISTEM INFAQ DAN MENANG GOLDBAR YAPEIM SARAWAK
- * Versi 1.0.1 — fail ini DIJANA oleh scripts/build.js. Jangan sunting terus;
+ * Versi 1.0.2 — fail ini DIJANA oleh scripts/build.js. Jangan sunting terus;
  * sunting fail dalam folder src/ dan jalankan "npm run build".
  * Salin KESELURUHAN fail ini ke Code.gs dalam editor Apps Script.
  */
+
+var VERSI_ = '1.0.2';
 
 /**
  * Core.js — logik tulen (tiada panggilan API Google).
@@ -962,7 +964,7 @@ HTML_.Dashboard = [
   "function $(id) { return document.getElementById(id); }",
   "function esc(s) { return String(s == null ? '' : s).replace(/[&<>\"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;' }[c]; }); }",
   "function rm(n) { return 'RM ' + Number(n || 0).toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }",
-  "function notis(m) { var n = $('notis'); n.textContent = m; n.classList.remove('tersembunyi'); clearTimeout(notis.t); notis.t = setTimeout(function () { n.classList.add('tersembunyi'); }, 4000); }",
+  "function notis(m) { var n = $('notis'); n.textContent = m; n.classList.remove('tersembunyi'); clearTimeout(notis.t); notis.t = setTimeout(function () { n.classList.add('tersembunyi'); }, 10000); }",
   "function simpan(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) {} }",
   "function baca(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }",
   "function lencana(s, ujian) {",
@@ -977,9 +979,9 @@ HTML_.Dashboard = [
   "    var r = google.script.run.withSuccessHandler(function (res) {",
   "      if (res && res.sesiTamat) { logKeluar(true); return gagal(new Error(res.ralat)); }",
   "      if (res && res.mestiTukar) { tunjuk('vTukarKata'); return gagal(new Error(res.ralat)); }",
-  "      if (!res || !res.ok) { notis((res && res.ralat) || 'Ralat'); return gagal(new Error(res && res.ralat)); }",
+  "      if (!res || !res.ok) { notis((res && res.ralat) || 'Ralat'); return gagal(new Error((res && res.ralat) || 'Ralat tidak diketahui')); }",
   "      ok(res.data);",
-  "    }).withFailureHandler(function (e) { notis('Sambungan gagal. Cuba lagi.'); gagal(e); });",
+  "    }).withFailureHandler(function (e) { var m = 'Ralat pelayan: ' + ((e && e.message) || e); notis(m); gagal(new Error(m)); });",
   "    r[fn].apply(r, [TOKEN].concat(args));",
   "  });",
   "}",
@@ -1045,7 +1047,7 @@ HTML_.Dashboard = [
   "    ringkasan = r;",
   "    $('rgKempen').innerHTML = '<strong>' + esc(NAMA_STATUS_KEMPEN[r.statusKempen]) + '</strong>' +",
   "      (r.tetapan.tarikhMula ? '<br>Tempoh: ' + esc(r.tetapan.tarikhMula.replace('T', ' ')) + ' hingga ' + esc(r.tetapan.tarikhTamat.replace('T', ' ')) : '') +",
-  "      '<br><span class=\"kecil\">Masa pelayan: ' + esc(r.sekarang) + (r.tetapan.benarkanUjian ? ' · <strong style=\"color:var(--biru)\">Mod ujian DIHIDUPKAN</strong>' : '') + '</span>';",
+  "      '<br><span class=\"kecil\">Versi sistem: ' + esc(r.versi) + ' · Masa pelayan: ' + esc(r.sekarang) + (r.tetapan.benarkanUjian ? ' · <strong style=\"color:var(--biru)\">Mod ujian DIHIDUPKAN</strong>' : '') + '</span>';",
   "    $('sJumlah').textContent = r.jumlah; $('sMenunggu').textContent = r.menunggu; $('sSemakan').textContent = r.semakan;",
   "    $('sLulus').textContent = r.lulus; $('sDitolak').textContent = r.ditolak; $('sPembetulan').textContent = r.pembetulan;",
   "    $('sLayak').textContent = r.layak; $('sRmDirekod').textContent = rm(r.rmDirekod); $('sRmDisahkan').textContent = rm(r.rmDisahkan);",
@@ -1154,7 +1156,9 @@ HTML_.Dashboard = [
   "function muatTerpantas() {",
   "  var ujian = $('tUjian').checked;",
   "  $('tBadan').innerHTML = '<tr><td colspan=\"6\">Memuatkan…</td></tr>';",
-  "  panggil('adminTerpantas', ujian).then(function (r) {",
+  "  var p = panggil('adminTerpantas', ujian);",
+  "  p.catch(function (e) { $('tBadan').innerHTML = '<tr><td colspan=\"6\" style=\"color:var(--merah)\">Gagal: ' + esc(e && e.message) + '</td></tr>'; });",
+  "  p.then(function (r) {",
   "    var amaran = [];",
   "    if (!ujian && r.statusKempen !== 'TAMAT') amaran.push('Kempen belum tamat — senarai ini SEMENTARA dan bukan keputusan rasmi.');",
   "    if (r.belumSelesai) amaran.push(r.belumSelesai + ' penyertaan belum disemak. Kedudukan boleh berubah.');",
@@ -1181,7 +1185,9 @@ HTML_.Dashboard = [
   "['cJenis', 'cKaedah'].forEach(function (x) { $(x).onchange = kemasInfoCabutan; });",
   "",
   "function muatCabutan() {",
-  "  muatRingkasan().then(function (r) { if (!$('cHadiah').value) $('cHadiah').value = r.tetapan.hadiah; kemasInfoCabutan(); });",
+  "  $('cInfo').textContent = 'Memuatkan bilangan peserta layak…';",
+  "  muatRingkasan().then(function (r) { if (!$('cHadiah').value) $('cHadiah').value = r.tetapan.hadiah; kemasInfoCabutan(); },",
+  "    function (e) { $('cInfo').textContent = 'Gagal memuatkan: ' + (e && e.message); });",
   "  panggil('adminSenaraiCabutan').then(function (senarai) {",
   "    $('cSenarai').innerHTML = senarai.length ? senarai.map(function (c) {",
   "      return '<div class=\"kad\" style=\"border:1px solid var(--garis)\"><div><strong class=\"mono\">' + esc(c.id) + '</strong> ' +",
@@ -1216,7 +1222,7 @@ HTML_.Dashboard = [
   "      c.pemenang.map(function (p) { return '<div class=\"pemenang-hasil\">🏆 #' + p.kedudukan + ' <strong class=\"mono\">' + esc(p.id) + '</strong> ' + esc(p.nama) + '</div>'; }).join('') +",
   "      c.simpanan.map(function (p) { return '<div class=\"pemenang-hasil\" style=\"background:#fff\">Simpanan #' + p.kedudukan + ' <span class=\"mono\">' + esc(p.id) + '</span> ' + esc(p.nama) + '</div>'; }).join('');",
   "    muatCabutan();",
-  "  }, function () { $('bCabut').disabled = false; });",
+  "  }, function (e) { $('bCabut').disabled = false; $('cHasil').innerHTML = '<div class=\"kotak-amaran\"><strong>Cabutan tidak dijalankan:</strong> ' + esc(e && e.message) + '</div>'; });",
   "};",
   "",
   "function muatAudit() {",
@@ -1249,7 +1255,11 @@ HTML_.Dashboard = [
   "  t.saluran = t.saluran.split('\\n');",
   "  panggil('adminSimpanTetapan', t).then(function () { notis('Tetapan disimpan.'); muatTetapan(); });",
   "};",
-  "$('bJanaUjian').onclick = function () { panggil('adminJanaDataUjian', 30).then(function (n) { notis(n + ' penyertaan ujian dijana.'); }); };",
+  "$('bJanaUjian').onclick = function () {",
+  "  $('bJanaUjian').disabled = true;",
+  "  panggil('adminJanaDataUjian', 30).then(function (n) { $('bJanaUjian').disabled = false; alert(n + ' penyertaan ujian palsu telah dijana. Semak di tab Penyertaan (tandakan \"Papar data ujian sahaja\").'); },",
+  "    function (e) { $('bJanaUjian').disabled = false; alert('Gagal menjana data ujian: ' + (e && e.message)); });",
+  "};",
   "$('bPadamUjian').onclick = function () { if (confirm('Padam SEMUA data ujian (termasuk fail resit ujian)?')) panggil('adminPadamDataUjian').then(function (n) { notis(n + ' rekod ujian dipadam.'); }); };",
   "",
   "function paparKata(r) {",
@@ -1898,6 +1908,7 @@ function adminRingkasan(token) {
     r.tetapan = tetapan;
     r.pengguna = u;
     r.sekarang = formatMasa(sekarang);
+    r.versi = typeof VERSI_ !== 'undefined' ? VERSI_ : '?';
     return r;
   });
 }

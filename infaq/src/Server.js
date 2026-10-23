@@ -408,6 +408,7 @@ function adminRingkasan(token) {
     r.tetapan = tetapan;
     r.pengguna = u;
     r.sekarang = formatMasa(sekarang);
+    r.versi = typeof VERSI_ !== 'undefined' ? VERSI_ : '?';
     return r;
   });
 }

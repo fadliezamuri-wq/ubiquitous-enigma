@@ -35,6 +35,8 @@ const kod = [
   ' * Salin KESELURUHAN fail ini ke Code.gs dalam editor Apps Script.',
   ' */',
   '',
+  `var VERSI_ = '${versi}';`,
+  '',
   baca('src/Core.js'),
   '',
   '/* ======================= Halaman HTML (dijana) ======================= */',
