@@ -189,7 +189,10 @@ function doGet(e) {
     };
   }
   var json = JSON.stringify(data).replace(/</g, '\\u003c');
-  var html = HTML_[halaman].replace('/*__DATA__*/null', function () { return json; });
+  var html = HTML_[halaman]
+    .replace('/*__GAYA__*/', function () { return GAYA_; })
+    .replace('<!--__LOGO__-->', function () { return LOGO_; })
+    .replace('/*__DATA__*/null', function () { return json; });
   return HtmlService.createHtmlOutput(html)
     .setTitle(tajuk)
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');

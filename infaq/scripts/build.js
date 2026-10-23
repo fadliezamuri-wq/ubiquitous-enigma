@@ -14,13 +14,16 @@ const logo = fs.existsSync(failLogo)
   ? `<div class="logo-ruang logo-sebenar"><img alt="YAPEIM" src="data:image/png;base64,${fs.readFileSync(failLogo).toString('base64')}"></div>`
   : '<div class="logo-ruang">LOGO RASMI YAPEIM</div>';
 
-const html = {};
+// Setiap halaman ditulis sebagai senarai baris pendek (bukan satu baris panjang)
+// supaya selamat disalin-tampal dan mudah dibaca dalam editor Apps Script.
+const keBaris = (teks) => '[\n' + teks.split('\n').map((b) => '  ' + JSON.stringify(b)).join(',\n') + '\n].join(\'\\n\')';
+const html = [];
 for (const nama of ['Borang', 'Dashboard', 'Paparan', 'Privasi']) {
-  let h = baca(`src/html/${nama}.html`);
-  for (const p of ['/*__GAYA__*/', '<!--__LOGO__-->', '/*__DATA__*/null']) {
-    if (!h.includes(p) && p !== '<!--__LOGO__-->') throw new Error(`${nama}.html tiada penanda ${p}`);
+  const h = baca(`src/html/${nama}.html`);
+  for (const p of ['/*__GAYA__*/', '/*__DATA__*/null']) {
+    if (!h.includes(p)) throw new Error(`${nama}.html tiada penanda ${p}`);
   }
-  html[nama] = h.replace('/*__GAYA__*/', () => gaya).replace('<!--__LOGO__-->', () => logo);
+  html.push(`HTML_.${nama} = ${keBaris(h)};`);
 }
 
 const versi = require('../package.json').version;
@@ -35,7 +38,10 @@ const kod = [
   baca('src/Core.js'),
   '',
   '/* ======================= Halaman HTML (dijana) ======================= */',
-  'var HTML_ = ' + JSON.stringify(html) + ';',
+  'var HTML_ = {};',
+  'var GAYA_ = ' + keBaris(gaya) + ';',
+  'var LOGO_ = ' + JSON.stringify(logo) + ';',
+  ...html,
   '',
   baca('src/Server.js'),
 ].join('\n');
