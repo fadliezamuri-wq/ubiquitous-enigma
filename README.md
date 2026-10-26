@@ -25,3 +25,8 @@ src/        Application source
 tests/      Tests (*.test.ts)
 dist/       Build output (git-ignored)
 ```
+
+## Website: AI Digital Studio Sarawak
+
+Static portfolio site (HTML/CSS/JS, no build step) in `docs/`. Open `docs/index.html` in a browser.
+Panduan dalam Bahasa Melayu (tetapan WhatsApp, demo dan penerbitan): [PANDUAN-WEBSITE.md](PANDUAN-WEBSITE.md).
