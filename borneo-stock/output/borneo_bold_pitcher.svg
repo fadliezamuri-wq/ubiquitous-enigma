@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000"><rect width="1000" height="1000" fill="#E9B949"/>
+  <radialGradient id="glow" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#F2C95F"/><stop offset="1" stop-color="#E9B949" stop-opacity="0"/></radialGradient>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+    <path d="M520 780 Q600 860 700 830 Q780 800 760 740" fill="none" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="14"/>
+    <path d="M760 740 Q800 610 700 560 Q600 640 640 760 Q690 800 760 740Z" fill="#6aa043" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M705 575 Q690 680 745 745" fill="none" stroke="#4f7f30" stroke-width="10" stroke-linecap="round"/>
+    <path d="M410 390 Q350 600 425 770 Q500 830 575 770 Q650 600 590 390Z" fill="#8cc152" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M440 470 Q420 620 455 760" fill="none" stroke="#c2413a" stroke-width="12" stroke-linecap="round" stroke-dasharray="2 26"/>
+    <path d="M560 470 Q580 620 545 760" fill="none" stroke="#c2413a" stroke-width="12" stroke-linecap="round" stroke-dasharray="2 26"/>
+    <g fill="#c2413a"><circle cx="480" cy="520" r="14"/><circle cx="520" cy="600" r="11"/><circle cx="490" cy="680" r="13"/><circle cx="530" cy="460" r="9"/><circle cx="525" cy="730" r="9"/><circle cx="470" cy="610" r="8"/></g>
+    <ellipse cx="500" cy="392" rx="102" ry="36" fill="#b8323a" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
+    <ellipse cx="500" cy="394" rx="70" ry="18" fill="#4a1a17"/>
+    <path d="M430 365 Q480 250 610 290 Q640 330 600 360 Q520 340 430 365Z" fill="#9ccc5f" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
+    <g fill="#c2413a"><circle cx="520" cy="310" r="10"/><circle cx="565" cy="320" r="8"/><circle cx="485" cy="335" r="7"/></g>
+    <path d="M610 290 Q660 250 700 280" fill="none" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/></svg>

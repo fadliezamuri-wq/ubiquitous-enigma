@@ -35,3 +35,4 @@ coverage/
 *.swp
 .DS_Store
 Thumbs.db
+borneo-stock/*.zip
