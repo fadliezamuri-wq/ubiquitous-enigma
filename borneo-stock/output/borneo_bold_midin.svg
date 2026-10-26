@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000"><rect width="1000" height="1000" fill="#E9B949"/>
+  <radialGradient id="glow" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#F2C95F"/><stop offset="1" stop-color="#E9B949" stop-opacity="0"/></radialGradient>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+    <path d="M470 840 Q450 650 470 470 Q490 330 420 300 Q350 290 350 360 Q355 420 410 410 Q440 400 430 370" fill="none" stroke="#2a1a12" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/><path d="M470 840 Q450 650 470 470 Q490 330 420 300 Q350 290 350 360 Q355 420 410 410 Q440 400 430 370" fill="none" stroke="#5d9b36" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M510 840 Q520 620 560 440 Q590 300 670 300 Q740 310 730 380 Q720 430 670 420 Q640 410 650 380" fill="none" stroke="#2a1a12" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/><path d="M510 840 Q520 620 560 440 Q590 300 670 300 Q740 310 730 380 Q720 430 670 420 Q640 410 650 380" fill="none" stroke="#6fb34f" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M490 840 Q480 600 515 330 Q535 200 600 195 Q655 198 650 248 Q645 285 608 280" fill="none" stroke="#2a1a12" stroke-width="42" stroke-linecap="round" stroke-linejoin="round"/><path d="M490 840 Q480 600 515 330 Q535 200 600 195 Q655 198 650 248 Q645 285 608 280" fill="none" stroke="#7cc152" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#8cc152" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="8">
+      <ellipse cx="430" cy="560" rx="34" ry="16" transform="rotate(-25 430 560)"/>
+      <ellipse cx="500" cy="520" rx="30" ry="14" transform="rotate(20 500 520)"/>
+      <ellipse cx="590" cy="560" rx="34" ry="16" transform="rotate(25 590 560)"/>
+      <ellipse cx="445" cy="470" rx="28" ry="13" transform="rotate(-30 445 470)"/>
+      <ellipse cx="530" cy="430" rx="26" ry="12" transform="rotate(25 530 430)"/>
+    </g>
+    <rect x="420" y="715" width="160" height="44" rx="14" fill="#c0392b" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
+    <path d="M440 737 l120 0" stroke="#f3d27a" stroke-width="8" stroke-dasharray="14 12"/></svg>

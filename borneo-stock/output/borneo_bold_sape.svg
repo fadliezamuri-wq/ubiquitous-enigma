@@ -3,7 +3,7 @@
   <rect width="1000" height="1000" fill="url(#glow)"/>
     <g transform="rotate(-20 500 500)">
       <path d="M440 245 Q438 150 495 110 Q560 70 572 140 Q548 128 528 150 Q562 180 560 245Z" fill="#b5652e" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
-      <circle cx="532" cy="118" r="12" fill="#f3e2b8" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="8"/>
+      <circle cx="532" cy="118" r="12" fill="#f3e2b8" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="8"/>
       <path d="M415 245 Q500 215 585 245 L605 770 Q605 845 500 852 Q395 845 395 770Z" fill="#c9783a" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
       <path d="M440 300 L560 300 L572 760 Q570 800 500 805 Q430 800 428 760Z" fill="#a85a28"/>
       <g fill="none" stroke="#fff3da" stroke-width="11" stroke-linecap="round">
@@ -15,7 +15,7 @@
         <path d="M500 590 q60 30 40 90 q-20 40 -60 20"/>
         <path d="M455 720 q45 40 90 0"/>
       </g>
-      <g fill="#f3e2b8" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="6">
+      <g fill="#f3e2b8" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="6">
         <rect x="474" y="255" width="52" height="14" rx="4"/>
         <rect x="476" y="285" width="48" height="14" rx="4"/>
         <rect x="472" y="770" width="56" height="18" rx="5"/>
@@ -26,5 +26,5 @@
         <line x1="516" y1="160" x2="516" y2="780"/>
       </g>
     </g>
-        <path d="M745 220 q25 -10 30 15 l0 70 M775 235 l40 -12 l0 60" fill="none" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
+        <path d="M745 220 q25 -10 30 15 l0 70 M775 235 l40 -12 l0 60" fill="none" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
     <circle cx="760" cy="305" r="16" fill="#2a1a12"/><circle cx="800" cy="290" r="16" fill="#2a1a12"/></svg>

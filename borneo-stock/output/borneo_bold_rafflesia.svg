@@ -23,6 +23,6 @@
       <g fill="#f6d2b8"><circle cx="470" cy="270" r="20"/><circle cx="535" cy="255" r="16"/><circle cx="510" cy="320" r="22"/><circle cx="455" cy="340" r="13"/><circle cx="560" cy="330" r="14"/><circle cx="500" cy="225" r="10"/></g>
     </g>
     <circle cx="500" cy="520" r="140" fill="#9c2b22" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="500" cy="520" r="100" fill="#f2d9c2" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
+    <circle cx="500" cy="520" r="100" fill="#f2d9c2" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
     <circle cx="500" cy="520" r="78" fill="#3a1410"/>
     <g fill="#c98a6a"><circle cx="540" cy="520" r="11"/><circle cx="530.6417777247591" cy="545.7115043874616" r="11"/><circle cx="506.94592710667723" cy="559.3923101204883" r="11"/><circle cx="480" cy="554.6410161513776" r="11"/><circle cx="462.4122951685637" cy="533.6808057330268" r="11"/><circle cx="462.4122951685637" cy="506.3191942669732" r="11"/><circle cx="480" cy="485.3589838486225" r="11"/><circle cx="506.9459271066772" cy="480.60768987951167" r="11"/><circle cx="530.6417777247591" cy="494.28849561253844" r="11"/><circle cx="500" cy="520" r="12"/></g></svg>

@@ -9,11 +9,11 @@
       <path d="M500 770 q-70 -20 -70 -80 q0 -40 40 -40 q30 0 30 30 q0 20 -20 20"/>
       <path d="M500 770 q70 -20 70 -80 q0 -40 -40 -40 q-30 0 -30 30 q0 20 20 20"/>
     </g>
-    <circle cx="440" cy="470" r="48" fill="#c0392b" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
-    <circle cx="560" cy="470" r="48" fill="#c0392b" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
-    <circle cx="440" cy="470" r="26" fill="#fff" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="10"/>
-    <circle cx="560" cy="470" r="26" fill="#fff" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="10"/>
+    <circle cx="440" cy="470" r="48" fill="#c0392b" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
+    <circle cx="560" cy="470" r="48" fill="#c0392b" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
+    <circle cx="440" cy="470" r="26" fill="#fff" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="10"/>
+    <circle cx="560" cy="470" r="26" fill="#fff" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="10"/>
     <circle cx="440" cy="470" r="11" fill="#2a1a12"/><circle cx="560" cy="470" r="11" fill="#2a1a12"/>
     <path d="M500 480 L520 545 L480 545Z" fill="#2a1a12"/>
-    <path d="M430 580 Q500 620 570 580 L560 600 Q500 650 440 600Z" fill="#c0392b" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round" stroke-width="10"/>
+    <path d="M430 580 Q500 620 570 580 L560 600 Q500 650 440 600Z" fill="#c0392b" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="10"/>
     <path d="M455 597 l0 14 M480 606 l0 16 M500 608 l0 16 M520 606 l0 16 M545 597 l0 14" stroke="#fff" stroke-width="8" stroke-linecap="round"/></svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000"><rect width="1000" height="1000" fill="#E9B949"/>
+  <radialGradient id="glow" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#F2C95F"/><stop offset="1" stop-color="#E9B949" stop-opacity="0"/></radialGradient>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+    <g fill="#8a5a3b" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="250" y="270" width="44" height="560" rx="10"/><rect x="706" y="270" width="44" height="560" rx="10"/>
+      <rect x="205" y="810" width="134" height="36" rx="12"/><rect x="661" y="810" width="134" height="36" rx="12"/>
+    </g>
+    <path d="M190 245 Q200 205 240 230 Q500 195 760 230 Q800 205 810 245 Q800 290 770 280 Q500 245 230 280 Q200 290 190 245Z" fill="#a8693a" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M430 262 L445 360 M570 262 L555 360" stroke="#2a1a12" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="500" cy="550" r="195" fill="#d9a43a" stroke="#2a1a12" stroke-width="16" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="500" cy="550" r="162" fill="none" stroke="#b07f22" stroke-width="10"/>
+    <circle cx="500" cy="550" r="110" fill="none" stroke="#f2c95f" stroke-width="10"/>
+    <circle cx="500" cy="550" r="56" fill="#f2c95f" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/>
+    <path d="M400 430 Q440 395 490 390" fill="none" stroke="#fff6d8" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+    <circle cx="485" cy="533" r="14" fill="#fff6d8" opacity=".8"/>
+    <path d="M560 880 L800 862" fill="none" stroke="#2a1a12" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/><path d="M560 880 L800 862" fill="none" stroke="#a8693a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="545" cy="882" rx="42" ry="30" fill="#c0392b" stroke="#2a1a12" stroke-linejoin="round" stroke-linecap="round" stroke-width="12"/></svg>

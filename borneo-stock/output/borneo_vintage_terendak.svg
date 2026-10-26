@@ -16,5 +16,5 @@
     </g>
     <path d="M150 560 Q500 640 850 560 Q700 360 500 300 Q300 360 150 560Z" fill="none" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
     <path d="M150 560 Q500 680 850 560" fill="none" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="500" cy="296" r="18" fill="#a8432a" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" stroke-width="8"/>
+    <circle cx="500" cy="296" r="18" fill="#a8432a" stroke="#5a3b2a" stroke-linejoin="round" stroke-linecap="round" stroke-width="8"/>
 </svg>

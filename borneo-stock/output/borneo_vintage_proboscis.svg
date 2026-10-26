@@ -9,9 +9,9 @@
     <ellipse cx="290" cy="450" rx="34" ry="44" fill="#e8c9a0" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
     <ellipse cx="710" cy="450" rx="34" ry="44" fill="#e8c9a0" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
     <path d="M500 330 Q610 330 630 440 Q640 560 580 640 Q540 680 500 680 Q460 680 420 640 Q360 560 370 440 Q390 330 500 330Z" fill="#e8b48e" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
-    <path d="M400 410 q40 -25 70 0 M530 410 q40 -25 70 0" fill="none" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" stroke-width="8"/>
+    <path d="M400 410 q40 -25 70 0 M530 410 q40 -25 70 0" fill="none" stroke="#5a3b2a" stroke-linejoin="round" stroke-linecap="round" stroke-width="8"/>
     <circle cx="440" cy="440" r="13" fill="#5a3b2a"/><circle cx="560" cy="440" r="13" fill="#5a3b2a"/>
     <path d="M478 470 Q440 540 450 600 Q470 640 500 640 Q540 640 552 600 Q560 540 522 470 Q500 455 478 470Z" fill="#d9825f" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/>
-    <path d="M480 620 q10 10 20 0 q10 10 20 0" fill="none" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" stroke-width="6"/>
-    <path d="M460 670 Q500 690 540 670" fill="none" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" stroke-width="7"/>
+    <path d="M480 620 q10 10 20 0 q10 10 20 0" fill="none" stroke="#5a3b2a" stroke-linejoin="round" stroke-linecap="round" stroke-width="6"/>
+    <path d="M460 670 Q500 690 540 670" fill="none" stroke="#5a3b2a" stroke-linejoin="round" stroke-linecap="round" stroke-width="7"/>
     <path d="M380 720 Q500 790 620 720 Q600 780 500 800 Q400 780 380 720Z" fill="#f1e2c6" stroke="#5a3b2a" stroke-width="10" stroke-linejoin="round" stroke-linecap="round"/></svg>
