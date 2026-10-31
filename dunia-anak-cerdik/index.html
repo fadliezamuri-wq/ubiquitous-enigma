@@ -320,7 +320,7 @@ main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:18px 16p
 
 <header>
   <button class="hbtn hide" id="homeBtn" aria-label="Laman utama">🏠</button>
-  <button class="hbtn" id="soundBtn" aria-label="Bunyi hidup atau mati">🔊</button>
+  <button class="hbtn" id="soundBtn" aria-label="Tetapan suara">🔊</button>
   <div class="brand"><h1><span>Dunia </span><span>Anak </span><span>Cerdik</span></h1></div>
   <div class="stars" id="stars" aria-label="Bintang terkumpul">⭐ <span id="starCount">0</span></div>
 </header>
@@ -332,7 +332,7 @@ main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:18px 16p
 "use strict";
 /* ============ STORAN SETEMPAT ============ */
 const KEY = "duniaAnakCerdik.v1";
-const blank = () => ({name:"", stars:0, sound:true, abc:[], num:[], animal:[], fruit:[], story:[], doa:[], hijaiyah:[], quiz:{}, quizCount:0});
+const blank = () => ({name:"", stars:0, sound:true, voice:"", speed:"biasa", abc:[], num:[], animal:[], fruit:[], story:[], doa:[], hijaiyah:[], quiz:{}, quizCount:0});
 let S = blank();
 try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch(e) {}
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {} }
@@ -355,23 +355,86 @@ const sfx = {
 };
 
 /* ============ SUARA (Web Speech, percuma) ============ */
+/* Pilih suara paling semula jadi yang ada dalam peranti: suara Natural/Neural/Online/Google/Premium
+   mengatasi suara robot lama. Teks dipecah ikut ayat supaya ada jeda semula jadi dan tidak terputus. */
 let voices = [];
-function loadVoices(){ try{ voices = speechSynthesis.getVoices(); }catch(e){} }
-if ("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
-function pickVoice(lang){
-  const pre = lang.slice(0,2);
-  const order = pre==="ms" ? ["ms","id"] : [pre];
-  for (const p of order){ const v = voices.find(v=>v.lang && v.lang.toLowerCase().startsWith(p)); if(v) return v; }
-  return null;
+function loadVoices(){ try{ voices = speechSynthesis.getVoices() || []; }catch(e){} }
+if ("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; setTimeout(loadVoices, 600); }
+const SPEEDS = {perlahan:.82, biasa:.95, laju:1.08};
+function voiceScore(v, pre){
+  const l = (v.lang||"").toLowerCase().replace("_","-"), n = (v.name||"").toLowerCase();
+  let sc = 0;
+  if (pre==="ms"){ if (l==="ms-my") sc+=100; else if (l.startsWith("ms")) sc+=90; else if (l.startsWith("id")) sc+=55; else return -1; }
+  else if (l.startsWith(pre)) sc+=100; else return -1;
+  if (/natural|neural|wavenet|online/.test(n)) sc+=50;
+  if (/premium|enhanced|siri/.test(n)) sc+=40;
+  if (/google/.test(n)) sc+=30;
+  if (/yasmin|amira|osman|damayanti|gadis|ardi/.test(n)) sc+=10;
+  if (/compact|espeak|robot/.test(n)) sc-=40;
+  if (v.localService===false) sc+=5;
+  return sc;
 }
+function rankedVoices(lang){
+  const pre = lang.slice(0,2);
+  return voices.map(v=>({v, s:voiceScore(v,pre)})).filter(x=>x.s>=0).sort((a,b)=>b.s-a.s).map(x=>x.v);
+}
+function pickVoice(lang){
+  const list = rankedVoices(lang);
+  if (lang.startsWith("ms") && S.voice){ const mine = voices.find(v=>v.voiceURI===S.voice); if (mine) return mine; }
+  return list[0] || null;
+}
+function cleanText(t){
+  return String(t)
+    .replace(/[\p{Extended_Pictographic}‍️]/gu, "")
+    .replace(/["“”«»]/g, "")
+    .replace(/\.\.\./g, ",")
+    .replace(/([!?])\s*\./g, "$1")
+    .replace(/\bSAW\b/g, "sallallahu alaihi wasallam")
+    .replace(/\bAS\b/g, "alaihissalam")
+    .replace(/–/g, " hingga ")
+    .replace(/\s+/g, " ").trim();
+}
+let speakToken = 0;
 function say(text, lang="ms-MY"){
   if(!S.sound || !("speechSynthesis" in window)) return;
-  try{
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    const v = pickVoice(lang); if (v){ u.voice=v; u.lang=v.lang; } else u.lang=lang;
-    u.rate = .85; u.pitch = 1.15; speechSynthesis.speak(u);
-  }catch(e){}
+  const tok = ++speakToken;
+  try{ speechSynthesis.cancel(); }catch(e){}
+  const parts = cleanText(text).split(/(?<=[.!?،؟])\s+/).map(x=>x.trim()).filter(Boolean);
+  if (!parts.length) return;
+  const v = pickVoice(lang);
+  const natural = v && /natural|neural|online|premium|enhanced|google|siri/i.test(v.name);
+  // Selepas cancel, Chrome perlukan seketika sebelum bercakap semula; tanpa ini suara kadang tersekat.
+  setTimeout(()=>{
+    if (tok!==speakToken) return;
+    parts.forEach(p=>{
+      const u = new SpeechSynthesisUtterance(p);
+      if (v){ u.voice=v; u.lang=v.lang; } else u.lang=lang;
+      u.rate = (SPEEDS[S.speed]||SPEEDS.biasa) * (lang.startsWith("ar") ? .9 : 1);
+      u.pitch = natural ? 1 : 1.05;   // suara semula jadi tidak perlu diubah nadanya
+      u.volume = 1;
+      try{ speechSynthesis.speak(u); }catch(e){}
+    });
+  }, 80);
+}
+
+function voiceSettings(){
+  loadVoices();
+  const list = rankedVoices("ms-MY");
+  const cur = pickVoice("ms-MY");
+  const label = v => { const n=v.name.replace(/Microsoft |Google | Online|\(.*?\)| - .*$/g,"").trim()||v.name;
+    const q = /natural|neural|online|premium|enhanced|google|siri/i.test(v.name) ? " ✨" : "";
+    const bahasa = v.lang.toLowerCase().startsWith("ms") ? "Melayu" : "Indonesia";
+    return `${esc(n)}${q} <small style="display:block;font-size:14px;color:var(--muted)">${bahasa}</small>`; };
+  modal(`<div style="font-size:54px">🗣️</div><h3>Tetapan Suara</h3>
+    <div class="row" style="margin-bottom:14px"><button class="btn ${S.sound?"green":"white"}" data-act="soundToggle">${S.sound?"🔊 Bunyi Hidup":"🔇 Bunyi Mati"}</button></div>
+    <h3 style="font-size:22px">Kelajuan</h3>
+    <div class="tabs">${[["perlahan","🐢 Perlahan"],["biasa","🙂 Biasa"],["laju","🐇 Laju"]].map(x=>`<button class="tab ${(S.speed||"biasa")===x[0]?"on":""}" data-act="speed" data-v="${x[0]}">${x[1]}</button>`).join("")}</div>
+    <h3 style="font-size:22px">Pilih suara</h3>
+    ${list.length ? `<div class="pillars" style="max-height:38vh;overflow:auto;padding:4px">${list.map(v=>`<button class="pillar" style="padding:10px 14px;${cur&&cur.voiceURI===v.voiceURI?"outline:4px solid var(--grass)":""}" data-act="voicePick" data-v="${esc(v.voiceURI)}">
+        <span class="n" style="--c:${cur&&cur.voiceURI===v.voiceURI?"var(--grass)":"#c9c4f5"};width:44px;height:44px;font-size:22px">${cur&&cur.voiceURI===v.voiceURI?"✓":"▶"}</span><span><b style="font-size:19px">${label(v)}</b></span></button>`).join("")}</div>
+      <p style="font-weight:700;color:var(--muted);font-size:15px">✨ = suara semula jadi (paling lancar). Tekan untuk mendengar contoh.</p>`
+    : `<p style="font-weight:700;font-size:17px">Tiada suara Bahasa Melayu dalam peranti ini. Cuba pelayar <b>Microsoft Edge</b> (suara Yasmin/Osman), atau pasang suara Bahasa Melayu dalam tetapan peranti.</p>`}
+    <div class="row" style="margin-top:10px"><button class="btn orange" data-act="voiceTest">🔊 Cuba Dengar</button><button class="btn pink" data-act="close">Siap ✔</button></div>`);
 }
 
 /* ============ WATAK KARTUN (SVG) ============ */
@@ -1026,7 +1089,7 @@ function viewKemajuan(){
     <div class="prog">${quizKeys.map(k=>{ const b=S.quiz[k]; return `<div class="pitem"><div class="top"><span>${QUIZ_TYPES[k].ic} ${QUIZ_TYPES[k].name}</span><span>${b===undefined?"–":b+"/"+QLEN}</span></div><div class="pbar"><i style="width:${b?b*10:0}%;background:linear-gradient(90deg,var(--grass),#a3e635)"></i></div></div>`; }).join("")}</div>
     <h3 class="h3">🎖️ Lencana</h3>
     <div class="badges">${badges.map(b=>`<div class="bdg ${b[3]?"":"locked"}"><span class="e">${b[0]}</span><b>${b[1]}</b><small>${b[3]?"Dibuka!":b[2]}</small></div>`).join("")}</div>
-    <div class="row" style="margin-top:26px"><button class="btn pink" data-act="resetAsk">🗑️ Padam Semua Kemajuan</button></div>
+    <div class="row" style="margin-top:26px"><button class="btn" data-act="voiceOpen">🗣️ Tetapan Suara</button><button class="btn pink" data-act="resetAsk">🗑️ Padam Semua Kemajuan</button></div>
   </section>`;
 }
 
@@ -1111,17 +1174,23 @@ document.addEventListener("click", e => {
     case "hj": { const h=HIJAIYAH[+d.i]; sfx.tap(); say(h[1]); markLearned("hijaiyah", h[1]+d.i, t); rerender(); break; }
     case "rukun": { const list=V.islamTab==="rislam"?RUKUN_ISLAM:RUKUN_IMAN, r=list[+d.i]; sfx.tap(); say(`${numWord(+d.i+1)}. ${r[0]}. ${r[1]}`); break; }
     case "sayRukunAll": { const isI=V.islamTab==="rislam", list=isI?RUKUN_ISLAM:RUKUN_IMAN; say((isI?"Rukun Islam ada lima. ":"Rukun Iman ada enam. ")+list.map((r,i)=>numWord(i+1)+", "+r[0]).join(". ")); break; }
+    /* Suara */
+    case "soundToggle": S.sound=!S.sound; save(); setSoundIcon(); if (S.sound) sfx.tap(); else try{ speechSynthesis.cancel(); }catch(e){} voiceSettings(); break;
+    case "speed": S.speed=d.v; save(); voiceSettings(); say("Hai! Beginilah kelajuan suara saya."); break;
+    case "voicePick": S.voice=d.v; save(); voiceSettings(); say(`Hai ${S.name||"adik"}! Saya Duri Durian. Jom belajar bersama!`); break;
+    case "voiceOpen": sfx.tap(); voiceSettings(); break;
+    case "voiceTest": say(`Hai ${S.name||"adik"}! Saya Duri Durian. Jom belajar bersama!`); break;
     /* Kemajuan */
     case "askName": askName(); break;
     case "saveName": { const v=($("#nameIn").value||"").trim().slice(0,20); S.name=v; save(); closeModal(); sfx.good(); if (v) say(`Selamat datang, ${v}!`); rerender(); break; }
     case "resetAsk": sfx.tap(); modal(`<div style="font-size:60px">🤔</div><h3>Padam semua kemajuan?</h3><p style="font-size:19px;font-weight:700">Semua bintang, markah kuiz dan lencana akan hilang. Minta izin ibu atau ayah dahulu ya!</p>
       <div class="row"><button class="btn green" data-act="close">Tidak, Simpan</button><button class="btn pink" data-act="resetYes">Ya, Padam</button></div>`); break;
-    case "resetYes": { const snd=S.sound; S=blank(); S.sound=snd; save(); closeModal(); updateStars(); rerender(true); break; }
+    case "resetYes": { const keep={sound:S.sound,voice:S.voice,speed:S.speed}; S=Object.assign(blank(),keep); save(); closeModal(); updateStars(); rerender(true); break; }
   }
 });
 document.addEventListener("keydown", e => { if (e.key==="Escape") closeModal(); if (e.key==="Enter" && e.target.id==="nameIn") $("[data-act=saveName]").click(); });
 $("#homeBtn").addEventListener("click", ()=>{ sfx.tap(); go("home"); });
-$("#soundBtn").addEventListener("click", ()=>{ S.sound=!S.sound; save(); setSoundIcon(); if (S.sound) sfx.tap(); else try{ speechSynthesis.cancel(); }catch(e){} });
+$("#soundBtn").addEventListener("click", ()=>{ ac(); sfx.tap(); voiceSettings(); });
 function setSoundIcon(){ $("#soundBtn").textContent = S.sound ? "🔊" : "🔇"; }
 
 function askName(){
