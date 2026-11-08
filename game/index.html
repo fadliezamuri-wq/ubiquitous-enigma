@@ -1,0 +1,1132 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Rumah Pusaka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Creepster&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000;
+    --ink: #e9e2d0;
+    --muted: #9b917c;
+    --blood: #b3121b;
+    --blood-hi: #ff2a36;
+    --gold: #d9b45a;
+    --panel: rgba(12, 6, 4, 0.92);
+    --card: #1b100b;
+    --card-hi: #2c1a10;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
+    font-family: "Special Elite", "Courier New", monospace; user-select: none; -webkit-user-select: none; }
+  canvas { position: fixed; inset: 0; display: block; touch-action: none; cursor: none; }
+  .hidden { display: none !important; }
+
+  /* HUD */
+  #hud { position: fixed; top: 0; left: 0; right: 0; padding: 12px 16px; display: flex; gap: 16px;
+    align-items: center; flex-wrap: wrap; pointer-events: none; font-size: 14px; text-shadow: 0 0 6px #000; }
+  #hud .night { color: var(--gold); letter-spacing: .05em; }
+  #hud .bar { width: 140px; height: 10px; border: 1px solid #5a1a1a; background: #1a0505; border-radius: 6px; overflow: hidden; }
+  #hud .bar > div { height: 100%; background: linear-gradient(90deg, #6d0b10, var(--blood-hi)); transition: width .3s; }
+  #hud .grp { display: flex; align-items: center; gap: 8px; }
+
+  #toast { position: fixed; left: 50%; top: 18%; transform: translateX(-50%); max-width: min(90vw, 640px);
+    text-align: center; font-size: clamp(16px, 2.6vw, 22px); color: var(--ink); text-shadow: 0 0 10px #000, 0 0 4px #000;
+    pointer-events: none; opacity: 0; transition: opacity .5s; padding: 0 16px; }
+  #toast.show { opacity: 1; }
+  #toast.red { color: var(--blood-hi); font-size: clamp(22px, 4vw, 38px); font-family: "Creepster", cursive; letter-spacing: .06em; }
+
+  /* Screens */
+  .overlay { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(30,5,5,.75), rgba(0,0,0,.96)); padding: 16px; overflow-y: auto; }
+  .box { max-width: 680px; width: 100%; text-align: center; line-height: 1.55; margin: auto; }
+  .title { font-family: "Creepster", cursive; color: var(--blood-hi); font-size: clamp(48px, 12vw, 104px);
+    margin: 0; line-height: 1; text-shadow: 0 0 18px #6d0000, 0 6px 0 #300; animation: drip 3s infinite; }
+  @keyframes drip { 0%,92%,100% { transform: none; opacity: 1; } 93% { transform: translate(2px,-1px) skewX(4deg); opacity: .6; } 95% { transform: translate(-3px,1px); opacity: 1; } }
+  .sub { color: var(--muted); margin: 8px 0 22px; }
+  .story { font-size: clamp(16px, 2.4vw, 20px); color: var(--ink); white-space: pre-line; }
+  .ghosts { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 18px 0; }
+  .ghosts span { border: 1px solid #4a1515; padding: 4px 10px; border-radius: 20px; font-size: 13px; color: #d8c9b0; background: rgba(40,8,8,.5); }
+  .help { text-align: left; font-size: 14px; color: #cdbfa6; background: rgba(0,0,0,.45); border: 1px solid #3a1a12;
+    padding: 12px 16px; border-radius: 8px; margin: 14px 0; }
+  .help b { color: var(--gold); }
+  .warn { font-size: 12px; color: #c46a6a; margin-top: 12px; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  button.big { font-family: "Creepster", cursive; font-size: 28px; letter-spacing: .08em; color: #fff; background: linear-gradient(#7d0c12, #3d0408);
+    border: 1px solid #ff3b47; border-radius: 10px; padding: 10px 34px; cursor: pointer; margin: 8px; box-shadow: 0 0 20px rgba(255,0,0,.35); }
+  button.big:hover { filter: brightness(1.2); }
+  button.small { font-family: inherit; font-size: 14px; color: var(--ink); background: #241510; border: 1px solid #5b3a24; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  button.small:hover { background: #33200f; }
+  .arabic { font-family: "Amiri", "Traditional Arabic", "Scheherazade New", serif; direction: rtl; }
+
+  /* Recite panel */
+  #recite { position: fixed; left: 0; right: 0; bottom: 0; max-height: 66vh; overflow-y: auto; background: var(--panel);
+    border-top: 2px solid #5a1a14; padding: 12px 16px 16px; box-shadow: 0 -10px 40px rgba(0,0,0,.8); }
+  #recite .head { text-align: center; }
+  #recite .taawudh { font-size: clamp(18px, 3vw, 24px); color: var(--gold); margin: 0; }
+  #recite .basmalah { font-size: clamp(18px, 3vw, 24px); color: var(--gold); margin: 0; }
+  #recite h2 { margin: 4px 0 8px; font-size: clamp(15px, 2.4vw, 20px); font-weight: normal; }
+  #recite h2 b { color: var(--blood-hi); }
+  .timer { height: 8px; background: #200606; border-radius: 4px; overflow: hidden; border: 1px solid #4a1010; margin: 0 auto 10px; max-width: 900px; }
+  .timer > div { height: 100%; background: linear-gradient(90deg, #ff2a36, #ffb13b); width: 100%; }
+  #readArea { min-height: 44px; max-width: 900px; margin: 0 auto 10px; padding: 8px 12px; border: 1px dashed #5b3a24; border-radius: 8px;
+    font-size: clamp(20px, 3.4vw, 28px); line-height: 1.9; color: #f6eedb; background: rgba(0,0,0,.35); text-align: right; }
+  #readArea:empty::before { content: "Klik ayat mengikut turutan yang betul..."; font-family: "Special Elite", monospace; font-size: 14px; color: var(--muted); direction: ltr; display: block; text-align: center; }
+  #readArea .ayah-no { color: var(--gold); font-size: .85em; margin: 0 4px; }
+  #cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; max-width: 900px; margin: 0 auto; }
+  .card { background: var(--card); border: 1px solid #4b2e1c; border-radius: 10px; padding: 8px 10px; cursor: pointer; text-align: center; color: var(--ink); font-family: inherit; }
+  .card:hover { background: var(--card-hi); border-color: var(--gold); }
+  .card .ar { font-size: clamp(20px, 3vw, 26px); line-height: 1.7; color: #fff6e0; }
+  .card .tr { font-size: 12px; color: #d9c08a; margin-top: 2px; font-style: italic; }
+  .card .ms { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .card.hint { border-color: #7dff9a; box-shadow: 0 0 14px rgba(125,255,154,.5); }
+  .card.wrong { animation: shake .35s; border-color: var(--blood-hi); }
+  .card.used { visibility: hidden; }
+  @keyframes shake { 0%,100% { transform: none; } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-4px); } }
+  #recite .tools { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+  body.no-meaning .card .ms, body.no-translit .card .tr { display: none; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="hud" class="hidden">
+  <div class="night" id="hudNight">Malam 1</div>
+  <div class="grp">Semangat <div class="bar"><div id="hudSemangat" style="width:100%"></div></div></div>
+  <div class="grp">🕯️ <span id="hudLilin">0/3</span></div>
+  <div class="grp">💡 Bantuan: <span id="hudHint">3</span></div>
+</div>
+
+<div id="toast"></div>
+
+<div id="recite" class="hidden">
+  <div class="head">
+    <p class="taawudh arabic">أَعُوذُ بِٱللَّهِ مِنَ ٱلشَّيْطَٰنِ ٱلرَّجِيمِ</p>
+    <p class="basmalah arabic" id="basmalah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
+    <h2 id="reciteTitle"></h2>
+  </div>
+  <div class="timer"><div id="timerBar"></div></div>
+  <div id="readArea" class="arabic"></div>
+  <div id="cards"></div>
+  <div class="tools">
+    <button class="small" id="btnHint">💡 Tunjuk ayat seterusnya</button>
+    <button class="small" id="btnTr">Rumi: Hidup</button>
+    <button class="small" id="btnMs">Maksud: Hidup</button>
+  </div>
+</div>
+
+<div id="screen" class="overlay"></div>
+
+<script>
+"use strict";
+
+/* ===================== DATA: AYAT AL-QURAN ===================== */
+// [teks Arab, sebutan rumi, maksud ringkas]
+const QURAN = {
+  ikhlas: { name: "Al-Ikhlas", no: 112, basmalah: true, ayat: [
+    ["قُلْ هُوَ ٱللَّهُ أَحَدٌ", "Qul huwallāhu aḥad", "Katakanlah: Dialah Allah, Yang Maha Esa."],
+    ["ٱللَّهُ ٱلصَّمَدُ", "Allāhuṣ-ṣamad", "Allah tempat bergantung segala makhluk."],
+    ["لَمْ يَلِدْ وَلَمْ يُولَدْ", "Lam yalid wa lam yūlad", "Dia tiada beranak dan tidak diperanakkan."],
+    ["وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ", "Wa lam yakul-lahū kufuwan aḥad", "Dan tiada sesiapa pun yang setara dengan-Nya."],
+  ]},
+  falaq: { name: "Al-Falaq", no: 113, basmalah: true, ayat: [
+    ["قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ", "Qul a‘ūdhu birabbil-falaq", "Katakanlah: Aku berlindung kepada Tuhan yang menguasai subuh,"],
+    ["مِن شَرِّ مَا خَلَقَ", "Min sharri mā khalaq", "dari kejahatan makhluk yang Dia ciptakan,"],
+    ["وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ", "Wa min sharri ghāsiqin idhā waqab", "dan dari kejahatan malam apabila ia gelap gelita,"],
+    ["وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ", "Wa min sharrin-naffāthāti fil-‘uqad", "dan dari kejahatan yang menghembus pada simpulan-simpulan ikatan,"],
+    ["وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ", "Wa min sharri ḥāsidin idhā ḥasad", "dan dari kejahatan orang yang dengki apabila ia dengki."],
+  ]},
+  nas: { name: "An-Nas", no: 114, basmalah: true, ayat: [
+    ["قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ", "Qul a‘ūdhu birabbin-nās", "Katakanlah: Aku berlindung kepada Tuhan manusia,"],
+    ["مَلِكِ ٱلنَّاسِ", "Malikin-nās", "Yang Menguasai manusia,"],
+    ["إِلَٰهِ ٱلنَّاسِ", "Ilāhin-nās", "Tuhan yang disembah oleh manusia,"],
+    ["مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ", "Min sharril-waswāsil-khannās", "dari kejahatan pembisik yang timbul tenggelam,"],
+    ["ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ", "Alladhī yuwaswisu fī ṣudūrin-nās", "yang membisikkan ke dalam hati manusia,"],
+    ["مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ", "Minal-jinnati wan-nās", "dari kalangan jin dan manusia."],
+  ]},
+  fatihah: { name: "Al-Fatihah", no: 1, basmalah: false, ayat: [
+    ["بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "Bismillāhir-raḥmānir-raḥīm", "Dengan nama Allah, Yang Maha Pemurah, lagi Maha Penyayang."],
+    ["ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ", "Al-ḥamdu lillāhi rabbil-‘ālamīn", "Segala puji bagi Allah, Tuhan sekalian alam."],
+    ["ٱلرَّحْمَٰنِ ٱلرَّحِيمِ", "Ar-raḥmānir-raḥīm", "Yang Maha Pemurah, lagi Maha Penyayang."],
+    ["مَٰلِكِ يَوْمِ ٱلدِّينِ", "Māliki yawmid-dīn", "Yang Menguasai hari pembalasan."],
+    ["إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "Iyyāka na‘budu wa iyyāka nasta‘īn", "Hanya Engkau yang kami sembah, dan hanya kepada Engkau kami memohon pertolongan."],
+    ["ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ", "Ihdinaṣ-ṣirāṭal-mustaqīm", "Tunjukilah kami jalan yang lurus,"],
+    ["صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ", "Ṣirāṭal-ladhīna an‘amta ‘alayhim ghayril-maghḍūbi ‘alayhim wa laḍ-ḍāllīn", "jalan orang yang Engkau kurniakan nikmat, bukan jalan orang yang dimurkai dan bukan jalan orang yang sesat."],
+  ]},
+  kursi: { name: "Ayat al-Kursi (Al-Baqarah: 255)", no: 2, basmalah: false, segmented: true, ayat: [
+    ["ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ", "Allāhu lā ilāha illā huwal-ḥayyul-qayyūm", "Allah, tiada Tuhan melainkan Dia, Yang Tetap Hidup, Yang Kekal mentadbir makhluk-Nya."],
+    ["لَا تَأْخُذُهُۥ سِنَةٌ وَلَا نَوْمٌ", "Lā ta’khudhuhū sinatuw wa lā nawm", "Dia tidak mengantuk dan tidak tidur."],
+    ["لَّهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ", "Lahū mā fis-samāwāti wa mā fil-arḍ", "Milik-Nya apa yang ada di langit dan di bumi."],
+    ["مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ", "Man dhal-ladhī yashfa‘u ‘indahū illā bi-idhnih", "Tiada siapa dapat memberi syafaat di sisi-Nya melainkan dengan izin-Nya."],
+    ["يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ", "Ya‘lamu mā bayna aydīhim wa mā khalfahum", "Dia mengetahui apa yang di hadapan dan di belakang mereka,"],
+    ["وَلَا يُحِيطُونَ بِشَىْءٍ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ", "Wa lā yuḥīṭūna bishay’im-min ‘ilmihī illā bimā shā’", "dan mereka tidak mengetahui sesuatu pun dari ilmu-Nya melainkan apa yang Dia kehendaki."],
+    ["وَسِعَ كُرْسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ", "Wasi‘a kursiyyuhus-samāwāti wal-arḍ", "Luas Kursi-Nya meliputi langit dan bumi,"],
+    ["وَلَا يَـُٔودُهُۥ حِفْظُهُمَا", "Wa lā ya’ūduhū ḥifẓuhumā", "dan tidak berat bagi-Nya memelihara keduanya."],
+    ["وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ", "Wa huwal-‘aliyyul-‘aẓīm", "Dan Dialah Yang Maha Tinggi, lagi Maha Besar."],
+  ]},
+};
+
+/* ===================== DATA: HANTU & MALAM ===================== */
+const GHOSTS = {
+  toyol:     { name: "Toyol",      surah: "ikhlas",  pitch: 1.7, lurkS: 0.075, lurkY: 0.70, glow: "#8bff4a" },
+  pocong:    { name: "Pocong",     surah: "falaq",   pitch: 0.55, lurkS: 0.11,  lurkY: 0.48, glow: "#e8e2c8" },
+  pontianak: { name: "Pontianak",  surah: "nas",     pitch: 1.35, lurkS: 0.11,  lurkY: 0.40, glow: "#ff2a2a" },
+  langsuir:  { name: "Langsuir",   surah: "fatihah", pitch: 1.1,  lurkS: 0.11,  lurkY: 0.36, glow: "#c8ff3a" },
+  hantuRaya: { name: "Hantu Raya", surah: "kursi",   pitch: 0.38, lurkS: 0.14,  lurkY: 0.30, glow: "#ff3300" },
+};
+const NIGHTS = ["toyol", "pocong", "pontianak", "langsuir", "hantuRaya"];
+const NIGHT_STORY = [
+  "Malam Pertama.\n\nKau pulang ke rumah pusaka arwah nenek di hujung kampung. Elektrik terputus.\nCari 3 batang lilin dalam gelap...\n\nAda bunyi tapak kaki kecil berlari di atas siling. Duit syiling dalam dompet kau... hilang satu demi satu.",
+  "Malam Kedua.\n\nBau kapur barus dan tanah kubur menusuk hidung.\nSesuatu yang berbalut kain putih melompat-lompat di luar tingkap...\n\nTali kafannya belum dibuka.",
+  "Malam Ketiga.\n\nBau bunga kemboja tiba-tiba semerbak.\nDari rumpun pisang di belakang rumah, kedengaran hilaian tawa seorang perempuan...\n\nJika bunyinya jauh, maksudnya dia dekat.",
+  "Malam Keempat.\n\nBunyi bayi menangis dari bawah rumah... lalu bertukar menjadi jeritan nyaring.\nLangsuir terbang dengan kuku panjang, mencari mangsa.",
+  "Malam Terakhir. Malam Jumaat.\n\nSaka arwah nenek — Hantu Raya — datang menuntut tuan yang baru.\nBayangnya setinggi bumbung, matanya merah menyala.\n\nHanya Ayat al-Kursi dapat menghalaunya.",
+];
+
+/* ===================== UTIL ===================== */
+const $ = (id) => document.getElementById(id);
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+const toArabicNum = (n) => String(n).split("").map((d) => AR_DIGITS[+d]).join("");
+function shuffleIdx(n) {
+  const a = [...Array(n).keys()];
+  do { for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } }
+  while (n > 2 && a.every((v, i) => v === i));
+  return a;
+}
+function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+/* ===================== AUDIO (Web Audio, tiada fail luar) ===================== */
+let AC = null, master = null, echoIn = null, noiseBuf = null;
+function initAudio() {
+  if (AC) { if (AC.state === "suspended") AC.resume(); return; }
+  AC = new (window.AudioContext || window.webkitAudioContext)();
+  const comp = AC.createDynamicsCompressor();
+  comp.threshold.value = -10; comp.ratio.value = 6;
+  master = AC.createGain(); master.gain.value = 0.9;
+  master.connect(comp); comp.connect(AC.destination);
+  // gema
+  echoIn = AC.createGain();
+  const dl = AC.createDelay(1); dl.delayTime.value = 0.32;
+  const fb = AC.createGain(); fb.gain.value = 0.38;
+  const wet = AC.createGain(); wet.gain.value = 0.5;
+  echoIn.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(wet); wet.connect(master); echoIn.connect(master);
+  noiseBuf = AC.createBuffer(1, AC.sampleRate * 2, AC.sampleRate);
+  const d = noiseBuf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  startAmbient();
+}
+function noise() { const s = AC.createBufferSource(); s.buffer = noiseBuf; s.loop = true; return s; }
+function envGain(t0, a, peak, d, dest) {
+  const g = AC.createGain();
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(peak, t0 + a);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + a + d);
+  g.connect(dest || master);
+  return g;
+}
+function distCurve(k) {
+  const n = 1024, c = new Float32Array(n);
+  for (let i = 0; i < n; i++) { const x = (i * 2) / n - 1; c[i] = ((3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x)); }
+  return c;
+}
+function startAmbient() {
+  const t = AC.currentTime;
+  // dengung rendah
+  const lp = AC.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 220;
+  const g = AC.createGain(); g.gain.value = 0.07; lp.connect(g); g.connect(master);
+  [[49, "sine"], [51.3, "sine"], [73.4, "sawtooth"]].forEach(([f, ty]) => {
+    const o = AC.createOscillator(); o.type = ty; o.frequency.value = f; o.connect(lp); o.start(t);
+  });
+  const lfo = AC.createOscillator(); lfo.frequency.value = 0.05;
+  const lfoG = AC.createGain(); lfoG.gain.value = 120; lfo.connect(lfoG); lfoG.connect(lp.frequency); lfo.start(t);
+  // angin
+  const n = noise(); const bp = AC.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 500; bp.Q.value = 0.8;
+  const wg = AC.createGain(); wg.gain.value = 0.05;
+  n.connect(bp); bp.connect(wg); wg.connect(master); n.start(t);
+  const l2 = AC.createOscillator(); l2.frequency.value = 0.08; const l2g = AC.createGain(); l2g.gain.value = 350;
+  l2.connect(l2g); l2g.connect(bp.frequency); l2.start(t);
+  const l3 = AC.createOscillator(); l3.frequency.value = 0.13; const l3g = AC.createGain(); l3g.gain.value = 0.035;
+  l3.connect(l3g); l3g.connect(wg.gain); l3.start(t);
+}
+const SFX = {
+  thump(vol = 0.5) {
+    if (!AC) return; const t = AC.currentTime;
+    [0, 0.17].forEach((off, i) => {
+      const o = AC.createOscillator(); o.type = "sine";
+      o.frequency.setValueAtTime(75, t + off); o.frequency.exponentialRampToValueAtTime(38, t + off + 0.14);
+      o.connect(envGain(t + off, 0.01, vol * (i ? 0.6 : 1), 0.16)); o.start(t + off); o.stop(t + off + 0.25);
+    });
+  },
+  scream(pitch = 1, dur = 1.4, vol = 1) {
+    if (!AC) return; const t = AC.currentTime;
+    const n = noise(); const bp = AC.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.6;
+    bp.frequency.setValueAtTime(900 * pitch, t); bp.frequency.exponentialRampToValueAtTime(3200 * pitch, t + 0.15);
+    bp.frequency.exponentialRampToValueAtTime(700 * pitch, t + dur);
+    n.connect(bp); bp.connect(envGain(t, 0.01, 0.9 * vol, dur)); n.start(t); n.stop(t + dur + 0.1);
+    const ws = AC.createWaveShaper(); ws.curve = distCurve(60);
+    ws.connect(envGain(t, 0.01, 0.35 * vol, dur, echoIn));
+    const vib = AC.createOscillator(); vib.frequency.value = 26; const vg = AC.createGain(); vg.gain.value = 50 * pitch;
+    vib.connect(vg); vib.start(t); vib.stop(t + dur + 0.1);
+    [380, 553, 811, 1190].forEach((f) => {
+      const o = AC.createOscillator(); o.type = "sawtooth";
+      o.frequency.setValueAtTime(f * pitch * 0.7, t);
+      o.frequency.exponentialRampToValueAtTime(f * pitch * 1.25, t + 0.12);
+      o.frequency.exponentialRampToValueAtTime(f * pitch * 0.6, t + dur);
+      vg.connect(o.frequency); o.connect(ws); o.start(t); o.stop(t + dur + 0.1);
+    });
+    const b = AC.createOscillator(); b.type = "sine";
+    b.frequency.setValueAtTime(70, t); b.frequency.exponentialRampToValueAtTime(28, t + 0.7);
+    b.connect(envGain(t, 0.005, 1.0 * vol, 0.8)); b.start(t); b.stop(t + 1);
+  },
+  whisper() {
+    if (!AC) return; const t = AC.currentTime, dur = rand(1.2, 2.2);
+    const n = noise();
+    const f1 = AC.createBiquadFilter(); f1.type = "bandpass"; f1.frequency.value = rand(2200, 3600); f1.Q.value = 3;
+    const f2 = AC.createBiquadFilter(); f2.type = "bandpass"; f2.frequency.value = rand(900, 1400); f2.Q.value = 5;
+    const am = AC.createGain(); am.gain.value = 0.5;
+    const lfo = AC.createOscillator(); lfo.frequency.value = rand(4, 8); const lg = AC.createGain(); lg.gain.value = 0.5;
+    lfo.connect(lg); lg.connect(am.gain); lfo.start(t); lfo.stop(t + dur + 0.2);
+    const pan = AC.createStereoPanner ? AC.createStereoPanner() : AC.createGain();
+    if (pan.pan) { pan.pan.setValueAtTime(rand(-1, 1), t); pan.pan.linearRampToValueAtTime(rand(-1, 1), t + dur); }
+    n.connect(f1); n.connect(f2); f1.connect(am); f2.connect(am); am.connect(pan);
+    pan.connect(envGain(t, dur * 0.4, 0.35, dur * 0.6, echoIn)); n.start(t); n.stop(t + dur + 0.2);
+  },
+  creak() {
+    if (!AC) return; const t = AC.currentTime, dur = rand(0.9, 1.6);
+    const o = AC.createOscillator(); o.type = "sawtooth";
+    o.frequency.setValueAtTime(rand(70, 110), t);
+    for (let i = 1; i <= 6; i++) o.frequency.linearRampToValueAtTime(rand(60, 160), t + (dur * i) / 6);
+    const bp = AC.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 700; bp.Q.value = 7;
+    o.connect(bp); bp.connect(envGain(t, 0.2, 0.45, dur, echoIn)); o.start(t); o.stop(t + dur + 0.3);
+  },
+  knock(times = 3, soft = false) {
+    if (!AC) return; const t = AC.currentTime;
+    for (let i = 0; i < times; i++) {
+      const tt = t + i * (soft ? 0.11 : 0.32);
+      const o = AC.createOscillator(); o.type = "sine"; o.frequency.setValueAtTime(soft ? 220 : 130, tt);
+      o.frequency.exponentialRampToValueAtTime(60, tt + 0.08);
+      o.connect(envGain(tt, 0.003, soft ? 0.25 : 0.7, 0.1, echoIn)); o.start(tt); o.stop(tt + 0.15);
+    }
+  },
+  laugh() {
+    if (!AC) return; const t = AC.currentTime;
+    const bp = AC.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1500; bp.Q.value = 2; bp.connect(echoIn);
+    for (let i = 0; i < 8; i++) {
+      const tt = t + i * 0.17;
+      const o = AC.createOscillator(); o.type = "triangle";
+      o.frequency.setValueAtTime(1250 - i * 55, tt); o.frequency.linearRampToValueAtTime(1050 - i * 55, tt + 0.12);
+      const g = AC.createGain(); g.gain.setValueAtTime(0.0001, tt); g.gain.exponentialRampToValueAtTime(0.28, tt + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, tt + 0.14); o.connect(g); g.connect(bp); o.start(tt); o.stop(tt + 0.16);
+    }
+  },
+  stinger() {
+    if (!AC) return; const t = AC.currentTime, dur = 2.2;
+    const bp = AC.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 2400; bp.Q.value = 3;
+    const g = AC.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.16, t + dur);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.3);
+    bp.connect(g); g.connect(echoIn);
+    const vib = AC.createOscillator(); vib.frequency.value = 7; const vg = AC.createGain(); vg.gain.value = 30;
+    vib.connect(vg); vib.start(t); vib.stop(t + dur + 0.4);
+    [1870, 1990, 2110].forEach((f) => {
+      const o = AC.createOscillator(); o.type = "sawtooth"; o.frequency.setValueAtTime(f, t);
+      o.frequency.linearRampToValueAtTime(f * 1.12, t + dur); vg.connect(o.frequency);
+      o.connect(bp); o.start(t); o.stop(t + dur + 0.4);
+    });
+  },
+  chime() {
+    if (!AC) return; const t = AC.currentTime;
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+      const o = AC.createOscillator(); o.type = "sine"; o.frequency.value = f;
+      o.connect(envGain(t + i * 0.09, 0.02, 0.18, 2.2, echoIn)); o.start(t + i * 0.09); o.stop(t + 3);
+    });
+  },
+  correct(i) {
+    if (!AC) return; const t = AC.currentTime;
+    const o = AC.createOscillator(); o.type = "sine"; o.frequency.value = 392 * Math.pow(2, (i % 8) * 2 / 12);
+    o.connect(envGain(t, 0.01, 0.2, 0.7, echoIn)); o.start(t); o.stop(t + 1);
+  },
+  wrong() {
+    if (!AC) return; const t = AC.currentTime;
+    const lp = AC.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 900; lp.connect(envGain(t, 0.01, 0.4, 0.45));
+    [68, 73].forEach((f) => { const o = AC.createOscillator(); o.type = "sawtooth"; o.frequency.value = f; o.connect(lp); o.start(t); o.stop(t + 0.5); });
+  },
+};
+
+/* ===================== CANVAS ===================== */
+const cv = $("c"), ctx = cv.getContext("2d");
+const dark = document.createElement("canvas"), dctx = dark.getContext("2d");
+let W = 0, H = 0, DPR = 1;
+function resize() {
+  DPR = Math.min(2, window.devicePixelRatio || 1);
+  W = window.innerWidth; H = window.innerHeight;
+  cv.width = dark.width = Math.round(W * DPR); cv.height = dark.height = Math.round(H * DPR);
+  cv.style.width = W + "px"; cv.style.height = H + "px";
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0); dctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+window.addEventListener("resize", resize); resize();
+
+function el(c, x, y, rx, ry) { c.beginPath(); c.ellipse(x, y, Math.abs(rx), Math.abs(ry), 0, 0, Math.PI * 2); }
+
+/* ---------- Lukisan hantu (koordinat unit; muka di 0,0) ---------- */
+function glowEyes(c, s, pts, rx, ry, color, pupil) {
+  c.save(); c.shadowColor = color; c.shadowBlur = Math.max(6, 0.12 * s); c.fillStyle = color;
+  pts.forEach(([x, y]) => { el(c, x, y, rx, ry); c.fill(); });
+  c.restore();
+  if (pupil) { c.fillStyle = pupil; pts.forEach(([x, y]) => { el(c, x, y, rx * 0.28, ry * 0.8); c.fill(); }); }
+}
+
+function drawToyol(c, t, s) {
+  const run = Math.sin(t * 14);
+  const skin = c.createRadialGradient(-0.08, -0.12, 0.05, 0, 0, 0.5);
+  skin.addColorStop(0, "#7fae52"); skin.addColorStop(1, "#2f4f1c");
+  c.lineCap = "round"; c.strokeStyle = "#3e6324";
+  // kaki & tangan
+  c.lineWidth = 0.09;
+  c.beginPath(); c.moveTo(-0.09, 0.85); c.lineTo(-0.14 + run * 0.08, 1.12); c.stroke();
+  c.beginPath(); c.moveTo(0.09, 0.85); c.lineTo(0.14 - run * 0.08, 1.12); c.stroke();
+  c.lineWidth = 0.07;
+  [[-1, run], [1, -run]].forEach(([d, r]) => {
+    c.beginPath(); c.moveTo(d * 0.17, 0.45); c.quadraticCurveTo(d * 0.38, 0.5, d * 0.4, 0.72 + r * 0.05); c.stroke();
+    c.save(); c.strokeStyle = "#111"; c.lineWidth = 0.015;
+    for (let k = -1; k <= 1; k++) { c.beginPath(); c.moveTo(d * 0.4, 0.74 + r * 0.05); c.lineTo(d * (0.43 + k * 0.03), 0.85 + r * 0.05); c.stroke(); }
+    c.restore();
+  });
+  // badan
+  c.fillStyle = skin; el(c, 0, 0.62, 0.21, 0.3); c.fill();
+  c.strokeStyle = "rgba(0,0,0,.35)"; c.lineWidth = 0.012;
+  for (let k = 0; k < 3; k++) { c.beginPath(); c.moveTo(-0.12, 0.5 + k * 0.07); c.quadraticCurveTo(0, 0.53 + k * 0.07, 0.12, 0.5 + k * 0.07); c.stroke(); }
+  c.fillStyle = "#5a0b0b"; c.fillRect(-0.2, 0.8, 0.4, 0.09);
+  // telinga
+  c.fillStyle = "#4b7530";
+  [-1, 1].forEach((d) => { c.beginPath(); c.moveTo(d * 0.28, -0.12); c.lineTo(d * 0.6, -0.32); c.lineTo(d * 0.3, 0.08); c.closePath(); c.fill(); });
+  // kepala
+  c.fillStyle = skin; el(c, 0, -0.02, 0.36, 0.38); c.fill();
+  c.strokeStyle = "rgba(20,40,10,.6)"; c.lineWidth = 0.01;
+  [[-0.1, -0.35, -0.02, -0.2], [0.12, -0.33, 0.05, -0.22], [0, -0.38, 0.02, -0.28]].forEach(([a, b, x, y]) => { c.beginPath(); c.moveTo(a, b); c.quadraticCurveTo(x + 0.04, (b + y) / 2, x, y); c.stroke(); });
+  // kening
+  c.fillStyle = "rgba(15,30,8,.75)";
+  [-1, 1].forEach((d) => { c.beginPath(); c.moveTo(d * 0.03, -0.08); c.lineTo(d * 0.27, -0.16); c.lineTo(d * 0.25, -0.1); c.closePath(); c.fill(); });
+  glowEyes(c, s, [[-0.14, -0.01], [0.14, -0.01]], 0.1, 0.085, "#ffe02a", "#c00000");
+  // hidung & mulut
+  c.fillStyle = "#1b2b10"; el(c, -0.025, 0.1, 0.012, 0.018); c.fill(); el(c, 0.025, 0.1, 0.012, 0.018); c.fill();
+  c.fillStyle = "#1a0505";
+  c.beginPath(); c.moveTo(-0.22, 0.15); c.quadraticCurveTo(0, 0.36, 0.22, 0.15); c.quadraticCurveTo(0, 0.22, -0.22, 0.15); c.fill();
+  c.fillStyle = "#f2efe0";
+  for (let k = -3; k <= 3; k++) { const x = k * 0.055; const y = 0.17 + 0.02 * (1 - Math.abs(k) / 3) ; c.beginPath(); c.moveTo(x - 0.022, y); c.lineTo(x + 0.022, y); c.lineTo(x, y + (Math.abs(k) === 2 ? 0.08 : 0.04)); c.fill(); }
+}
+
+function drawPocong(c, t, s) {
+  const cloth = c.createLinearGradient(-0.45, 0, 0.45, 0);
+  cloth.addColorStop(0, "#9c9886"); cloth.addColorStop(0.45, "#efebdc"); cloth.addColorStop(1, "#8d8977");
+  c.fillStyle = cloth;
+  c.beginPath();
+  c.moveTo(0, -0.5);
+  c.bezierCurveTo(0.34, -0.5, 0.42, -0.1, 0.38, 0.32);
+  c.bezierCurveTo(0.5, 0.7, 0.46, 1.6, 0.32, 2.2);
+  c.quadraticCurveTo(0, 2.38, -0.32, 2.2);
+  c.bezierCurveTo(-0.46, 1.6, -0.5, 0.7, -0.38, 0.32);
+  c.bezierCurveTo(-0.42, -0.1, -0.34, -0.5, 0, -0.5);
+  c.fill();
+  // simpulan atas
+  c.beginPath(); c.moveTo(-0.06, -0.48); c.lineTo(-0.16, -0.72); c.lineTo(0, -0.58); c.lineTo(0.15, -0.74); c.lineTo(0.06, -0.48); c.closePath(); c.fill();
+  // tali
+  c.strokeStyle = "#6f6a58"; c.lineWidth = 0.035;
+  [[-0.08, -0.5, 0.08, -0.5], [-0.37, 0.36, 0.37, 0.36], [-0.34, 2.0, 0.34, 2.0], [-0.44, 1.15, 0.44, 1.15]].forEach(([a, b, x, y]) => {
+    c.beginPath(); c.moveTo(a, b); c.quadraticCurveTo(0, b + 0.05, x, y); c.stroke();
+  });
+  // lipatan & kotoran
+  c.strokeStyle = "rgba(60,55,40,.35)"; c.lineWidth = 0.012;
+  [[-0.2, 0.5, -0.25, 1.9], [0.18, 0.45, 0.22, 1.95], [0, 0.6, 0.03, 2.1]].forEach(([a, b, x, y]) => { c.beginPath(); c.moveTo(a, b); c.quadraticCurveTo(a + 0.1, (b + y) / 2, x, y); c.stroke(); });
+  c.fillStyle = "rgba(95,60,30,.35)"; el(c, 0.15, 1.5, 0.08, 0.13); c.fill(); el(c, -0.2, 0.9, 0.05, 0.08); c.fill(); el(c, -0.05, 2.15, 0.12, 0.05); c.fill();
+  // lubang muka
+  const fg = c.createRadialGradient(0, 0, 0.02, 0, 0, 0.3); fg.addColorStop(0, "#4a4f37"); fg.addColorStop(1, "#0d0e09");
+  c.fillStyle = fg; el(c, 0, 0, 0.25, 0.31); c.fill();
+  c.fillStyle = "rgba(120,110,80,.35)"; el(c, 0, 0.05, 0.16, 0.2); c.fill();
+  glowEyes(c, s, [[-0.09, -0.05], [0.09, -0.05]], 0.06, 0.05, "#f4f4ea", "#9a0000");
+  c.fillStyle = "#050505"; el(c, 0, 0.15, 0.055, 0.085); c.fill();
+}
+
+function drawLady(c, t, s, isLangsuir) {
+  const sway = Math.sin(t * 1.7);
+  // aura
+  // rambut belakang
+  c.fillStyle = "#040404";
+  c.beginPath(); c.moveTo(-0.28, -0.25);
+  c.bezierCurveTo(-0.5, 0.2, -0.5 + 0.05 * sway, 1.0, -0.45, 1.7);
+  for (let k = 0; k <= 10; k++) { const x = -0.45 + k * 0.09; c.lineTo(x, 1.7 + 0.1 * Math.sin(k * 1.9 + t * 3) + (k % 2) * 0.08); }
+  c.bezierCurveTo(0.5 - 0.05 * sway, 1.0, 0.5, 0.2, 0.28, -0.25);
+  c.quadraticCurveTo(0, -0.52, -0.28, -0.25); c.fill();
+  // baju
+  const dg = c.createLinearGradient(0, 0.3, 0, 2.5);
+  if (isLangsuir) { dg.addColorStop(0, "rgba(170,180,150,.95)"); dg.addColorStop(1, "rgba(80,90,70,0)"); }
+  else { dg.addColorStop(0, "rgba(245,240,230,.97)"); dg.addColorStop(1, "rgba(220,215,205,0)"); }
+  c.fillStyle = dg;
+  c.beginPath(); c.moveTo(-0.17, 0.3); c.lineTo(0.17, 0.3);
+  c.bezierCurveTo(0.35, 0.8, 0.45 + sway * 0.04, 1.6, 0.6, 2.45);
+  for (let k = 0; k <= 12; k++) { const x = 0.6 - k * 0.1; c.lineTo(x, 2.45 - (k % 2) * 0.18 + 0.05 * Math.sin(t * 4 + k)); }
+  c.bezierCurveTo(-0.45 + sway * 0.04, 1.6, -0.35, 0.8, -0.17, 0.3); c.fill();
+  // tangan
+  const skinCol = isLangsuir ? "#9fae86" : "#e4dccd";
+  c.strokeStyle = skinCol; c.lineCap = "round"; c.lineWidth = 0.06;
+  if (isLangsuir) {
+    [-1, 1].forEach((d) => {
+      const hy = 0.32 + Math.sin(t * 3 + d) * 0.06;
+      c.strokeStyle = skinCol; c.lineWidth = 0.06;
+      c.beginPath(); c.moveTo(d * 0.2, 0.48); c.quadraticCurveTo(d * 0.5, 0.42, d * 0.78, hy); c.stroke();
+      c.strokeStyle = "#1c1a10"; c.lineWidth = 0.014;
+      for (let k = -2; k <= 2; k++) { c.beginPath(); c.moveTo(d * 0.78, hy); c.quadraticCurveTo(d * 0.92, hy + k * 0.05, d * 1.05, hy + k * 0.09 - 0.05); c.stroke(); }
+    });
+  } else {
+    c.beginPath(); c.moveTo(0.2, 0.5); c.quadraticCurveTo(0.32, 0.9, 0.28, 1.25); c.stroke();
+    c.strokeStyle = "#2a0505"; c.lineWidth = 0.012;
+    for (let k = -1; k <= 1; k++) { c.beginPath(); c.moveTo(0.28, 1.25); c.lineTo(0.28 + k * 0.03, 1.38); c.stroke(); }
+  }
+  // leher & muka
+  c.fillStyle = skinCol; c.fillRect(-0.07, 0.2, 0.14, 0.14);
+  const fg = c.createRadialGradient(-0.04, -0.05, 0.03, 0, 0, 0.3);
+  fg.addColorStop(0, isLangsuir ? "#c3d0aa" : "#f6f1e8"); fg.addColorStop(1, isLangsuir ? "#6d7a58" : "#a79e8f");
+  c.fillStyle = fg; el(c, 0, 0, 0.21, 0.28); c.fill();
+  c.fillStyle = "rgba(35,10,15,.75)"; el(c, -0.085, -0.03, 0.07, 0.05); c.fill(); el(c, 0.085, -0.03, 0.07, 0.05); c.fill();
+  glowEyes(c, s, [[-0.085, -0.03], [0.085, -0.03]], 0.035, 0.03, isLangsuir ? "#d4ff3a" : "#ff1a1a", "#000");
+  if (isLangsuir) {
+    c.fillStyle = "#0a0505";
+    c.beginPath(); c.moveTo(-0.13, 0.11); c.quadraticCurveTo(0, 0.27, 0.13, 0.11); c.quadraticCurveTo(0, 0.15, -0.13, 0.11); c.fill();
+    c.fillStyle = "#efe9d8";
+    [-0.07, -0.025, 0.025, 0.07].forEach((x, i) => { c.beginPath(); c.moveTo(x - 0.016, 0.125); c.lineTo(x + 0.016, 0.125); c.lineTo(x, 0.125 + (i % 3 === 0 ? 0.07 : 0.035)); c.fill(); });
+  } else {
+    c.fillStyle = "#3a0508"; el(c, 0, 0.15, 0.06, 0.025); c.fill();
+    c.strokeStyle = "#a0000a"; c.lineWidth = 0.012;
+    [[-0.035, 0.17, 0.32], [0.03, 0.17, 0.26]].forEach(([x, y, y2]) => { c.beginPath(); c.moveTo(x, y); c.lineTo(x - 0.004, y2); c.stroke(); c.fillStyle = "#a0000a"; el(c, x - 0.004, y2 + 0.012, 0.012, 0.018); c.fill(); });
+  }
+  // rambut depan
+  c.fillStyle = "#060606";
+  el(c, 0, -0.25, 0.235, 0.11); c.fill();
+  [-1, 1].forEach((d) => {
+    c.beginPath(); c.moveTo(d * 0.02, -0.33);
+    c.bezierCurveTo(d * 0.17, -0.32, d * 0.21, -0.1, d * 0.16, 0.2);
+    c.bezierCurveTo(d * 0.14, 0.6, d * (0.2 + sway * 0.02), 1.0, d * 0.26, 1.4);
+    c.lineTo(d * 0.38, 1.38);
+    c.bezierCurveTo(d * 0.34, 0.8, d * 0.32, 0.1, d * 0.26, -0.22);
+    c.closePath(); c.fill();
+  });
+  // helai rambut lepas di muka
+  c.strokeStyle = "#050505"; c.lineWidth = 0.008;
+  for (let k = 0; k < 5; k++) { const x = -0.1 + k * 0.05; c.beginPath(); c.moveTo(x * 0.5, -0.3); c.quadraticCurveTo(x + 0.02 * Math.sin(t + k), 0, x * 1.2, 0.3 + (k % 2) * 0.1); c.stroke(); }
+}
+
+function drawHantuRaya(c, t, s) {
+  const au = c.createRadialGradient(0, 0.8, 0.1, 0, 0.8, 1.8);
+  au.addColorStop(0, "rgba(150,0,0,.45)"); au.addColorStop(1, "rgba(80,0,0,0)");
+  c.fillStyle = au; el(c, 0, 0.8, 1.8, 2.0); c.fill();
+  // asap
+  for (let i = 0; i < 34; i++) {
+    const ph = (t * 0.25 + i * 0.137) % 1;
+    const px = Math.sin(i * 12.9898) * 0.85 + Math.sin(t + i) * 0.04;
+    const py = 2.6 - (i / 34) * 2.8 - ph * 0.4;
+    const r = 0.18 + 0.12 * Math.abs(Math.sin(i * 3.1));
+    const g = c.createRadialGradient(px, py, 0, px, py, r);
+    g.addColorStop(0, `rgba(5,2,2,${0.75 * (1 - ph)})`); g.addColorStop(1, "rgba(5,2,2,0)");
+    c.fillStyle = g; el(c, px, py, r, r); c.fill();
+  }
+  c.fillStyle = "#060202";
+  // badan
+  c.beginPath(); c.moveTo(-0.2, 0.3); c.bezierCurveTo(-0.9, 0.35, -0.85, 0.7, -0.75, 1.3);
+  c.bezierCurveTo(-0.7, 2.0, -0.4, 2.6, 0, 2.8); c.bezierCurveTo(0.4, 2.6, 0.7, 2.0, 0.75, 1.3);
+  c.bezierCurveTo(0.85, 0.7, 0.9, 0.35, 0.2, 0.3); c.closePath(); c.fill();
+  // tangan panjang
+  c.strokeStyle = "#060202"; c.lineCap = "round";
+  [-1, 1].forEach((d) => {
+    const sw = Math.sin(t * 1.3 + d) * 0.08;
+    c.lineWidth = 0.13; c.beginPath(); c.moveTo(d * 0.7, 0.55); c.quadraticCurveTo(d * 1.05, 1.0, d * (0.95 + sw), 1.7); c.stroke();
+    c.lineWidth = 0.025;
+    for (let k = -2; k <= 2; k++) { c.beginPath(); c.moveTo(d * (0.95 + sw), 1.7); c.quadraticCurveTo(d * (1.0 + sw + k * 0.03), 1.85, d * (0.95 + sw + k * 0.07), 2.0); c.stroke(); }
+  });
+  // tanduk & kepala
+  [-1, 1].forEach((d) => { c.beginPath(); c.moveTo(d * 0.14, -0.28); c.quadraticCurveTo(d * 0.42, -0.45, d * 0.38, -0.8); c.quadraticCurveTo(d * 0.3, -0.45, d * 0.28, -0.18); c.closePath(); c.fill(); });
+  el(c, 0, 0, 0.33, 0.38); c.fill();
+  // mata
+  c.save(); c.shadowColor = "#ff0000"; c.shadowBlur = Math.max(10, 0.2 * s); c.fillStyle = "#ff2a00";
+  [-1, 1].forEach((d) => { c.beginPath(); c.moveTo(d * 0.04, -0.06); c.lineTo(d * 0.24, -0.1); c.lineTo(d * 0.2, 0.02); c.lineTo(d * 0.06, 0.0); c.closePath(); c.fill(); });
+  // mulut
+  c.fillStyle = "#ff3a00"; c.beginPath(); c.moveTo(-0.2, 0.15);
+  for (let k = 0; k <= 8; k++) { c.lineTo(-0.2 + k * 0.05, 0.15 + (k % 2 ? 0.05 : 0.0)); }
+  for (let k = 8; k >= 0; k--) { c.lineTo(-0.2 + k * 0.05, 0.26 - (k % 2 ? 0.0 : 0.04) - 0.04 * Math.sin((k / 8) * Math.PI) * -1); }
+  c.closePath(); c.fill();
+  c.restore();
+}
+
+function drawGhost(type, c, cx, cy, s, t, alpha = 1) {
+  c.save(); c.globalAlpha = alpha; c.translate(cx, cy); c.scale(s, s);
+  if (type === "toyol") drawToyol(c, t, s);
+  else if (type === "pocong") drawPocong(c, t, s);
+  else if (type === "pontianak") drawLady(c, t, s, false);
+  else if (type === "langsuir") drawLady(c, t, s, true);
+  else drawHantuRaya(c, t, s);
+  c.restore();
+}
+
+/* ---------- Bilik rumah pusaka ---------- */
+const SPOTS = [[0.14, 0.95], [0.3, 0.83], [0.4, 0.615], [0.66, 0.44], [0.88, 0.26], [0.9, 0.93], [0.56, 0.95],
+  [0.24, 0.76], [0.75, 0.82], [0.47, 0.79], [0.04, 0.86], [0.63, 0.74]];
+
+function drawRoom() {
+  const fy = H * 0.72, tt = G.t;
+  let g = ctx.createLinearGradient(0, 0, 0, fy);
+  g.addColorStop(0, "#22170f"); g.addColorStop(1, "#3a2a1b");
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, fy);
+  ctx.strokeStyle = "rgba(0,0,0,.5)"; ctx.lineWidth = 2;
+  for (let x = 0; x < W; x += W / 18) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, fy); ctx.stroke(); }
+  ctx.fillStyle = "rgba(0,0,0,.25)";
+  for (let i = 0; i < 9; i++) { const x = (i * 0.137 % 1) * W; ctx.fillRect(x, (i * 0.31 % 1) * fy, 3, 30 + i * 6); }
+  ctx.fillStyle = "#1a110a"; ctx.fillRect(0, fy - 10, W, 10);
+  g = ctx.createLinearGradient(0, fy, 0, H); g.addColorStop(0, "#2d2116"); g.addColorStop(1, "#140d08");
+  ctx.fillStyle = g; ctx.fillRect(0, fy, W, H - fy);
+  ctx.strokeStyle = "rgba(0,0,0,.45)";
+  for (let i = -12; i <= 12; i++) { ctx.beginPath(); ctx.moveTo(W / 2 + i * W * 0.045, fy); ctx.lineTo(W / 2 + i * W * 0.22, H); ctx.stroke(); }
+  // tikar mengkuang
+  ctx.fillStyle = "#4a3a20";
+  ctx.beginPath(); ctx.moveTo(W * 0.32, fy + H * 0.08); ctx.lineTo(W * 0.68, fy + H * 0.08); ctx.lineTo(W * 0.78, H * 0.98); ctx.lineTo(W * 0.22, H * 0.98); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "rgba(20,10,0,.5)"; ctx.lineWidth = 1;
+  for (let i = 1; i < 10; i++) { const y = fy + H * 0.08 + (H * 0.9 - fy - H * 0.08) * i / 10; ctx.beginPath(); ctx.moveTo(W * 0.3 - i * W * 0.009, y); ctx.lineTo(W * 0.7 + i * W * 0.009, y); ctx.stroke(); }
+
+  // tingkap
+  const wx = W * 0.56, wy = H * 0.14, ww = W * 0.2, wh = H * 0.3;
+  g = ctx.createLinearGradient(0, wy, 0, wy + wh); g.addColorStop(0, "#08122a"); g.addColorStop(1, "#1d2c4c");
+  ctx.fillStyle = g; ctx.fillRect(wx, wy, ww, wh);
+  const mr = Math.min(ww, wh) * 0.14;
+  ctx.save(); ctx.shadowColor = "#f4f0d0"; ctx.shadowBlur = 30; ctx.fillStyle = "#ece8cf";
+  el(ctx, wx + ww * 0.72, wy + wh * 0.28, mr, mr); ctx.fill(); ctx.restore();
+  ctx.fillStyle = "rgba(5,8,5,1)";
+  // pokok pisang
+  ctx.beginPath(); ctx.moveTo(wx, wy + wh); ctx.lineTo(wx + ww * 0.1, wy + wh * 0.45); ctx.lineTo(wx + ww * 0.16, wy + wh); ctx.fill();
+  for (let k = 0; k < 4; k++) {
+    ctx.beginPath(); const bx = wx + ww * 0.12, by = wy + wh * 0.48;
+    ctx.moveTo(bx, by); ctx.quadraticCurveTo(bx + ww * (0.15 + k * 0.06), by - wh * (0.25 - k * 0.08), bx + ww * (0.3 + k * 0.05), by + wh * (0.05 + k * 0.08));
+    ctx.quadraticCurveTo(bx + ww * 0.12, by - wh * 0.05, bx, by); ctx.fill();
+  }
+  // bayang lalu di tingkap
+  if (G.winShadow > 0) {
+    const p = 1 - G.winShadow;
+    const sx = wx - ww * 0.3 + p * ww * 1.6;
+    ctx.save(); ctx.beginPath(); ctx.rect(wx, wy, ww, wh); ctx.clip();
+    ctx.fillStyle = "#000"; el(ctx, sx, wy + wh * 0.38, ww * 0.09, wh * 0.11); ctx.fill();
+    ctx.fillRect(sx - ww * 0.13, wy + wh * 0.48, ww * 0.26, wh * 0.6);
+    ctx.restore();
+  }
+  ctx.strokeStyle = "#140b05"; ctx.lineWidth = 8; ctx.strokeRect(wx, wy, ww, wh);
+  ctx.lineWidth = 4; for (let k = 1; k < 5; k++) { ctx.beginPath(); ctx.moveTo(wx + ww * k / 5, wy); ctx.lineTo(wx + ww * k / 5, wy + wh); ctx.stroke(); }
+  ctx.fillStyle = "#1e130a"; ctx.fillRect(wx - 10, wy + wh, ww + 20, 10);
+  // langsir koyak
+  ctx.fillStyle = "rgba(90,20,20,.85)";
+  ctx.beginPath(); ctx.moveTo(wx - 6, wy - 6); ctx.lineTo(wx + ww * 0.22, wy - 6);
+  ctx.quadraticCurveTo(wx + ww * 0.08 + Math.sin(tt * 0.9) * 6, wy + wh * 0.5, wx + ww * 0.12, wy + wh * 0.8);
+  ctx.lineTo(wx + ww * 0.06, wy + wh * 0.7); ctx.lineTo(wx + ww * 0.02, wy + wh * 0.95); ctx.lineTo(wx - 6, wy + wh); ctx.fill();
+
+  // pintu
+  const dx = W * 0.07, dy = H * 0.18, dw = W * 0.14, dh = fy - dy;
+  ctx.fillStyle = "#000"; ctx.fillRect(dx, dy, dw, dh);
+  const open = G.doorOpen;
+  ctx.fillStyle = "#26170d"; ctx.fillRect(dx, dy, dw * (1 - open * 0.7), dh);
+  ctx.strokeStyle = "#120a05"; ctx.lineWidth = 3;
+  ctx.strokeRect(dx + 8, dy + 10, dw * (1 - open * 0.7) - 16, dh * 0.42);
+  ctx.strokeRect(dx + 8, dy + dh * 0.5, dw * (1 - open * 0.7) - 16, dh * 0.45);
+  ctx.fillStyle = "#6b5a2a"; el(ctx, dx + dw * (1 - open * 0.7) - 14, dy + dh * 0.5, 4, 4); ctx.fill();
+  ctx.strokeStyle = "#140b05"; ctx.lineWidth = 6; ctx.strokeRect(dx, dy, dw, dh);
+  if (open > 0.2) { glowEyes(ctx, 40, [[dx + dw * 0.75, dy + dh * 0.3], [dx + dw * 0.83, dy + dh * 0.3]], 3, 2, "#ff2020"); }
+
+  // potret arwah nenek
+  const px = W * 0.33, py = H * 0.15, pw = Math.max(50, W * 0.08), ph = H * 0.15;
+  ctx.fillStyle = "#3d2a12"; ctx.fillRect(px - 6, py - 6, pw + 12, ph + 12);
+  ctx.fillStyle = "#58503e"; ctx.fillRect(px, py, pw, ph);
+  ctx.fillStyle = "#2a241a"; el(ctx, px + pw / 2, py + ph * 0.42, pw * 0.2, ph * 0.18); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(px + pw * 0.15, py + ph); ctx.quadraticCurveTo(px + pw / 2, py + ph * 0.45, px + pw * 0.85, py + ph); ctx.fill();
+  ctx.fillStyle = "#e9e3d2"; ctx.beginPath(); ctx.moveTo(px + pw * 0.24, py + ph * 0.35); ctx.quadraticCurveTo(px + pw / 2, py + ph * 0.05, px + pw * 0.76, py + ph * 0.35);
+  ctx.lineTo(px + pw * 0.7, py + ph * 0.3); ctx.quadraticCurveTo(px + pw / 2, py + ph * 0.15, px + pw * 0.3, py + ph * 0.3); ctx.fill();
+  if (G.portrait > 0) glowEyes(ctx, 40, [[px + pw * 0.43, py + ph * 0.42], [px + pw * 0.57, py + ph * 0.42]], 2.5, 2, "#ff1010");
+
+  // almari
+  const ax = W * 0.8, ay = H * 0.26, aw = W * 0.14, ah = H * 0.5;
+  ctx.fillStyle = "#2a1a0e"; ctx.fillRect(ax, ay, aw, ah);
+  ctx.strokeStyle = "#130a04"; ctx.lineWidth = 3; ctx.strokeRect(ax, ay, aw, ah);
+  ctx.beginPath(); ctx.moveTo(ax + aw / 2, ay + 6); ctx.lineTo(ax + aw / 2, ay + ah - 6); ctx.stroke();
+  ctx.fillStyle = "#1a2a30"; ctx.fillRect(ax + 8, ay + 12, aw / 2 - 14, ah * 0.5);
+  ctx.fillStyle = "#6b5a2a"; el(ctx, ax + aw / 2 - 6, ay + ah * 0.55, 3, 3); ctx.fill(); el(ctx, ax + aw / 2 + 6, ay + ah * 0.55, 3, 3); ctx.fill();
+
+  // meja & pelita
+  const tx = W * 0.36, ty = H * 0.62, tw = W * 0.18;
+  ctx.fillStyle = "#2e1d10"; ctx.fillRect(tx, ty, tw, 10);
+  ctx.fillRect(tx + 6, ty + 10, 8, H * 0.18); ctx.fillRect(tx + tw - 14, ty + 10, 8, H * 0.18);
+  ctx.fillStyle = "#4b3a1c"; ctx.fillRect(tx + tw * 0.68, ty - 22, 16, 22);
+  ctx.fillStyle = "#6a5a40"; el(ctx, tx + tw * 0.68 + 8, ty - 24, 6, 3); ctx.fill();
+  ctx.fillStyle = "#1a2610"; ctx.fillRect(tx + tw * 0.2, ty - 3, tw * 0.25, 3); // kitab lama
+}
+
+function drawCandle(x, y, sz) {
+  ctx.fillStyle = "#efe6cc"; ctx.fillRect(x - sz * 0.18, y - sz, sz * 0.36, sz);
+  ctx.fillStyle = "#c9bd9c"; ctx.fillRect(x - sz * 0.18, y - sz, sz * 0.12, sz);
+  ctx.strokeStyle = "#222"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y - sz); ctx.lineTo(x, y - sz * 1.2); ctx.stroke();
+  const tw = 0.5 + 0.5 * Math.sin(G.t * 4 + x);
+  ctx.fillStyle = `rgba(255,240,180,${0.25 + tw * 0.5})`;
+  el(ctx, x + sz * 0.3, y - sz * 0.8, 2, 2); ctx.fill();
+}
+
+/* ===================== GAME STATE ===================== */
+const G = {
+  state: "title", night: 0, semangat: 100, lilin: 0, items: [], hints: 3,
+  spawnT: 0, fakeT: 0, bossT: 0, bossPending: false, firstSpawn: false,
+  ghost: null, t: 0, ptr: { x: 0, y: 0 }, shake: 0, flash: 0, flashColor: "255,255,255",
+  winShadow: 0, doorOpen: 0, portrait: 0, flicker: 0, hb: 1,
+  recite: null, scareT: 0, banT: 0, particles: [], afterScare: null,
+};
+G.ptr.x = W / 2; G.ptr.y = H / 2;
+
+function lightR() { return Math.min(W, H) * 0.19 + 40; }
+
+let toastTimer = null;
+function toast(msg, dur = 2.6, red = false) {
+  const t = $("toast"); t.textContent = msg; t.className = "show" + (red ? " red" : "");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.className = red ? "red" : ""; }, dur * 1000);
+}
+function updateHud() {
+  $("hudNight").textContent = `Malam ${G.night + 1}/5 — ${GHOSTS[NIGHTS[G.night]].name}`;
+  $("hudSemangat").style.width = clamp(G.semangat, 0, 100) + "%";
+  $("hudLilin").textContent = `${G.lilin}/3`;
+  $("hudHint").textContent = G.hints;
+}
+
+function showScreen(html) { const s = $("screen"); s.innerHTML = `<div class="box">${html}</div>`; s.classList.remove("hidden"); }
+function hideScreen() { $("screen").classList.add("hidden"); }
+
+function titleScreen() {
+  G.state = "title";
+  const saved = +(load("rp_night") || 0);
+  showScreen(`
+    <h1 class="title">RUMAH PUSAKA</h1>
+    <div class="sub">5 malam. 5 hantu. Hanya kalam Allah pelindungmu.</div>
+    <div class="ghosts">${NIGHTS.map((k) => `<span>${GHOSTS[k].name} · ${QURAN[GHOSTS[k].surah].name.split(" (")[0]}</span>`).join("")}</div>
+    <div class="help">
+      <b>Cara main</b><br>
+      • Gerakkan <b>lampu suluh</b> dengan tetikus / jari. Cari <b>3 batang lilin</b> setiap malam dan klik untuk ambil.<br>
+      • Hantu akan muncul tiba-tiba. Jika kau nampak ia bersembunyi dalam gelap... ia akan menerkam.<br>
+      • Bila hantu menyerang, <b>bacalah surah</b> yang tertera — klik ayat-ayatnya <b>mengikut turutan yang betul</b> sebelum masa tamat.<br>
+      • Salah ayat atau terlambat = semangat berkurang. Semangat habis = kau dirasuk.
+    </div>
+    <button class="big" data-act="start">MULA</button>
+    ${saved > 0 ? `<button class="big" data-act="continue">SAMBUNG MALAM ${saved + 1}</button>` : ""}
+    <div class="warn">⚠ Amaran: banyak jumpscare, imej mengejut & bunyi kuat. Gunakan fon telinga untuk pengalaman penuh.</div>
+    <div class="note">Teks ayat dipaparkan untuk tujuan hafazan & pembelajaran. Sila semak dengan mushaf dan hormati kalam Allah.</div>
+  `);
+}
+
+function nightIntro(n) {
+  G.state = "intro"; G.night = n; save("rp_night", String(n));
+  $("hud").classList.add("hidden");
+  showScreen(`
+    <h1 class="title" style="font-size:clamp(40px,9vw,72px)">MALAM ${n + 1}</h1>
+    <p class="story">${NIGHT_STORY[n]}</p>
+    <p class="note">Surah baharu malam ini: <b style="color:var(--gold)">${QURAN[GHOSTS[NIGHTS[n]].surah].name}</b></p>
+    <button class="big" data-act="beginNight">MASUK</button>
+  `);
+}
+
+function startNight() {
+  hideScreen();
+  G.semangat = 100; G.lilin = 0; G.hints = 3; G.ghost = null; G.recite = null;
+  G.firstSpawn = false; G.bossPending = false;
+  const spots = [...SPOTS].sort(() => Math.random() - 0.5).slice(0, 3);
+  G.items = spots.map(([x, y]) => ({ nx: x, ny: y, taken: false }));
+  G.spawnT = rand(5, 8); G.fakeT = rand(2, 4);
+  G.state = "explore"; $("hud").classList.remove("hidden"); updateHud();
+  toast("Cari 3 batang lilin...", 3);
+}
+
+function spawnInterval() { return Math.max(5, 12 - G.night * 1.3) + rand(0, 5); }
+
+function chooseGhost() {
+  if (!G.firstSpawn) { G.firstSpawn = true; return NIGHTS[G.night]; }
+  return pick(NIGHTS.slice(0, G.night + 1));
+}
+
+function startLurk(type, boss = false) {
+  const def = GHOSTS[type];
+  let x;
+  do { x = rand(0.12, 0.88) * W; } while (Math.abs(x - G.ptr.x) < W * 0.22 && W > 400);
+  G.ghost = { type, x, y: def.lurkY * H, t: 0, lurk: rand(1.8, 3.2), boss, vx: type === "toyol" ? (Math.random() < 0.5 ? -1 : 1) * W * 0.35 : rand(-20, 20), lunge: 0 };
+  G.state = "lurk";
+  SFX.stinger();
+  if (boss) toast("Udara tiba-tiba menjadi sejuk...", 2.5);
+  else if (Math.random() < 0.5) setTimeout(() => SFX.whisper(), 400);
+}
+
+function startScare(behind) {
+  G.state = "scare"; G.scareT = 0; G.shake = 1; G.flash = 1; G.flashColor = Math.random() < 0.5 ? "255,255,255" : "255,0,0";
+  const def = GHOSTS[G.ghost.type];
+  SFX.scream(def.pitch);
+  if (G.ghost.type === "toyol" || G.ghost.type === "pontianak") setTimeout(() => SFX.laugh(), 900);
+  if (navigator.vibrate) try { navigator.vibrate([300, 80, 300]); } catch (e) {}
+  toast(behind ? "DI BELAKANG KAU!" : def.name.toUpperCase() + "!", 1.2, true);
+}
+
+/* ---------- Bacaan surah ---------- */
+function perAyat(surahKey) { return Math.max(4.2, 7.5 - G.night * 0.55) + (surahKey === "kursi" ? 1 : 0); }
+
+function startRecite() {
+  const g = G.ghost, def = GHOSTS[g.type], sk = def.surah, su = QURAN[sk];
+  const total = su.ayat.length * perAyat(sk);
+  G.recite = { key: sk, idx: 0, order: shuffleIdx(su.ayat.length), timeMax: total, timeLeft: total };
+  G.state = "recite";
+  $("basmalah").classList.toggle("hidden", !su.basmalah);
+  $("reciteTitle").innerHTML = `Bacalah <b>${su.name}</b> untuk menghalau <b>${def.name}</b>!`;
+  buildCards();
+  $("recite").classList.remove("hidden");
+  $("btnHint").disabled = G.hints <= 0;
+}
+
+function buildCards() {
+  const r = G.recite, su = QURAN[r.key];
+  $("readArea").innerHTML = "";
+  const cards = $("cards"); cards.innerHTML = "";
+  r.order.forEach((ai) => {
+    const [ar, tr, ms] = su.ayat[ai];
+    const b = document.createElement("button");
+    b.className = "card"; b.dataset.ai = ai;
+    b.innerHTML = `<div class="ar arabic">${ar}</div><div class="tr">${tr}</div><div class="ms">${ms}</div>`;
+    b.addEventListener("click", () => onCard(b, ai));
+    cards.appendChild(b);
+  });
+}
+
+function onCard(btn, ai) {
+  const r = G.recite; if (G.state !== "recite" || !r) return;
+  initAudio();
+  if (ai === r.idx) {
+    btn.classList.add("used"); btn.classList.remove("hint");
+    const su = QURAN[r.key];
+    const span = document.createElement("span");
+    span.innerHTML = `${su.ayat[ai][0]} <span class="ayah-no">${su.segmented ? "۝" : "﴿" + toArabicNum(ai + 1) + "﴾"}</span> `;
+    $("readArea").appendChild(span);
+    SFX.correct(r.idx);
+    r.idx++;
+    G.ghost.lunge = -0.4;
+    if (r.idx >= su.ayat.length) banish();
+  } else {
+    btn.classList.remove("wrong"); void btn.offsetWidth; btn.classList.add("wrong");
+    SFX.wrong(); SFX.scream(GHOSTS[G.ghost.type].pitch * 1.2, 0.5, 0.5);
+    G.semangat -= 10; G.ghost.lunge = 1; G.shake = 0.5; G.flash = 0.5; G.flashColor = "255,0,0";
+    r.timeLeft = Math.max(0.5, r.timeLeft - 2);
+    toast("Salah ayat!", 1, true);
+    updateHud();
+    if (G.semangat <= 0) die();
+  }
+}
+
+function useHint() {
+  const r = G.recite; if (!r || G.hints <= 0 || G.state !== "recite") return;
+  G.hints--; updateHud(); $("btnHint").disabled = G.hints <= 0;
+  const b = $("cards").querySelector(`.card[data-ai="${r.idx}"]`);
+  if (b) { b.classList.add("hint"); b.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
+}
+
+function reciteTimeout() {
+  G.semangat -= 30; updateHud();
+  G.state = "scare"; G.scareT = 0; G.shake = 1; G.flash = 1; G.flashColor = "255,0,0";
+  SFX.scream(GHOSTS[G.ghost.type].pitch, 1.2);
+  $("recite").classList.add("hidden");
+  toast("TERLAMBAT! Baca semula dari awal!", 2, true);
+  if (G.semangat <= 0) { die(); return; }
+}
+
+function banish() {
+  $("recite").classList.add("hidden");
+  G.state = "banish"; G.banT = 0; SFX.chime();
+  G.semangat = Math.min(100, G.semangat + 10); updateHud();
+  const cx = W / 2, cy = H * 0.22;
+  G.particles = [];
+  for (let i = 0; i < 120; i++) G.particles.push({ x: cx + rand(-60, 60), y: cy + rand(-40, 160), vx: rand(-60, 60), vy: rand(-220, -40), life: rand(0.8, 2) });
+  toast(`${GHOSTS[G.ghost.type].name} lenyap! Alhamdulillah.`, 2.5);
+}
+
+function afterBanish() {
+  const boss = G.ghost && G.ghost.boss;
+  G.ghost = null; G.recite = null;
+  if (boss) { nightClear(); return; }
+  G.state = "explore"; G.spawnT = spawnInterval();
+}
+
+function die() {
+  $("recite").classList.add("hidden");
+  G.state = "dead"; G.scareT = 0; G.shake = 1.2; G.flash = 1; G.flashColor = "255,0,0";
+  SFX.scream(GHOSTS[G.ghost ? G.ghost.type : "hantuRaya"].pitch * 0.8, 2.2);
+  setTimeout(() => SFX.laugh(), 1200);
+  $("hud").classList.add("hidden");
+}
+
+function gameOverScreen() {
+  G.state = "gameover";
+  const name = G.ghost ? GHOSTS[G.ghost.type].name : "hantu";
+  showScreen(`
+    <h1 class="title">KAU DIRASUK</h1>
+    <p class="story">Semangat kau hilang... ${name} telah menguasai tubuhmu.\nOrang kampung menjumpai kau pagi esoknya, duduk di tengah rumah, tersenyum memandang dinding.</p>
+    <p class="note">Tip: hafal turutan ayat — gunakan butang 💡 bila buntu.</p>
+    <button class="big" data-act="retry">CUBA LAGI MALAM ${G.night + 1}</button>
+    <button class="small" data-act="menu">Menu utama</button>
+  `);
+}
+
+function nightClear() {
+  G.state = "clear"; $("hud").classList.add("hidden");
+  if (G.night >= NIGHTS.length - 1) {
+    save("rp_night", "0");
+    showScreen(`
+      <h1 class="title" style="color:var(--gold);text-shadow:0 0 18px #6d5000">SUBUH</h1>
+      <p class="story">Azan Subuh berkumandang dari surau hujung kampung.\n\nHantu Raya meraung lalu hancur menjadi asap. Saka itu telah putus.\nRumah pusaka arwah nenek akhirnya sunyi... dan tenang.\n\n<b>TAMAT</b></p>
+      <p class="note">Teruskan membaca dan menghafal surah-surah ini — ia pendinding sebenar.</p>
+      <button class="big" data-act="menu">MAIN SEMULA</button>
+    `);
+    return;
+  }
+  save("rp_night", String(G.night + 1));
+  showScreen(`
+    <h1 class="title" style="font-size:clamp(36px,8vw,64px);color:var(--gold)">SUBUH MENJELANG</h1>
+    <p class="story">Kau berjaya bertahan pada Malam ${G.night + 1}.\n${GHOSTS[NIGHTS[G.night]].name} telah dihalau dengan ${QURAN[GHOSTS[NIGHTS[G.night]].surah].name}.\n\nTapi malam esok... akan lebih gelap.</p>
+    <button class="big" data-act="next">MALAM ${G.night + 2}</button>
+  `);
+}
+
+/* ===================== INPUT ===================== */
+function setPtr(e) { G.ptr.x = e.clientX; G.ptr.y = e.clientY; }
+cv.addEventListener("pointermove", setPtr);
+cv.addEventListener("pointerdown", (e) => {
+  setPtr(e); initAudio();
+  if (G.state !== "explore" && G.state !== "lurk") return;
+  for (const it of G.items) {
+    if (it.taken) continue;
+    const x = it.nx * W, y = it.ny * H;
+    if (Math.hypot(x - e.clientX, y - 10 - e.clientY) < Math.max(34, H * 0.045)) {
+      it.taken = true; G.lilin++; updateHud(); SFX.chime();
+      if (G.lilin >= 3) { G.bossPending = true; G.bossT = 1.8; toast("Lilin ketiga dijumpai... tapi kenapa api tak mahu menyala?", 3); }
+      else toast(`Lilin dijumpai (${G.lilin}/3)`, 2);
+      break;
+    }
+  }
+});
+$("screen").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  initAudio();
+  const a = b.dataset.act;
+  if (a === "start") nightIntro(0);
+  else if (a === "continue") nightIntro(+(load("rp_night") || 0));
+  else if (a === "beginNight" || a === "retry") startNight();
+  else if (a === "next") nightIntro(G.night + 1);
+  else if (a === "menu") titleScreen();
+});
+$("btnHint").addEventListener("click", useHint);
+$("btnTr").addEventListener("click", () => { const off = document.body.classList.toggle("no-translit"); $("btnTr").textContent = "Rumi: " + (off ? "Tutup" : "Hidup"); });
+$("btnMs").addEventListener("click", () => { const off = document.body.classList.toggle("no-meaning"); $("btnMs").textContent = "Maksud: " + (off ? "Tutup" : "Hidup"); });
+
+/* ===================== FAKE SCARES ===================== */
+const ATMOS = ["Kau terdengar bisikan memanggil namamu...", "Ada sesuatu bergerak di bawah rumah.", "Bau kemenyan tiba-tiba menusuk hidung.",
+  "Bunyi tapak kaki di atas siling...", "Siapa yang mengetuk pintu tengah malam begini?", "Jangan toleh ke belakang."];
+function fakeScare() {
+  const opts = ["whisper", "creak", "knock", "window", "flicker", "portrait", "steps"];
+  if (G.night >= 2) opts.push("laugh");
+  const o = pick(opts);
+  if (o === "whisper") SFX.whisper();
+  else if (o === "creak") { SFX.creak(); G.doorOpen = 1; }
+  else if (o === "knock") SFX.knock(3);
+  else if (o === "window") { G.winShadow = 1; SFX.whisper(); }
+  else if (o === "flicker") G.flicker = rand(0.6, 1.4);
+  else if (o === "portrait") { G.portrait = 2; SFX.stinger(); }
+  else if (o === "steps") SFX.knock(6, true);
+  else if (o === "laugh") SFX.laugh();
+  if (Math.random() < 0.35) toast(pick(ATMOS), 2.6);
+}
+
+/* ===================== LOOP ===================== */
+function bpm() {
+  if (G.state === "lurk") return 105;
+  if (G.state === "recite" && G.recite) return 120 + 50 * (1 - G.recite.timeLeft / G.recite.timeMax);
+  if (G.state === "scare" || G.state === "dead") return 150;
+  return 64 + G.night * 4;
+}
+
+function update(dt) {
+  G.t += dt;
+  G.shake = Math.max(0, G.shake - dt * 1.6);
+  G.flash = Math.max(0, G.flash - dt * 3);
+  G.winShadow = Math.max(0, G.winShadow - dt * 0.6);
+  G.doorOpen = Math.max(0, G.doorOpen - dt * 0.25);
+  G.portrait = Math.max(0, G.portrait - dt);
+  G.flicker = Math.max(0, G.flicker - dt);
+
+  const playing = ["explore", "lurk", "scare", "recite", "banish", "dead"].includes(G.state);
+  if (playing && AC) { G.hb -= dt; if (G.hb <= 0) { SFX.thump(G.state === "explore" ? 0.35 : 0.6); G.hb = 60 / bpm(); } }
+
+  if (G.state === "explore") {
+    if (G.bossPending) {
+      G.bossT -= dt;
+      if (G.bossT <= 0) { G.bossPending = false; startLurk(NIGHTS[G.night], true); }
+    } else if (G.lilin < 3) {
+      G.spawnT -= dt; if (G.spawnT <= 0) startLurk(chooseGhost());
+    }
+    G.fakeT -= dt; if (G.fakeT <= 0) { fakeScare(); G.fakeT = rand(4, 9) - G.night * 0.4; }
+  } else if (G.state === "lurk") {
+    const g = G.ghost; g.t += dt; g.x += g.vx * dt;
+    if (g.x < W * 0.05 || g.x > W * 0.95) g.vx *= -1;
+    const s = GHOSTS[g.type].lurkS * H;
+    if (g.t > 0.35 && Math.hypot(G.ptr.x - g.x, G.ptr.y - g.y) < lightR() * 0.8 + s * 0.3) startScare(false);
+    else if (g.t > g.lurk) startScare(true);
+  } else if (G.state === "scare") {
+    G.scareT += dt;
+    if (G.scareT > 1.15) {
+      if (G.recite) { // ulang selepas tamat masa
+        G.recite.order = shuffleIdx(QURAN[G.recite.key].ayat.length); G.recite.idx = 0; G.recite.timeLeft = G.recite.timeMax;
+        G.state = "recite"; buildCards(); $("recite").classList.remove("hidden");
+      } else startRecite();
+    }
+  } else if (G.state === "recite") {
+    const r = G.recite;
+    r.timeLeft -= dt; G.ghost.t += dt;
+    G.ghost.lunge += (0 - G.ghost.lunge) * Math.min(1, dt * 4);
+    $("timerBar").style.width = clamp(r.timeLeft / r.timeMax * 100, 0, 100) + "%";
+    if (r.timeLeft <= 0) reciteTimeout();
+    if (Math.random() < dt * 0.15) SFX.whisper();
+  } else if (G.state === "banish") {
+    G.banT += dt; G.ghost.t += dt;
+    G.particles.forEach((p) => { p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt; });
+    if (G.banT > 2.2) afterBanish();
+  } else if (G.state === "dead") {
+    G.scareT += dt;
+    if (G.scareT > 2.4) gameOverScreen();
+  }
+}
+
+function render() {
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+  const st = G.state;
+  if (st === "title" || st === "intro" || st === "clear" || st === "gameover") {
+    // latar menu: bilik gelap dengan suluhan perlahan
+    ctx.save(); drawRoom(); ctx.restore();
+    dctx.globalCompositeOperation = "source-over"; dctx.fillStyle = "rgba(0,0,0,.93)"; dctx.fillRect(0, 0, W, H);
+    dctx.globalCompositeOperation = "destination-out";
+    const lx = W / 2 + Math.sin(G.t * 0.4) * W * 0.3, ly = H * 0.5 + Math.cos(G.t * 0.3) * H * 0.2;
+    const lg = dctx.createRadialGradient(lx, ly, 0, lx, ly, lightR());
+    lg.addColorStop(0, "rgba(0,0,0,.8)"); lg.addColorStop(1, "rgba(0,0,0,0)");
+    dctx.fillStyle = lg; dctx.fillRect(0, 0, W, H);
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(dark, 0, 0); ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    return;
+  }
+
+  ctx.save();
+  if (G.shake > 0) ctx.translate((Math.random() - 0.5) * 70 * G.shake, (Math.random() - 0.5) * 70 * G.shake);
+
+  if (st === "scare" || st === "dead") {
+    // JUMPSCARE
+    const k = Math.min(1, G.scareT / 0.12);
+    const z = 0.55 + k * 0.55 + G.scareT * 0.15;
+    const type = G.ghost ? G.ghost.type : "hantuRaya";
+    ctx.fillStyle = Math.random() < 0.15 ? "#300" : "#000"; ctx.fillRect(-50, -50, W + 100, H + 100);
+    const s = Math.min(W, H) * 1.45 * z;
+    drawGhost(type, ctx, W / 2 + (Math.random() - 0.5) * 24, H * 0.45 + (Math.random() - 0.5) * 24, s, G.t * 3);
+    if (Math.random() < 0.12) { ctx.globalCompositeOperation = "difference"; ctx.fillStyle = "#fff"; ctx.fillRect(-50, -50, W + 100, H + 100); ctx.globalCompositeOperation = "source-over"; }
+    // garis gangguan
+    ctx.fillStyle = "rgba(255,255,255,.08)";
+    for (let i = 0; i < 6; i++) ctx.fillRect(0, Math.random() * H, W, rand(2, 12));
+    ctx.restore();
+    drawFlash();
+    return;
+  }
+
+  drawRoom();
+  G.items.forEach((it) => { if (!it.taken) drawCandle(it.nx * W, it.ny * H, Math.max(16, H * 0.035)); });
+
+  if (st === "lurk" && G.ghost) {
+    const g = G.ghost, def = GHOSTS[g.type];
+    const bob = g.type === "pocong" ? -Math.abs(Math.sin(g.t * 5)) * H * 0.03 : Math.sin(g.t * 2) * H * 0.01;
+    drawGhost(g.type, ctx, g.x, g.y + bob, def.lurkS * H, g.t, Math.min(1, g.t * 2) * 0.9);
+  }
+
+  // kegelapan + lampu suluh
+  dctx.globalCompositeOperation = "source-over";
+  dctx.fillStyle = st === "recite" || st === "banish" ? "rgba(0,0,0,.9)" : "rgba(0,0,0,.975)";
+  dctx.fillRect(0, 0, W, H);
+  dctx.globalCompositeOperation = "destination-out";
+  // cahaya bulan
+  const mx = W * 0.66, my = H * 0.3;
+  let lg = dctx.createRadialGradient(mx, my, 0, mx, my, W * 0.16);
+  lg.addColorStop(0, "rgba(0,0,0,.35)"); lg.addColorStop(1, "rgba(0,0,0,0)");
+  dctx.fillStyle = lg; dctx.fillRect(0, 0, W, H);
+  if (st === "explore" || st === "lurk") {
+    let R = lightR() * (0.96 + Math.random() * 0.04);
+    if (G.flicker > 0) R *= Math.random() < 0.5 ? 0.08 : 0.55;
+    lg = dctx.createRadialGradient(G.ptr.x, G.ptr.y, R * 0.15, G.ptr.x, G.ptr.y, R);
+    lg.addColorStop(0, "rgba(0,0,0,1)"); lg.addColorStop(0.6, "rgba(0,0,0,.85)"); lg.addColorStop(1, "rgba(0,0,0,0)");
+    dctx.fillStyle = lg; dctx.fillRect(0, 0, W, H);
+  }
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(dark, 0, 0); ctx.restore();
+  // warna kuning lampu suluh
+  if (st === "explore" || st === "lurk") {
+    const R = lightR();
+    const yg = ctx.createRadialGradient(G.ptr.x, G.ptr.y, 0, G.ptr.x, G.ptr.y, R);
+    yg.addColorStop(0, "rgba(255,220,150,.10)"); yg.addColorStop(1, "rgba(255,220,150,0)");
+    ctx.fillStyle = yg; ctx.fillRect(0, 0, W, H);
+  }
+
+  if ((st === "recite" || st === "banish") && G.ghost) {
+    const g = G.ghost, def = GHOSTS[g.type];
+    const danger = st === "recite" && G.recite ? 1 - G.recite.timeLeft / G.recite.timeMax : 0;
+    const panelTop = $("recite").classList.contains("hidden") ? H : $("recite").getBoundingClientRect().top;
+    const cy = Math.max(H * 0.1, Math.min(H * 0.24, panelTop * 0.35));
+    let s = Math.min(W, H) * 0.12 * (1 + danger * 0.9 + g.lunge * 0.6);
+    let alpha = 1;
+    if (st === "banish") { alpha = Math.max(0, 1 - G.banT / 1.4); s *= 1 + G.banT * 0.2; }
+    const au = ctx.createRadialGradient(W / 2, cy + s, 0, W / 2, cy + s, s * 3);
+    au.addColorStop(0, st === "banish" ? `rgba(255,250,220,${0.5 * (1 - G.banT / 2.2)})` : "rgba(120,0,0,.35)");
+    au.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = au; ctx.fillRect(0, 0, W, H);
+    drawGhost(g.type, ctx, W / 2 + Math.sin(g.t * 1.3) * W * 0.03, cy - (st === "banish" ? G.banT * 80 : 0), s, g.t, alpha);
+    if (st === "banish") {
+      ctx.save(); ctx.globalCompositeOperation = "lighter";
+      G.particles.forEach((p) => { if (p.life > 0) { ctx.fillStyle = `rgba(255,240,190,${Math.min(1, p.life)})`; el(ctx, p.x, p.y, 2.5, 2.5); ctx.fill(); } });
+      ctx.restore();
+    }
+    // vinyet merah ikut bahaya
+    if (danger > 0) {
+      const vg = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.3, W / 2, H / 2, Math.max(W, H) * 0.75);
+      vg.addColorStop(0, "rgba(120,0,0,0)"); vg.addColorStop(1, `rgba(140,0,0,${0.25 + danger * 0.5})`);
+      ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+    }
+  }
+
+  // kursor lampu suluh
+  if (st === "explore" || st === "lurk") {
+    ctx.strokeStyle = "rgba(255,230,180,.35)"; ctx.lineWidth = 1;
+    el(ctx, G.ptr.x, G.ptr.y, 6, 6); ctx.stroke();
+  }
+  ctx.restore();
+  drawFlash();
+}
+
+function drawFlash() {
+  if (G.flash > 0) { ctx.fillStyle = `rgba(${G.flashColor},${G.flash * 0.85})`; ctx.fillRect(0, 0, W, H); }
+}
+
+let last = performance.now();
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  update(dt); render();
+  requestAnimationFrame(loop);
+}
+titleScreen();
+requestAnimationFrame(loop);
+window.__G = G; // untuk ujian
+</script>
+</body>
+</html>
