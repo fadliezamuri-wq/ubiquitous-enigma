@@ -1,4 +1,5 @@
 import { BuahMenariComposition } from "./BuahMenari";
+import { CicakMenariComposition } from "./CicakMenari";
 import { MyComposition } from "./Composition";
 
 export const RemotionRoot: React.FC = () => {
@@ -6,6 +7,7 @@ export const RemotionRoot: React.FC = () => {
     <>
       <MyComposition />
       <BuahMenariComposition />
+      <CicakMenariComposition />
     </>
   );
 };

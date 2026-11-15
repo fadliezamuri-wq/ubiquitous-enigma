@@ -31,10 +31,10 @@ export const BuahMenariComposition = () => (
 
 /* ---------------------------------------------------------------- utils */
 
-const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const smooth = (t: number) => t * t * (3 - 2 * t);
-const rand = (i: number) => {
+export const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+export const smooth = (t: number) => t * t * (3 - 2 * t);
+export const rand = (i: number) => {
   const x = Math.sin(i * 127.1 + 311.7) * 43758.5453;
   return x - Math.floor(x);
 };
@@ -42,7 +42,7 @@ const ci = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 
 /* ----------------------------------------------------------------- pose */
 
-type Pose = {
+export type Pose = {
   bounce: number;
   tilt: number;
   sx: number;
@@ -57,7 +57,7 @@ type Pose = {
   squash: number;
 };
 
-const base: Pose = {
+export const base: Pose = {
   bounce: 0,
   tilt: 0,
   sx: 0,
@@ -73,7 +73,7 @@ const base: Pose = {
 };
 
 // A: goyang kiri-kanan, tangan melambai bergilir
-const poseA = (f: number): Pose => {
+export const poseA = (f: number): Pose => {
   const p = f / BEAT;
   const s = Math.sin(P * p);
   return {
@@ -91,7 +91,7 @@ const poseA = (f: number): Pose => {
 };
 
 // B: tangan depang + goyang pinggul
-const poseB = (f: number): Pose => {
+export const poseB = (f: number): Pose => {
   const p = f / BEAT;
   const s = Math.sin(P * p);
   return {
@@ -109,7 +109,7 @@ const poseB = (f: number): Pose => {
 };
 
 // C: lompat-lompat, tangan ke atas
-const poseC = (f: number): Pose => {
+export const poseC = (f: number): Pose => {
   const p = f / BEAT;
   const q = (p % 2) / 2;
   const air = Math.sin(P * q);
@@ -129,7 +129,7 @@ const poseC = (f: number): Pose => {
 };
 
 // D: lambai ke kamera
-const poseD = (f: number): Pose => {
+export const poseD = (f: number): Pose => {
   const p = f / BEAT;
   const s = Math.sin(P * p);
   return {
@@ -146,7 +146,7 @@ const poseD = (f: number): Pose => {
 };
 
 // E: posing akhir, tangan V ke atas
-const poseE = (f: number): Pose => {
+export const poseE = (f: number): Pose => {
   const t = clamp(f / 12);
   return {
     ...base,
@@ -197,14 +197,14 @@ const getPose = (f: number, mirror: boolean): Pose => {
   return pose;
 };
 
-const blinkAt = (f: number, seed: number) => {
+export const blinkAt = (f: number, seed: number) => {
   const ph = (f + seed) % 78;
   return ph < 7 ? Math.sin((ph / 7) * P) : 0;
 };
 
 /* ----------------------------------------------------------------- face */
 
-const Face: React.FC<{
+export const Face: React.FC<{
   y: number;
   s?: number;
   blink: number;
@@ -262,7 +262,7 @@ const Face: React.FC<{
 
 /* -------------------------------------------------------------- anggota */
 
-const Arm: React.FC<{
+export const Arm: React.FC<{
   x: number;
   y: number;
   angle: number;
@@ -282,7 +282,7 @@ const Arm: React.FC<{
   </g>
 );
 
-const Leg: React.FC<{ x: number; lift: number; side: 1 | -1; fill: string; stroke: string }> = ({
+export const Leg: React.FC<{ x: number; lift: number; side: 1 | -1; fill: string; stroke: string }> = ({
   x,
   lift,
   side,
@@ -298,7 +298,7 @@ const Leg: React.FC<{ x: number; lift: number; side: 1 | -1; fill: string; strok
 type CharProps = { pose: Pose; f: number; seed: number };
 
 /* Rig umum: kaki tak ikut senget, badan & kepala ikut senget dan lompat */
-const Rig: React.FC<{
+export const Rig: React.FC<{
   pose: Pose;
   legFill: string;
   legStroke: string;
@@ -316,7 +316,7 @@ const Rig: React.FC<{
 
 /* ---------------------------------------------------------------- Durian */
 
-const Durian: React.FC<CharProps> = ({ pose, f, seed }) => {
+export const Durian: React.FC<CharProps> = ({ pose, f, seed }) => {
   const fill = "#a7b84a";
   const stroke = "#5f6d1f";
   const headY = -300;
@@ -370,7 +370,7 @@ const Durian: React.FC<CharProps> = ({ pose, f, seed }) => {
 
 /* -------------------------------------------------------------- Rambutan */
 
-const Rambutan: React.FC<CharProps> = ({ pose, f, seed }) => {
+export const Rambutan: React.FC<CharProps> = ({ pose, f, seed }) => {
   const fill = "#d8302a";
   const stroke = "#8e1410";
   const headY = -295;
@@ -438,7 +438,7 @@ const Rambutan: React.FC<CharProps> = ({ pose, f, seed }) => {
 
 /* ---------------------------------------------------------------- Pisang */
 
-const Pisang: React.FC<CharProps> = ({ pose, f, seed }) => {
+export const Pisang: React.FC<CharProps> = ({ pose, f, seed }) => {
   const fill = "#f6d145";
   const stroke = "#a77d10";
   const bend = 10 * Math.sin(f / 7);
@@ -654,76 +654,7 @@ export const BuahMenari: React.FC = () => {
     <AbsoluteFill style={{ backgroundColor: "#1b1d3a" }}>
       <Audio src={staticFile("muzik-tarian.wav")} />
       <svg viewBox="0 0 1080 1920" width={1080} height={1920}>
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#2b3a8c" />
-            <stop offset="0.45" stopColor="#6c5cb8" />
-            <stop offset="0.72" stopColor="#e47f9a" />
-            <stop offset="0.9" stopColor="#ffb07a" />
-          </linearGradient>
-          <radialGradient id="sunGlow">
-            <stop offset="0" stopColor="#ffd9a0" stopOpacity={0.9} />
-            <stop offset="1" stopColor="#ff9a7a" stopOpacity={0} />
-          </radialGradient>
-          <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#5e4632" />
-            <stop offset="0.3" stopColor="#8a6a4c" />
-            <stop offset="1" stopColor="#a5825e" />
-          </linearGradient>
-          <linearGradient id="mulch" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#14161c" />
-            <stop offset="0.5" stopColor="#3a3f4c" />
-            <stop offset="1" stopColor="#14161c" />
-          </linearGradient>
-          <radialGradient id="eyeGrad" cx="0.5" cy="0.65" r="0.6">
-            <stop offset="0" stopColor="#6a3a1e" />
-            <stop offset="0.6" stopColor="#2a140a" />
-            <stop offset="1" stopColor="#120804" />
-          </radialGradient>
-          <radialGradient id="durHead" cx="0.35" cy="0.3" r="0.8">
-            <stop offset="0" stopColor="#d4df82" />
-            <stop offset="1" stopColor="#7f9230" />
-          </radialGradient>
-          <radialGradient id="durBody" cx="0.35" cy="0.3" r="0.8">
-            <stop offset="0" stopColor="#cbd77a" />
-            <stop offset="1" stopColor="#869a33" />
-          </radialGradient>
-          <radialGradient id="durFlesh" cx="0.4" cy="0.35" r="0.75">
-            <stop offset="0" stopColor="#fff8d6" />
-            <stop offset="1" stopColor="#f2d272" />
-          </radialGradient>
-          <radialGradient id="ramHead" cx="0.35" cy="0.3" r="0.8">
-            <stop offset="0" stopColor="#ff8a70" />
-            <stop offset="0.6" stopColor="#e2382c" />
-            <stop offset="1" stopColor="#a8160f" />
-          </radialGradient>
-          <radialGradient id="ramBody" cx="0.35" cy="0.3" r="0.8">
-            <stop offset="0" stopColor="#ff7a64" />
-            <stop offset="1" stopColor="#b81c14" />
-          </radialGradient>
-          <linearGradient id="pisBody" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#e2ad1c" />
-            <stop offset="0.4" stopColor="#ffe873" />
-            <stop offset="1" stopColor="#e9b52a" />
-          </linearGradient>
-          <radialGradient id="shadow">
-            <stop offset="0" stopColor="#000" stopOpacity={0.45} />
-            <stop offset="1" stopColor="#000" stopOpacity={0} />
-          </radialGradient>
-          <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.75">
-            <stop offset="0.6" stopColor="#000" stopOpacity={0} />
-            <stop offset="1" stopColor="#000" stopOpacity={0.55} />
-          </radialGradient>
-          <filter id="blurFar">
-            <feGaussianBlur stdDeviation={4} />
-          </filter>
-          <filter id="blurMid">
-            <feGaussianBlur stdDeviation={1.6} />
-          </filter>
-          <filter id="glow" x="-2" y="-2" width="5" height="5">
-            <feGaussianBlur stdDeviation={4} />
-          </filter>
-        </defs>
+        <CharDefs />
 
         <g transform={world}>
           <Background f={frame} shift={bgShift} />
@@ -820,3 +751,77 @@ export const BuahMenari: React.FC = () => {
     </AbsoluteFill>
   );
 };
+
+/* gradien & penapis dikongsi (watak + latar) */
+export const CharDefs: React.FC = () => (
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stopColor="#2b3a8c" />
+      <stop offset="0.45" stopColor="#6c5cb8" />
+      <stop offset="0.72" stopColor="#e47f9a" />
+      <stop offset="0.9" stopColor="#ffb07a" />
+    </linearGradient>
+    <radialGradient id="sunGlow">
+      <stop offset="0" stopColor="#ffd9a0" stopOpacity={0.9} />
+      <stop offset="1" stopColor="#ff9a7a" stopOpacity={0} />
+    </radialGradient>
+    <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stopColor="#5e4632" />
+      <stop offset="0.3" stopColor="#8a6a4c" />
+      <stop offset="1" stopColor="#a5825e" />
+    </linearGradient>
+    <linearGradient id="mulch" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stopColor="#14161c" />
+      <stop offset="0.5" stopColor="#3a3f4c" />
+      <stop offset="1" stopColor="#14161c" />
+    </linearGradient>
+    <radialGradient id="eyeGrad" cx="0.5" cy="0.65" r="0.6">
+      <stop offset="0" stopColor="#6a3a1e" />
+      <stop offset="0.6" stopColor="#2a140a" />
+      <stop offset="1" stopColor="#120804" />
+    </radialGradient>
+    <radialGradient id="durHead" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stopColor="#d4df82" />
+      <stop offset="1" stopColor="#7f9230" />
+    </radialGradient>
+    <radialGradient id="durBody" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stopColor="#cbd77a" />
+      <stop offset="1" stopColor="#869a33" />
+    </radialGradient>
+    <radialGradient id="durFlesh" cx="0.4" cy="0.35" r="0.75">
+      <stop offset="0" stopColor="#fff8d6" />
+      <stop offset="1" stopColor="#f2d272" />
+    </radialGradient>
+    <radialGradient id="ramHead" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stopColor="#ff8a70" />
+      <stop offset="0.6" stopColor="#e2382c" />
+      <stop offset="1" stopColor="#a8160f" />
+    </radialGradient>
+    <radialGradient id="ramBody" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stopColor="#ff7a64" />
+      <stop offset="1" stopColor="#b81c14" />
+    </radialGradient>
+    <linearGradient id="pisBody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stopColor="#e2ad1c" />
+      <stop offset="0.4" stopColor="#ffe873" />
+      <stop offset="1" stopColor="#e9b52a" />
+    </linearGradient>
+    <radialGradient id="shadow">
+      <stop offset="0" stopColor="#000" stopOpacity={0.45} />
+      <stop offset="1" stopColor="#000" stopOpacity={0} />
+    </radialGradient>
+    <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.6" stopColor="#000" stopOpacity={0} />
+      <stop offset="1" stopColor="#000" stopOpacity={0.55} />
+    </radialGradient>
+    <filter id="blurFar">
+      <feGaussianBlur stdDeviation={4} />
+    </filter>
+    <filter id="blurMid">
+      <feGaussianBlur stdDeviation={1.6} />
+    </filter>
+    <filter id="glow" x="-2" y="-2" width="5" height="5">
+      <feGaussianBlur stdDeviation={4} />
+    </filter>
+  </defs>
+);
