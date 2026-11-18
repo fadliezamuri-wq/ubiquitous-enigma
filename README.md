@@ -43,3 +43,12 @@ mengikut turutan yang betul sebelum masa tamat. Hantu tu hanya hilang selepas su
 | 5 | Hantu Raya | Ayat al-Kursi |
 
 Cara main: buka `game/index.html` dalam pelayar (tak perlu install apa-apa). Pakai fon telinga.
+
+## Video: Si Duri (animasi 3D)
+
+Cerita pendek 31 saat tentang Duri, durian kecil dari dusun durian aku, dibuat dengan
+Remotion + Three.js. Hasil render: `video/si-duri.mp4`.
+
+- Kod babak: `video/src/durian/scenes/` (Pembukaan, Kesepian, Ribut, Pagi, Penutup)
+- Muzik & kesan bunyi: `python3 video/scripts/make_music.py`
+- Render semula: `cd video && npx remotion render SiDuri out/si-duri.mp4 --gl=angle`
