@@ -35,3 +35,7 @@ coverage/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Data pelanggan laman BentukBadan
+fitness/data/
+fitness/.env

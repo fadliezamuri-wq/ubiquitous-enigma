@@ -178,7 +178,7 @@
   @media (max-width: 760px) { .pricing { grid-template-columns: 1fr; } }
   .plan { background: var(--surface); border: 1.5px solid var(--line); border-radius: 24px; padding: 28px; display: flex; flex-direction: column; }
   .plan.best { border-color: var(--brand); box-shadow: var(--shadow); position: relative; }
-  .plan.best::before { content: "PALING LARIS"; position: absolute; top: -12px; left: 28px; background: var(--brand); color: var(--brand-ink);
+  .plan.best::before { content: "DISYORKAN"; position: absolute; top: -12px; left: 28px; background: var(--brand); color: var(--brand-ink);
     font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 99px; letter-spacing: .05em; }
   .plan h3 { margin: 0; font-size: 20px; }
   .plan .price { font-size: 48px; font-weight: 800; letter-spacing: -.03em; margin: 10px 0 2px; }
@@ -236,26 +236,41 @@
   .member-bar { background: var(--brand); color: var(--brand-ink); text-align: center; padding: 10px 16px; font-weight: 600; font-size: 15px; }
   .member-bar button { background: transparent; border: 1.5px solid currentColor; color: inherit; border-radius: 99px; padding: 3px 12px; margin-left: 8px; cursor: pointer; font: inherit; font-size: 13px; }
 </style>
+<style>
+  .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; background: var(--surface-2); padding: 4px; border-radius: 12px; margin-bottom: 18px; }
+  .auth-tabs button { font: inherit; border: 0; background: transparent; padding: 10px; border-radius: 9px; cursor: pointer; color: var(--muted); font-weight: 700; }
+  .auth-tabs button.on { background: var(--surface); color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .form-err { background: #fde2e1; color: #9b1c1c; border-radius: 10px; padding: 10px 14px; font-size: 14px; margin-bottom: 12px; }
+  :root[data-theme="dark"] .form-err { background: #3b1616; color: #ffb4b4; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .form-err { background: #3b1616; color: #ffb4b4; } }
+  .user-chip { display: flex; align-items: center; gap: 10px; }
+  .user-chip .who { font-weight: 600; font-size: 14px; color: var(--muted); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .linkbtn { background: none; border: 0; padding: 0; font: inherit; color: var(--muted); font-weight: 600; cursor: pointer; font-size: 14px; }
+  .linkbtn:hover { color: var(--ink); }
+  @media (max-width: 760px) { .user-chip .who { display: none; } }
+  .pay-badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 4px 0 14px; }
+  .pay-badges span { border: 1.5px solid var(--line); border-radius: 10px; padding: 6px 12px; font-size: 13px; font-weight: 600; }
+  .skeleton { color: var(--muted); padding: 24px 0; }
+</style>
 </head>
 <body>
 
-<div class="member-bar hidden" id="memberBar">🎉 Akses Penuh aktif. Semua panduan & resepi premium dah dibuka. <button id="logoutBtn" type="button">Log keluar</button></div>
+<div class="member-bar hidden" id="memberBar">🎉 Akses Penuh aktif. Semua panduan & resepi premium dah dibuka.</div>
 
 <header class="nav">
   <div class="wrap">
-    <a href="#" class="logo">Bentuk<span>Badan</span></a>
+    <a href="/" class="logo">Bentuk<span>Badan</span></a>
     <nav>
       <a class="link" href="#matlamat">Matlamat</a>
       <a class="link" href="#kalkulator">Kalkulator</a>
       <a class="link" href="#resepi">Resepi</a>
       <a class="link" href="#panduan">Panduan</a>
-      <a class="btn sm" href="#harga" id="navBuy">Beli Akses</a>
+      <span id="navAuth"></span>
     </nav>
   </div>
 </header>
 
 <main>
-  <!-- HERO -->
   <section class="hero">
     <div class="wrap">
       <div>
@@ -267,7 +282,7 @@
           <a class="btn ghost" href="#resepi">Tengok Resepi</a>
         </div>
         <div class="stats">
-          <div><b>8 resepi</b><span>siap dikira makro</span></div>
+          <div><b id="statRecipes">20 resepi</b><span>siap dikira makro</span></div>
           <div><b>12 minggu</b><span>program latihan</span></div>
           <div><b>2 laluan</b><span>kurus & bina otot</span></div>
         </div>
@@ -284,7 +299,6 @@
     </div>
   </section>
 
-  <!-- GOALS -->
   <section id="matlamat" style="padding-top:24px">
     <div class="wrap">
       <div class="sec-head">
@@ -319,7 +333,6 @@
     </div>
   </section>
 
-  <!-- CALCULATOR -->
   <section id="kalkulator">
     <div class="wrap">
       <div class="sec-head">
@@ -375,7 +388,6 @@
     </div>
   </section>
 
-  <!-- RECIPES -->
   <section id="resepi">
     <div class="wrap">
       <div class="sec-head">
@@ -389,11 +401,10 @@
         <button type="button" class="chip" data-f="bulk">💪 Bina otot</button>
         <button type="button" class="chip" data-f="free">Percuma</button>
       </div>
-      <div class="recipes" id="recipeGrid"></div>
+      <div class="recipes" id="recipeGrid"><div class="skeleton">Memuatkan resepi…</div></div>
     </div>
   </section>
 
-  <!-- PREMIUM GUIDES -->
   <section id="panduan">
     <div class="wrap">
       <div class="sec-head">
@@ -401,11 +412,10 @@
         <h2>Panduan lengkap kuruskan badan & bina otot</h2>
         <p>Semua yang anda perlu tahu, disusun minggu demi minggu. Dibuka selepas pembelian.</p>
       </div>
-      <div class="modules" id="moduleGrid"></div>
+      <div class="modules" id="moduleGrid"><div class="skeleton">Memuatkan panduan…</div></div>
     </div>
   </section>
 
-  <!-- PRICING -->
   <section id="harga">
     <div class="wrap">
       <div class="sec-head" style="text-align:center;margin-left:auto;margin-right:auto">
@@ -417,10 +427,9 @@
         <div class="plan">
           <h3>Percuma</h3>
           <div class="price">RM0</div>
-          <div class="old">&nbsp;</div>
           <ul>
             <li>Kalkulator kalori & makro</li>
-            <li>4 resepi asas berkalori</li>
+            <li><span id="freeCount">6</span> resepi asas berkalori</li>
             <li>Ringkasan prinsip kurus & bina otot</li>
             <li class="no">Panduan penuh 6 modul</li>
             <li class="no">Program latihan 12 minggu</li>
@@ -430,31 +439,29 @@
         </div>
         <div class="plan best">
           <h3>Akses Penuh</h3>
-          <div class="price">RM49 <small>sekali bayar</small></div>
-          <div class="old">Harga asal RM99</div>
+          <div class="price"><span data-price>RM49</span> <small>sekali bayar</small></div>
           <ul>
             <li>Semua 6 modul panduan penuh</li>
             <li>Program latihan 12 minggu (gym & rumah)</li>
             <li>Pelan makan 4 minggu, kurus & bina otot</li>
-            <li>Semua resepi premium + senarai barang dapur</li>
+            <li>Semua <span id="premiumCount">14</span> resepi premium</li>
             <li>Cara pecahkan plateau</li>
             <li>Kemas kini percuma seumur hidup</li>
           </ul>
-          <button class="btn block" type="button" data-buy>Beli Sekarang — RM49</button>
+          <button class="btn block" type="button" data-buy>Beli Sekarang — <span data-price>RM49</span></button>
         </div>
       </div>
-      <p class="guarantee">🛡️ Jaminan pulang wang 14 hari jika tak berpuas hati.</p>
+      <p class="guarantee hidden" id="guarantee"></p>
     </div>
   </section>
 
-  <!-- FAQ -->
   <section id="soalan" style="padding-top:16px">
     <div class="wrap" style="max-width:780px">
       <div class="sec-head"><div class="eyebrow">Soalan lazim</div><h2>Ada soalan?</h2></div>
       <details><summary>Perlu pergi gym ke?</summary><p>Tak semestinya. Akses Penuh ada dua versi program: gym, dan rumah (guna berat badan dan dumbbell). Kedua-duanya boleh bina otot kalau beban ditambah secara berperingkat.</p></details>
       <details><summary>Boleh ke makan nasi kalau nak kurus?</summary><p>Boleh. Yang penting jumlah kalori sehari. Semua resepi kami guna sukatan nasi yang jelas supaya anda tahu berapa yang dimakan.</p></details>
       <details><summary>Berapa cepat saya nampak hasil?</summary><p>Kebanyakan orang nampak perubahan pada berat dan ukuran pinggang dalam 3–4 minggu, dan perubahan bentuk badan yang jelas dalam 8–12 minggu.</p></details>
-      <details><summary>Macam mana saya dapat akses selepas bayar?</summary><p>Selepas pembayaran berjaya, semua modul dan resepi premium terus dibuka di laman ini.</p></details>
+      <details><summary>Macam mana saya dapat akses selepas bayar?</summary><p>Daftar akaun, kemudian bayar melalui FPX atau kad (ToyyibPay). Selepas bayaran disahkan, log masuk dengan e-mel dan kata laluan anda dari mana-mana peranti untuk baca semua panduan.</p></details>
       <details><summary>Saya ada penyakit kronik, boleh ikut?</summary><p>Sila dapatkan nasihat doktor atau pakar dietetik dahulu, terutama jika anda ada kencing manis, darah tinggi, masalah jantung, hamil atau menyusu.</p></details>
     </div>
   </section>
@@ -467,7 +474,6 @@
   </div>
 </footer>
 
-<!-- Modal -->
 <div class="overlay hidden" id="overlay" role="dialog" aria-modal="true">
   <div class="modal">
     <button class="x" type="button" id="closeModal" aria-label="Tutup">✕</button>
@@ -476,110 +482,22 @@
 </div>
 
 <script>
-/* ===== Tetapan pembayaran =====
-   Letak pautan bayaran sebenar (contoh ToyyibPay / Billplz / Stripe Payment Link).
-   Tetapkan URL "return/redirect" di gateway kepada laman ini dengan ?akses=berjaya
-   Contoh: https://laman-anda.com/fitness/?akses=berjaya
-   Jika kosong, butang bayar berjalan dalam MOD DEMO. */
-const PAYMENT_LINK = "";
-const PRICE = 49;
-const STORE_KEY = "bentukbadan_akses";
-
-const RECIPES = [
-  { id: "nasi-ayam", name: "Nasi Ayam Panggang Kunyit", emoji: "🍗", goal: "bulk", free: true, kcal: 480, p: 42, c: 55, f: 10, time: "30 min", bg: "#fff1d6",
-    ing: ["150 g dada ayam tanpa kulit", "1 cawan (150 g) nasi putih masak", "1 sudu teh serbuk kunyit", "1 ulas bawang putih, ditumbuk", "1 sudu teh minyak zaitun", "Timun & tomato secukupnya", "Garam, lada hitam"],
-    steps: ["Perap ayam dengan kunyit, bawang putih, garam dan lada hitam selama 15 minit.", "Panggang di atas kuali leper bersama minyak, 6–7 minit setiap belah sehingga masak.", "Hiris ayam dan hidang bersama nasi, timun dan tomato."] },
-  { id: "telur-dadar", name: "Telur Dadar Bayam & Roti Gandum", emoji: "🍳", goal: "cut", free: true, kcal: 325, p: 22, c: 28, f: 14, time: "10 min", bg: "#e6f6dc",
-    ing: ["2 biji telur", "1 genggam bayam", "1/2 biji bawang besar, dihiris", "2 keping roti gandum penuh", "Semburan minyak", "Garam, lada"],
-    steps: ["Pukul telur bersama garam dan lada.", "Tumis bawang dan bayam sekejap dengan semburan minyak.", "Tuang telur, masak sehingga set. Hidang dengan roti gandum yang dibakar."] },
-  { id: "ikan-bakar", name: "Ikan Bakar Air Asam & Ulam", emoji: "🐟", goal: "cut", free: true, kcal: 270, p: 35, c: 12, f: 9, time: "25 min", bg: "#dcefff",
-    ing: ["200 g ikan kembung atau tilapia", "Air asam: cili, bawang merah, asam jawa, kicap", "Ulam: kacang botol, timun, pucuk paku", "Perahan limau nipis"],
-    steps: ["Lumur ikan dengan garam dan kunyit.", "Bakar atas bara atau air fryer 200°C selama 15 minit.", "Campur bahan air asam. Hidang bersama ulam."] },
-  { id: "sup-ayam", name: "Sup Ayam Sayur", emoji: "🥣", goal: "cut", free: true, kcal: 245, p: 30, c: 18, f: 6, time: "35 min", bg: "#fbe7dd",
-    ing: ["150 g ayam tanpa kulit, dipotong", "1 batang lobak merah", "1 biji kentang kecil", "Kubis secukupnya", "Rempah sup, halia, bawang putih", "Daun sup & bawang goreng sedikit"],
-    steps: ["Tumis bawang putih, halia dan rempah sup tanpa minyak banyak.", "Masukkan ayam dan air, reneh 20 minit.", "Masukkan sayur, masak sehingga lembut. Tabur daun sup."] },
-  { id: "oat-pisang", name: "Oat Overnight Pisang Protein", emoji: "🍌", goal: "bulk", free: false, kcal: 410, p: 30, c: 52, f: 9, time: "5 min + semalaman", bg: "#fff6c9",
-    ing: ["50 g oat gulung", "1 skop (30 g) whey protein", "200 ml susu rendah lemak", "1 biji pisang", "1 sudu teh biji chia"],
-    steps: ["Campur oat, whey, susu dan chia dalam balang.", "Simpan dalam peti sejuk semalaman.", "Hiris pisang di atasnya pagi esok."] },
-  { id: "daging-lada", name: "Daging Lada Hitam & Nasi Perang", emoji: "🥩", goal: "bulk", free: false, kcal: 535, p: 40, c: 60, f: 15, time: "25 min", bg: "#f3e1d6",
-    ing: ["150 g daging batang pinang, dihiris", "1 cawan nasi perang", "Lada benggala, bawang besar", "Sos lada hitam, sos tiram", "1 sudu teh minyak"],
-    steps: ["Perap daging dengan sos tiram dan lada hitam.", "Tumis cepat atas api besar sehingga perang.", "Masukkan sayur dan sos, gaul. Hidang dengan nasi perang."] },
-  { id: "salad-tuna", name: "Salad Tuna Telur", emoji: "🥗", goal: "cut", free: false, kcal: 275, p: 32, c: 10, f: 12, time: "10 min", bg: "#e1f4ea",
-    ing: ["1 tin tuna dalam air (toskan)", "1 biji telur rebus", "Salad, timun, tomato ceri", "1 sudu besar yogurt Greek", "Perahan lemon, lada hitam"],
-    steps: ["Campur tuna dengan yogurt, lemon dan lada.", "Susun sayur dalam mangkuk.", "Letak tuna dan telur yang dihiris di atasnya."] },
-  { id: "smoothie-kacang", name: "Smoothie Kacang Susu Coklat", emoji: "🥤", goal: "bulk", free: false, kcal: 420, p: 28, c: 45, f: 14, time: "5 min", bg: "#efe2d6",
-    ing: ["250 ml susu rendah lemak", "1 sudu besar mentega kacang", "1 biji pisang beku", "1 skop whey coklat", "Ais"],
-    steps: ["Masukkan semua bahan ke dalam pengisar.", "Kisar sehingga licin.", "Minum selepas latihan."] },
-];
-
-const MODULES = [
-  { n: 1, title: "Asas Kalori & Makro", desc: "Cara kira TDEE, defisit dan lebihan kalori, dan kenapa protein paling penting.",
-    body: `<h4>1. Kira TDEE anda</h4><p>TDEE = BMR × faktor aktiviti. Guna kalkulator di atas sebagai titik mula, kemudian laraskan ikut berat sebenar selepas 2 minggu.</p>
-<h4>2. Tetapkan sasaran</h4><ul><li><b>Kurus:</b> TDEE − 20% (contoh 2,400 → 1,900 kcal)</li><li><b>Bina otot:</b> TDEE + 10% (contoh 2,400 → 2,650 kcal)</li></ul>
-<h4>3. Susun makro</h4><ul><li><b>Protein:</b> 2 g × berat badan (kg). Ini yang kekalkan otot semasa defisit.</li><li><b>Lemak:</b> 0.8 g × berat badan, minimum untuk hormon.</li><li><b>Karbo:</b> baki kalori. Tenaga untuk latihan.</li></ul>
-<h4>4. Pantau</h4><p>Timbang setiap pagi selepas tandas, ambil purata mingguan. Jika purata tak berubah selama 2 minggu, kurangkan 150 kcal (kurus) atau tambah 150 kcal (bina otot).</p>` },
-  { n: 2, title: "Pelan Makan 4 Minggu: Kurus", desc: "Menu harian ±1,600 kcal guna makanan Malaysia, dengan senarai barang dapur mingguan.",
-    body: `<p>Sasaran contoh: 1,600 kcal · 130 g protein · 150 g karbo · 50 g lemak. Laraskan saiz hidangan ikut sasaran anda.</p>
-<div class="tablewrap"><table><tr><th>Hari</th><th>Sarapan</th><th>Tengah hari</th><th>Snek</th><th>Malam</th></tr>
-<tr><td>Isnin</td><td>Telur dadar bayam + roti gandum</td><td>Ikan bakar + nasi ½ cawan + ulam</td><td>Yogurt Greek</td><td>Sup ayam sayur</td></tr>
-<tr><td>Selasa</td><td>Oat + whey + beri</td><td>Nasi ayam panggang kunyit</td><td>2 telur rebus</td><td>Salad tuna telur</td></tr>
-<tr><td>Rabu</td><td>Roti gandum + telur hancur</td><td>Daging lada hitam + nasi ½ cawan</td><td>Epal + kacang 15 g</td><td>Ikan stim limau + sayur</td></tr>
-<tr><td>Khamis</td><td>Telur dadar bayam + roti gandum</td><td>Sup ayam + nasi ½ cawan</td><td>Susu rendah lemak</td><td>Ayam panggang + salad</td></tr>
-<tr><td>Jumaat</td><td>Oat overnight pisang</td><td>Ikan bakar air asam + ulam</td><td>Yogurt Greek</td><td>Tauhu sumbat (bakar) + sayur</td></tr>
-<tr><td>Sabtu</td><td>Nasi lemak separuh (tanpa sambal lebih)</td><td>Salad tuna telur</td><td>Buah</td><td>Sup ayam sayur</td></tr>
-<tr><td>Ahad</td><td>Roti canai kosong 1 + telur rebus</td><td>Nasi ayam panggang kunyit</td><td>2 telur rebus</td><td>Ikan bakar + sayur</td></tr></table></div>
-<h4>Peraturan mudah</h4><ul><li>Minum air 2.5–3 liter sehari.</li><li>Teh tarik / kopi: tukar kepada kurang manis atau kosong.</li><li>Sukat nasi dengan cawan, jangan agak.</li><li>Ulang menu yang sama minggu 2–4, tukar lauk ikut selera.</li></ul>` },
-  { n: 3, title: "Pelan Makan 4 Minggu: Bina Otot", desc: "Menu harian ±2,700 kcal dengan 5 kali makan dan protein 150 g+.",
-    body: `<p>Sasaran contoh: 2,700 kcal · 160 g protein · 330 g karbo · 80 g lemak.</p>
-<div class="tablewrap"><table><tr><th>Waktu</th><th>Menu</th><th>Anggaran</th></tr>
-<tr><td>07:00</td><td>Oat overnight pisang protein</td><td>410 kcal · 30 g P</td></tr>
-<tr><td>10:00</td><td>2 roti gandum + 3 telur hancur</td><td>450 kcal · 26 g P</td></tr>
-<tr><td>13:00</td><td>Nasi ayam panggang kunyit (nasi 1½ cawan)</td><td>600 kcal · 44 g P</td></tr>
-<tr><td>17:00 (lepas latihan)</td><td>Smoothie kacang susu coklat</td><td>420 kcal · 28 g P</td></tr>
-<tr><td>20:00</td><td>Daging lada hitam + nasi perang</td><td>535 kcal · 40 g P</td></tr>
-<tr><td>22:00</td><td>Susu + 1 biji pisang</td><td>280 kcal · 9 g P</td></tr></table></div>
-<h4>Tips</h4><ul><li>Susah nak makan banyak? Tambah kalori melalui minuman (susu, smoothie).</li><li>Makan karbo paling banyak sebelum dan selepas latihan.</li><li>Jika berat naik lebih 0.5 kg seminggu, kurangkan 150 kcal.</li></ul>` },
-  { n: 4, title: "Program Latihan 12 Minggu (Gym)", desc: "Jadual Upper/Lower 4 hari, set, ulangan dan cara tambah beban setiap minggu.",
-    body: `<h4>Jadual mingguan</h4><ul><li><b>Isnin:</b> Upper A</li><li><b>Selasa:</b> Lower A</li><li><b>Khamis:</b> Upper B</li><li><b>Jumaat:</b> Lower B</li><li>Hari lain: jalan kaki 30–45 minit</li></ul>
-<div class="tablewrap"><table><tr><th>Hari</th><th>Senaman</th><th>Set × Ulangan</th></tr>
-<tr><td>Upper A</td><td>Bench press<br>Barbell row<br>Overhead press<br>Lat pulldown<br>Bicep curl + tricep pushdown</td><td>4×6–8<br>4×8<br>3×8–10<br>3×10–12<br>3×12</td></tr>
-<tr><td>Lower A</td><td>Squat<br>Romanian deadlift<br>Leg press<br>Calf raise<br>Plank</td><td>4×5–8<br>3×8–10<br>3×10–12<br>4×15<br>3×45 s</td></tr>
-<tr><td>Upper B</td><td>Incline dumbbell press<br>Pull-up / assisted<br>Seated cable row<br>Lateral raise<br>Face pull</td><td>4×8–10<br>4×AMRAP<br>3×10–12<br>3×15<br>3×15</td></tr>
-<tr><td>Lower B</td><td>Deadlift<br>Bulgarian split squat<br>Leg curl<br>Hip thrust<br>Hanging leg raise</td><td>3×5<br>3×8 setiap kaki<br>3×12<br>3×10<br>3×12</td></tr></table></div>
-<h4>Progresi (double progression)</h4><p>Bila anda capai ulangan tertinggi untuk semua set, tambah beban 2.5 kg (atas) atau 5 kg (bawah) minggu berikutnya. Setiap minggu ke-6 dan ke-12, kurangkan beban 40% untuk pemulihan (deload).</p>` },
-  { n: 5, title: "Program Latihan di Rumah", desc: "Tanpa gym: litar berat badan + dumbbell untuk bakar lemak dan bina otot.",
-    body: `<h4>3 hari seminggu (Isnin, Rabu, Jumaat)</h4><p>Buat 4 pusingan. Rehat 60 saat antara pusingan.</p>
-<div class="tablewrap"><table><tr><th>Senaman</th><th>Minggu 1–4</th><th>Minggu 5–8</th><th>Minggu 9–12</th></tr>
-<tr><td>Push-up (atau atas lutut)</td><td>10</td><td>15</td><td>20 / tempo perlahan</td></tr>
-<tr><td>Goblet squat (dumbbell)</td><td>12</td><td>15</td><td>20</td></tr>
-<tr><td>Dumbbell row</td><td>10 / belah</td><td>12 / belah</td><td>15 / belah</td></tr>
-<tr><td>Reverse lunge</td><td>8 / kaki</td><td>10 / kaki</td><td>12 / kaki</td></tr>
-<tr><td>Pike push-up</td><td>6</td><td>8</td><td>10</td></tr>
-<tr><td>Glute bridge</td><td>15</td><td>20</td><td>Satu kaki 12</td></tr>
-<tr><td>Plank</td><td>30 s</td><td>45 s</td><td>60 s</td></tr></table></div>
-<h4>Hari lain</h4><p>Jalan pantas 30 minit atau 8,000–10,000 langkah. Ini cara paling mudah tambah pembakaran kalori tanpa ganggu pemulihan otot.</p>` },
-  { n: 6, title: "Pecahkan Plateau & Kekalkan Hasil", desc: "Apa nak buat bila berat tak turun, otot tak naik, dan cara elak naik semula.",
-    body: `<h4>Berat tak turun 2 minggu?</h4><ol><li>Semak semula sukatan. Minyak masak, sos dan minuman manis selalu terlepas kira.</li><li>Tambah 2,000 langkah sehari.</li><li>Kurangkan 150 kcal daripada karbo atau lemak, bukan protein.</li><li>Pertimbangkan <b>diet break</b>: makan pada TDEE selama 7 hari, kemudian sambung defisit.</li></ol>
-<h4>Otot tak naik?</h4><ol><li>Pastikan beban atau ulangan bertambah setiap minggu. Catat dalam buku log.</li><li>Tambah 1–2 set untuk otot yang ketinggalan.</li><li>Tidur 7–9 jam. Kurang tidur kurangkan hasil latihan.</li><li>Tambah 150–200 kcal sehari.</li></ol>
-<h4>Selepas capai sasaran</h4><p>Naikkan kalori 100–150 kcal seminggu sehingga berat stabil. Teruskan latihan beban 3x seminggu dan protein tinggi. Itu cara paling berkesan elak berat naik semula.</p>` },
-];
-
-const $ = (s) => document.querySelector(s);
+const $ = (s, el = document) => el.querySelector(s);
 const overlay = $("#overlay"), modalBody = $("#modalBody");
+const state = { config: { priceRm: 49, refundDays: 0, payment: "none" }, user: null, recipes: [], modules: [], premium: null, filter: "all" };
 
-function hasAccess() {
-  try { return localStorage.getItem(STORE_KEY) === "1"; } catch (e) { return window.__akses === true; }
-}
-function grantAccess() {
-  try { localStorage.setItem(STORE_KEY, "1"); } catch (e) {}
-  window.__akses = true; refresh();
-}
-function revokeAccess() {
-  try { localStorage.removeItem(STORE_KEY); } catch (e) {}
-  window.__akses = false; refresh();
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const rm = () => "RM" + state.config.priceRm.toLocaleString("ms-MY", { maximumFractionDigits: 2 });
+
+async function api(path, body) {
+  const opts = body === undefined ? {} : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) };
+  const res = await fetch(path, { credentials: "same-origin", ...opts });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(data.error || "Ralat rangkaian. Cuba lagi."), { status: res.status });
+  return data;
 }
 
-/* ---------- Calculator ---------- */
+/* ---------- Kalkulator ---------- */
 const calcState = { sex: "m", goal: "cut" };
 document.querySelectorAll("[data-seg]").forEach((seg) => {
   seg.addEventListener("click", (e) => {
@@ -589,187 +507,235 @@ document.querySelectorAll("[data-seg]").forEach((seg) => {
   });
 });
 ["age", "height", "weight", "activity"].forEach((id) => $("#" + id).addEventListener("input", calc));
-
 function calc() {
   const age = +$("#age").value || 0, h = +$("#height").value || 0, w = +$("#weight").value || 0, act = +$("#activity").value;
   if (!age || !h || !w) return;
   const bmr = 10 * w + 6.25 * h - 5 * age + (calcState.sex === "m" ? 5 : -161);
   const tdee = bmr * act;
-  const mult = { cut: 0.8, maintain: 1, bulk: 1.1 }[calcState.goal];
-  const kcal = Math.round(tdee * mult / 10) * 10;
-  const pPerKg = calcState.goal === "cut" ? 2.0 : 1.8;
-  const p = Math.round(w * pPerKg), f = Math.round(w * 0.8);
+  const kcal = Math.round(tdee * { cut: 0.8, maintain: 1, bulk: 1.1 }[calcState.goal] / 10) * 10;
+  const p = Math.round(w * (calcState.goal === "cut" ? 2.0 : 1.8)), f = Math.round(w * 0.8);
   const c = Math.max(0, Math.round((kcal - p * 4 - f * 9) / 4));
+  const t = Math.round(tdee).toLocaleString("ms-MY");
   $("#kcalOut").innerHTML = kcal.toLocaleString("ms-MY") + " <small>kcal</small>";
-  const notes = { cut: "Defisit 20% daripada TDEE (" + Math.round(tdee).toLocaleString("ms-MY") + " kcal). Jangka turun ±0.5 kg seminggu.",
+  $("#kcalNote").textContent = { cut: `Defisit 20% daripada TDEE (${t} kcal). Jangka turun ±0.5 kg seminggu.`,
     maintain: "Sama dengan TDEE anda. Sesuai untuk recomp jika protein tinggi dan latihan beban.",
-    bulk: "Lebihan 10% atas TDEE (" + Math.round(tdee).toLocaleString("ms-MY") + " kcal). Jangka naik ±0.25 kg seminggu." };
-  $("#kcalNote").textContent = notes[calcState.goal];
+    bulk: `Lebihan 10% atas TDEE (${t} kcal). Jangka naik ±0.25 kg seminggu.` }[calcState.goal];
   const tot = p * 4 + c * 4 + f * 9 || 1;
   $("#pOut").textContent = p + " g"; $("#cOut").textContent = c + " g"; $("#fOut").textContent = f + " g";
-  $("#pBar").style.width = (p * 4 / tot * 100) + "%"; $("#cBar").style.width = (c * 4 / tot * 100) + "%"; $("#fBar").style.width = (f * 9 / tot * 100) + "%";
+  $("#pBar").style.width = (p * 400 / tot) + "%"; $("#cBar").style.width = (c * 400 / tot) + "%"; $("#fBar").style.width = (f * 900 / tot) + "%";
   const bmi = w / ((h / 100) ** 2);
   const cat = bmi < 18.5 ? "kurang berat" : bmi < 23 ? "normal" : bmi < 27.5 ? "berlebihan berat" : "obes";
-  $("#bmiOut").textContent = "BMI anda: " + bmi.toFixed(1) + " (" + cat + ", ikut panduan Asia).";
+  $("#bmiOut").textContent = `BMI anda: ${bmi.toFixed(1)} (${cat}, ikut panduan Asia).`;
 }
 
-/* ---------- Recipes ---------- */
-let filter = "all";
+/* ---------- Resepi ---------- */
+const isPaid = () => !!(state.user && state.user.paid && state.premium);
+const macrosHtml = (r) => `<div class="macros">
+  <div class="p"><b>${r.p}g</b><span>Protein</span></div><div class="c"><b>${r.c}g</b><span>Karbo</span></div><div class="f"><b>${r.f}g</b><span>Lemak</span></div></div>`;
+
 $("#filters").addEventListener("click", (e) => {
   const b = e.target.closest(".chip"); if (!b) return;
-  filter = b.dataset.f;
+  state.filter = b.dataset.f;
   document.querySelectorAll("#filters .chip").forEach((x) => x.classList.toggle("on", x === b));
   renderRecipes();
 });
-
 function renderRecipes() {
-  const paid = hasAccess();
-  const list = RECIPES.filter((r) => filter === "all" || (filter === "free" ? r.free : r.goal === filter));
+  const f = state.filter;
+  const list = state.recipes.filter((r) => f === "all" || (f === "free" ? r.free : r.goal === f));
   $("#recipeGrid").innerHTML = list.map((r) => `
-    <button type="button" class="rcard" data-recipe="${r.id}">
-      <div class="thumb" style="background:${r.bg}">
+    <button type="button" class="rcard" data-recipe="${esc(r.id)}">
+      <div class="thumb" style="background:${esc(r.bg)}">
         <span class="badge">${r.goal === "cut" ? "🔥 Kurus" : "💪 Bina otot"}</span>
-        ${!r.free && !paid ? '<span class="lock">🔒 Premium</span>' : ""}
-        ${r.emoji}
+        ${!r.free && !isPaid() ? '<span class="lock">🔒 Premium</span>' : ""}${r.emoji}
       </div>
       <div class="body">
-        <h3>${r.name}</h3>
+        <h3>${esc(r.name)}</h3>
         <div class="kcal">${r.kcal} <small>kcal / hidangan</small></div>
-        <div class="macros">
-          <div class="p"><b>${r.p}g</b><span>Protein</span></div>
-          <div class="c"><b>${r.c}g</b><span>Karbo</span></div>
-          <div class="f"><b>${r.f}g</b><span>Lemak</span></div>
-        </div>
-        <div class="time">⏱ ${r.time}</div>
+        ${macrosHtml(r)}
+        <div class="time">⏱ ${esc(r.time)}</div>
       </div>
     </button>`).join("");
 }
-$("#recipeGrid").addEventListener("click", (e) => {
-  const c = e.target.closest("[data-recipe]"); if (c) openRecipe(c.dataset.recipe);
-});
+$("#recipeGrid").addEventListener("click", (e) => { const c = e.target.closest("[data-recipe]"); if (c) openRecipe(c.dataset.recipe); });
 
 function openRecipe(id) {
-  const r = RECIPES.find((x) => x.id === id);
-  const unlocked = r.free || hasAccess();
-  const detail = unlocked
-    ? `<h4>Bahan</h4><ul>${r.ing.map((i) => `<li>${i}</li>`).join("")}</ul>
-       <h4>Cara masak</h4><ol>${r.steps.map((s) => `<li>${s}</li>`).join("")}</ol>`
-    : `<h4>Bahan</h4><ul style="filter:blur(5px);user-select:none">${r.ing.slice(0, 3).map((i) => `<li>${i}</li>`).join("")}</ul>
+  const r = state.recipes.find((x) => x.id === id);
+  const d = r.free ? r : state.premium?.recipes[r.id];
+  const detail = d
+    ? `<h4>Bahan</h4><ul>${d.ing.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
+       <h4>Cara masak</h4><ol>${d.steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>`
+    : `<h4>Bahan</h4><ul style="filter:blur(5px);user-select:none" aria-hidden="true"><li>xxxxx xxxx xxxxxxx</li><li>xxx xxxxxxxx xxxx</li><li>xxxxxx xxx xxxxx</li></ul>
        <div class="paywall"><p><b>Resepi premium.</b> Beli Akses Penuh untuk lihat bahan, cara masak dan semua panduan.</p>
-       <button class="btn accent" type="button" data-buy>Beli Akses Penuh — RM${PRICE}</button></div>`;
+       <button class="btn accent" type="button" data-buy>Beli Akses Penuh — ${rm()}</button></div>`;
   openModal(`
-    <div class="hero-emoji" style="background:${r.bg}">${r.emoji}</div>
+    <div class="hero-emoji" style="background:${esc(r.bg)}">${r.emoji}</div>
     <div class="content">
-      <h2>${r.name}</h2>
-      <div class="muted">⏱ ${r.time} · 1 hidangan · ${r.goal === "cut" ? "Sesuai untuk kurus" : "Sesuai untuk bina otot"}</div>
+      <h2>${esc(r.name)}</h2>
+      <div class="muted">⏱ ${esc(r.time)} · 1 hidangan · ${r.goal === "cut" ? "Sesuai untuk kurus" : "Sesuai untuk bina otot"}</div>
       <div style="display:flex;align-items:baseline;gap:10px;margin:16px 0 10px"><span style="font-size:36px;font-weight:800">${r.kcal}</span><span class="muted">kcal</span></div>
-      <div class="macros">
-        <div class="p"><b>${r.p}g</b><span>Protein</span></div>
-        <div class="c"><b>${r.c}g</b><span>Karbo</span></div>
-        <div class="f"><b>${r.f}g</b><span>Lemak</span></div>
-      </div>
-      ${detail}
+      ${macrosHtml(r)}${detail}
     </div>`);
 }
 
-/* ---------- Modules ---------- */
+/* ---------- Modul ---------- */
 function renderModules() {
-  const paid = hasAccess();
-  $("#moduleGrid").innerHTML = MODULES.map((m) => `
+  $("#moduleGrid").innerHTML = state.modules.map((m) => `
     <div class="module">
       <div class="num">MODUL ${m.n}</div>
-      <h3>${m.title}</h3>
-      <p>${m.desc}</p>
-      ${paid
+      <h3>${esc(m.title)}</h3>
+      <p>${esc(m.desc)}</p>
+      ${isPaid()
         ? `<button class="btn sm open-btn" type="button" data-module="${m.n}">Baca Modul →</button>`
-        : `<div class="locked-preview" aria-hidden="true">${m.body.replace(/<[^>]+>/g, " ").slice(0, 150)}…</div>
+        : `<div class="locked-preview" aria-hidden="true">Langkah 1 xxxxxx xxxxx xxxx xxxxxxxx xxx xxxxxx. Langkah 2 xxxxxxx xxxx xxxxx xxxxxxx xxxx xxxxx xxx…</div>
            <div class="lockline">🔒 Dibuka selepas pembelian</div>
-           <button class="btn sm accent open-btn" type="button" data-buy>Buka dengan RM${PRICE}</button>`}
+           <button class="btn sm accent open-btn" type="button" data-buy>Buka dengan ${rm()}</button>`}
     </div>`).join("");
 }
 $("#moduleGrid").addEventListener("click", (e) => {
-  const b = e.target.closest("[data-module]"); if (!b) return;
-  const m = MODULES.find((x) => x.n === +b.dataset.module);
-  openModal(`<div class="head"><div class="eyebrow">Modul ${m.n}</div><h2>${m.title}</h2></div><div class="content guide-body">${m.body}</div>`);
+  const b = e.target.closest("[data-module]"); if (!b || !state.premium) return;
+  const m = state.modules.find((x) => x.n === +b.dataset.module);
+  // Kandungan modul datang daripada server kita sendiri (fail content/modules.mjs).
+  openModal(`<div class="head"><div class="eyebrow">Modul ${m.n}</div><h2>${esc(m.title)}</h2></div><div class="content guide-body">${state.premium.modules[m.n]}</div>`);
 });
 
-/* ---------- Checkout ---------- */
-document.addEventListener("click", (e) => { if (e.target.closest("[data-buy]")) { e.preventDefault(); openCheckout(); } });
+/* ---------- Akaun ---------- */
+function renderNav() {
+  const u = state.user;
+  $("#navAuth").innerHTML = u
+    ? `<span class="user-chip"><span class="who">${esc(u.name)}</span><button class="linkbtn" type="button" id="logoutBtn">Log keluar</button>
+       ${u.paid ? '<a class="btn sm" href="#panduan">Panduan Saya</a>' : '<button class="btn sm" type="button" data-buy>Beli Akses</button>'}</span>`
+    : `<span class="user-chip"><button class="linkbtn" type="button" data-login>Log masuk</button><button class="btn sm" type="button" data-buy>Beli Akses</button></span>`;
+  $("#memberBar").classList.toggle("hidden", !isPaid());
+}
+document.addEventListener("click", async (e) => {
+  if (e.target.closest("[data-buy]")) { e.preventDefault(); startBuy(); }
+  else if (e.target.closest("[data-login]")) { e.preventDefault(); openAuth("login"); }
+  else if (e.target.closest("#logoutBtn")) {
+    await api("/api/logout", {}).catch(() => {});
+    state.user = null; state.premium = null; refresh();
+  }
+});
 
-function openCheckout() {
-  if (hasAccess()) { location.hash = "panduan"; closeModal(); return; }
+function openAuth(mode, afterAuth) {
+  const reg = mode === "register";
   openModal(`
-    <div class="head"><div class="eyebrow">Pembayaran</div><h2>Akses Penuh BentukBadan</h2>
-      <div class="muted">Sekali bayar, akses seumur hidup.</div></div>
-    <form class="content" id="checkoutForm">
-      <div class="field"><label for="buyName">Nama penuh</label><input id="buyName" required autocomplete="name" placeholder="Contoh: Ahmad Faiz"></div>
-      <div class="field"><label for="buyEmail">E-mel</label><input id="buyEmail" type="email" required autocomplete="email" placeholder="anda@contoh.com"></div>
-      <div class="field"><label>Kaedah bayaran</label>
-        <div class="pay-methods">
-          <label><input type="radio" name="pm" value="fpx" checked><span>🏦 FPX</span></label>
-          <label><input type="radio" name="pm" value="card"><span>💳 Kad</span></label>
-          <label><input type="radio" name="pm" value="ewallet"><span>📱 e-Wallet</span></label>
-        </div>
-      </div>
-      <div class="summary-line"><span>Akses Penuh (6 modul + resepi premium)</span><span>RM99</span></div>
-      <div class="summary-line"><span>Diskaun pelancaran</span><span>− RM50</span></div>
-      <div class="summary-line total"><span>Jumlah</span><span>RM${PRICE}.00</span></div>
-      <button class="btn block" type="submit" style="margin-top:16px">Bayar RM${PRICE} →</button>
-      <div class="demo-note">${PAYMENT_LINK ? "Anda akan dibawa ke halaman bayaran yang selamat." : "Mod demo: tiada bayaran sebenar dibuat. Sambungkan gateway bayaran untuk jualan sebenar."}</div>
+    <div class="head"><div class="eyebrow">${afterAuth ? "Langkah 1 daripada 2" : "Akaun"}</div><h2>${reg ? "Daftar akaun" : "Log masuk"}</h2>
+      <div class="muted">${reg ? "Akaun ini digunakan untuk buka panduan selepas bayar, dari mana-mana peranti." : "Log masuk untuk baca panduan yang anda dah beli."}</div></div>
+    <form class="content" id="authForm" novalidate>
+      <div class="auth-tabs"><button type="button" class="${reg ? "on" : ""}" data-mode="register">Daftar</button><button type="button" class="${reg ? "" : "on"}" data-mode="login">Log masuk</button></div>
+      <div id="authErr"></div>
+      ${reg ? `<div class="field"><label for="fName">Nama penuh</label><input id="fName" name="name" required autocomplete="name"></div>` : ""}
+      <div class="field"><label for="fEmail">E-mel</label><input id="fEmail" name="email" type="email" required autocomplete="email"></div>
+      ${reg ? `<div class="field"><label for="fPhone">No. telefon</label><input id="fPhone" name="phone" type="tel" required autocomplete="tel" placeholder="0123456789"></div>` : ""}
+      <div class="field"><label for="fPass">Kata laluan</label><input id="fPass" name="password" type="password" required minlength="8" autocomplete="${reg ? "new-password" : "current-password"}">${reg ? '<small class="muted">Sekurang-kurangnya 8 aksara.</small>' : ""}</div>
+      <button class="btn block" type="submit" style="margin-top:8px">${reg ? (afterAuth ? "Daftar & teruskan ke bayaran" : "Daftar") : "Log masuk"}</button>
     </form>`);
-  $("#checkoutForm").addEventListener("submit", (e) => {
+  $("#authForm .auth-tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (b) openAuth(b.dataset.mode, afterAuth); });
+  $("#authForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = $("#buyName").value.trim();
-    if (PAYMENT_LINK) {
-      const url = new URL(PAYMENT_LINK);
-      url.searchParams.set("email", $("#buyEmail").value.trim());
-      url.searchParams.set("name", name);
-      location.href = url.toString();
-      return;
+    const form = e.target, btn = form.querySelector("[type=submit]");
+    const body = Object.fromEntries(new FormData(form));
+    btn.disabled = true;
+    try {
+      const { user } = await api(reg ? "/api/register" : "/api/login", body);
+      state.user = user;
+      await loadPremium();
+      refresh();
+      if (afterAuth && !user.paid) afterAuth(); else closeModal();
+    } catch (err) {
+      $("#authErr").innerHTML = `<div class="form-err">${esc(err.message)}</div>`;
+      btn.disabled = false;
     }
-    const btn = e.target.querySelector("button[type=submit]");
-    btn.disabled = true; btn.textContent = "Memproses…";
-    setTimeout(() => { grantAccess(); showSuccess(name); }, 900);
   });
 }
 
-function showSuccess(name) {
+/* ---------- Pembelian ---------- */
+function startBuy() {
+  if (state.user?.paid) { closeModal(); location.hash = "panduan"; return; }
+  if (!state.user) return openAuth("register", openCheckout);
+  openCheckout();
+}
+function openCheckout() {
+  const mode = state.config.payment;
+  openModal(`
+    <div class="head"><div class="eyebrow">${state.user ? "Pembayaran" : ""}</div><h2>Akses Penuh BentukBadan</h2>
+      <div class="muted">Sekali bayar, akses seumur hidup. Log masuk sebagai ${esc(state.user.email)}.</div></div>
+    <div class="content">
+      <div class="summary-line"><span>6 modul panduan + ${state.recipes.filter((r) => !r.free).length} resepi premium</span><span>${rm()}</span></div>
+      <div class="summary-line total"><span>Jumlah</span><span>${rm()}</span></div>
+      <div id="payErr" style="margin-top:12px"></div>
+      ${mode === "none"
+        ? `<div class="form-err">Pembayaran belum dibuka lagi. Sila cuba semula kemudian.</div>`
+        : `<div class="pay-badges" style="margin-top:16px"><span>🏦 FPX (semua bank)</span><span>💳 Kad debit/kredit</span></div>
+           <button class="btn block" type="button" id="payBtn">Bayar ${rm()} →</button>
+           <div class="demo-note">${mode === "demo" ? "Mod demo: tiada bayaran sebenar dibuat." : "Anda akan dibawa ke ToyyibPay untuk bayar dengan selamat."}</div>`}
+    </div>`);
+  $("#payBtn")?.addEventListener("click", async (e) => {
+    const btn = e.currentTarget; btn.disabled = true; btn.textContent = "Menyambung ke gateway…";
+    try {
+      const r = await api("/api/checkout", {});
+      if (r.url) { location.href = r.url; return; }
+      await afterPaid();
+    } catch (err) {
+      $("#payErr").innerHTML = `<div class="form-err">${esc(err.message)}</div>`;
+      btn.disabled = false; btn.textContent = `Bayar ${rm()} →`;
+    }
+  });
+}
+async function afterPaid() {
+  state.user = (await api("/api/me")).user;
+  await loadPremium(); refresh();
   openModal(`<div class="content success">
     <div class="tick">✓</div>
-    <h2 style="padding:0">Terima kasih${name ? ", " + escapeHtml(name.split(" ")[0]) : ""}!</h2>
-    <p class="muted">Pembayaran berjaya. Semua 6 modul panduan dan resepi premium kini dibuka.</p>
-    <a class="btn" href="#panduan" id="goGuides">Mula Baca Panduan →</a>
-  </div>`);
+    <h2 style="padding:0">Terima kasih${state.user ? ", " + esc(state.user.name.split(" ")[0]) : ""}!</h2>
+    <p class="muted">Pembayaran berjaya. Semua modul panduan dan resepi premium kini dibuka dalam akaun anda.</p>
+    <a class="btn" href="#panduan" id="goGuides">Mula Baca Panduan →</a></div>`);
   $("#goGuides").addEventListener("click", closeModal);
 }
 
-function escapeHtml(s) { return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
-
 /* ---------- Modal ---------- */
-function openModal(html) { modalBody.innerHTML = html; overlay.classList.remove("hidden"); document.body.style.overflow = "hidden"; overlay.querySelector(".modal").scrollTop = 0; }
+function openModal(html) { modalBody.innerHTML = html; overlay.classList.remove("hidden"); document.body.style.overflow = "hidden"; $(".modal", overlay).scrollTop = 0; }
 function closeModal() { overlay.classList.add("hidden"); document.body.style.overflow = ""; }
 $("#closeModal").addEventListener("click", closeModal);
 overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
-$("#logoutBtn").addEventListener("click", revokeAccess);
 
+/* ---------- Mula ---------- */
+async function loadPremium() {
+  state.premium = state.user?.paid ? await api("/api/premium").catch(() => null) : null;
+}
 function refresh() {
-  const paid = hasAccess();
-  $("#memberBar").classList.toggle("hidden", !paid);
-  $("#navBuy").textContent = paid ? "Panduan Saya" : "Beli Akses";
-  $("#navBuy").href = paid ? "#panduan" : "#harga";
-  renderRecipes(); renderModules();
+  document.querySelectorAll("[data-price]").forEach((el) => (el.textContent = rm()));
+  const free = state.recipes.filter((r) => r.free).length;
+  $("#statRecipes").textContent = `${state.recipes.length} resepi`;
+  $("#freeCount").textContent = free;
+  $("#premiumCount").textContent = state.recipes.length - free;
+  const g = $("#guarantee");
+  g.classList.toggle("hidden", !(state.config.refundDays > 0));
+  g.textContent = `🛡️ Jaminan pulang wang ${state.config.refundDays} hari jika tak berpuas hati.`;
+  renderNav(); renderRecipes(); renderModules();
 }
 
-/* Pulang dari gateway bayaran */
-const params = new URLSearchParams(location.search);
-if (params.get("akses") === "berjaya" || params.get("status_id") === "1") {
-  grantAccess();
-  history.replaceState(null, "", location.pathname + location.hash);
-  setTimeout(() => showSuccess(""), 100);
-}
-
-calc(); refresh();
+(async function init() {
+  calc();
+  try {
+    const [config, catalog, me] = await Promise.all([api("/api/config"), api("/api/catalog"), api("/api/me")]);
+    Object.assign(state, { config, recipes: catalog.recipes, modules: catalog.modules, user: me.user });
+    await loadPremium();
+  } catch {
+    $("#recipeGrid").innerHTML = $("#moduleGrid").innerHTML = '<div class="skeleton">Tak dapat sambung ke server. Muat semula halaman.</div>';
+    return;
+  }
+  refresh();
+  const status = new URLSearchParams(location.search).get("bayar");
+  if (status) {
+    history.replaceState(null, "", location.pathname + location.hash);
+    if (status === "berjaya") afterPaid();
+    else openModal(`<div class="content"><h2>${status === "menunggu" ? "Bayaran sedang diproses" : "Bayaran tidak berjaya"}</h2>
+      <p class="muted">${status === "menunggu" ? "Bank masih memproses bayaran anda. Akses akan dibuka secara automatik bila disahkan. Muat semula halaman ini dalam beberapa minit." : "Tiada caj dibuat. Anda boleh cuba bayar semula."}</p>
+      ${status === "menunggu" ? "" : `<button class="btn" type="button" data-buy>Cuba lagi</button>`}</div>`);
+  }
+})();
 </script>
 </body>
 </html>

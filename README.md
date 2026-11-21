@@ -46,13 +46,37 @@ Cara main: buka `game/index.html` dalam pelayar (tak perlu install apa-apa). Pak
 
 ## Website: BentukBadan (kurus & bina otot)
 
-Laman jualan untuk orang yang nak kuruskan badan dan bina otot. Buka `fitness/index.html` dalam pelayar.
+Laman jualan dengan akaun pengguna dan bayaran ToyyibPay (FPX + kad). Kandungan premium
+hanya dihantar oleh server kepada akaun yang dah bayar, jadi tak boleh dibuka dengan "inspect" atau ubah URL.
 
-- Kalkulator kalori & makro (BMR Mifflin-St Jeor + TDEE + BMI ikut panduan Asia)
-- Resepi dengan kalori, protein, karbo dan lemak. 4 resepi percuma, 4 premium dikunci
-- 6 modul panduan penuh (pelan makan, program latihan gym/rumah, plateau) yang dibuka selepas beli
-- Butang **Beli** (RM49) dengan borang checkout
+- Kalkulator kalori & makro (Mifflin-St Jeor + TDEE + BMI panduan Asia)
+- 20 resepi Malaysia dengan kalori, protein, karbo, lemak (6 percuma, 14 premium)
+- 6 modul panduan penuh: pelan makan kurus & bina otot, program gym 12 minggu, latihan di rumah, plateau
+- Daftar / log masuk (kata laluan di-hash dengan scrypt, sesi cookie HttpOnly bertandatangan)
+- Bayaran disahkan terus dengan API ToyyibPay (`getBillTransactions`), bukan dengan parameter URL
 
-Untuk jualan sebenar, letak pautan bayaran (ToyyibPay / Billplz / Stripe) dalam `PAYMENT_LINK`
-di bahagian atas skrip, dan tetapkan URL pulang gateway kepada `.../fitness/?akses=berjaya`.
-Jika `PAYMENT_LINK` kosong, checkout berjalan dalam mod demo.
+### Cuba di komputer
+
+```sh
+npm run fitness:demo     # http://localhost:3000, bayaran demo (tiada duit sebenar)
+npm run test:fitness     # ujian server + aliran bayaran dengan ToyyibPay palsu
+```
+
+### Jual betul-betul
+
+1. Daftar di [ToyyibPay](https://toyyibpay.com) (cuba dulu di sandbox `dev.toyyibpay.com`).
+2. Cipta **Category**, salin **Category Code** dan **User Secret Key**.
+3. `cp fitness/.env.example fitness/.env` dan isi semua nilai.
+4. Deploy ke host Node.js (Render, Railway, VPS) dengan HTTPS dan cakera kekal untuk `fitness/data/`.
+   Jalankan `npm run fitness`.
+5. Buat satu pembelian ujian di sandbox, kemudian tukar `TOYYIBPAY_BASE=https://toyyibpay.com` dan kunci live.
+
+Struktur:
+
+```
+fitness/server.mjs          Server HTTP + API
+fitness/lib/                Klien ToyyibPay, pangkalan data fail JSON
+fitness/content/            Resepi & modul (edit di sini untuk tambah kandungan)
+fitness/public/index.html   Laman depan
+fitness/data/               Data pelanggan (git-ignored, buat backup!)
+```
