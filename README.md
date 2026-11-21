@@ -43,3 +43,16 @@ mengikut turutan yang betul sebelum masa tamat. Hantu tu hanya hilang selepas su
 | 5 | Hantu Raya | Ayat al-Kursi |
 
 Cara main: buka `game/index.html` dalam pelayar (tak perlu install apa-apa). Pakai fon telinga.
+
+## Website: BentukBadan (kurus & bina otot)
+
+Laman jualan untuk orang yang nak kuruskan badan dan bina otot. Buka `fitness/index.html` dalam pelayar.
+
+- Kalkulator kalori & makro (BMR Mifflin-St Jeor + TDEE + BMI ikut panduan Asia)
+- Resepi dengan kalori, protein, karbo dan lemak. 4 resepi percuma, 4 premium dikunci
+- 6 modul panduan penuh (pelan makan, program latihan gym/rumah, plateau) yang dibuka selepas beli
+- Butang **Beli** (RM49) dengan borang checkout
+
+Untuk jualan sebenar, letak pautan bayaran (ToyyibPay / Billplz / Stripe) dalam `PAYMENT_LINK`
+di bahagian atas skrip, dan tetapkan URL pulang gateway kepada `.../fitness/?akses=berjaya`.
+Jika `PAYMENT_LINK` kosong, checkout berjalan dalam mod demo.
