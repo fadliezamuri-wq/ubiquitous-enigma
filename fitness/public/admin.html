@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin BentukBadan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f6f7f4; --surface:#fff; --surface-2:#eef1ea; --ink:#15201a; --muted:#5d6b62; --line:#dde3da; --brand:#1f8a4c; --brand-ink:#fff;
+    --brand-soft:#dff3e6; --accent:#ff7a2f; --accent-soft:#ffe8da; --err-bg:#fde2e1; --err:#9b1c1c; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0e1411; --surface:#151d18; --surface-2:#1c2620; --ink:#eaf1ec; --muted:#9aaba0;
+    --line:#27332c; --brand:#3fbf73; --brand-ink:#06140c; --brand-soft:#173525; --accent:#ff8f4f; --accent-soft:#3a2416; --err-bg:#3b1616; --err:#ffb4b4; } }
+  :root[data-theme="dark"] { --bg:#0e1411; --surface:#151d18; --surface-2:#1c2620; --ink:#eaf1ec; --muted:#9aaba0;
+    --line:#27332c; --brand:#3fbf73; --brand-ink:#06140c; --brand-soft:#173525; --accent:#ff8f4f; --accent-soft:#3a2416; --err-bg:#3b1616; --err:#ffb4b4; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Outfit", system-ui, sans-serif; line-height: 1.5; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  .hidden { display: none !important; }
+  header { border-bottom: 1px solid var(--line); background: var(--surface); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+  .logo { font-weight: 800; font-size: 20px; text-decoration: none; color: inherit; }
+  .logo span { color: var(--brand); }
+  .logo small { font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 6px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; border: 0; cursor: pointer; font: inherit; font-weight: 700;
+    padding: 9px 16px; border-radius: 999px; text-decoration: none; background: var(--brand); color: var(--brand-ink); font-size: 14px; white-space: nowrap; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+  .btn.warn { background: var(--accent-soft); color: var(--ink); }
+  .btn.xs { padding: 5px 12px; font-size: 13px; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  main { padding: 28px 0 60px; }
+  h1 { font-size: 28px; margin: 0 0 18px; letter-spacing: -.02em; }
+  h2 { font-size: 20px; margin: 32px 0 12px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .stats { grid-template-columns: 1fr 1fr; } }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .stat b { display: block; font-size: 30px; letter-spacing: -.02em; }
+  .stat span { color: var(--muted); font-size: 14px; }
+  .notice { border-radius: 12px; padding: 12px 16px; margin: 0 0 10px; font-size: 14px; background: var(--accent-soft); }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .toolbar input, .toolbar select { font: inherit; padding: 9px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+  .toolbar input { flex: 1; min-width: 200px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 760px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { background: var(--surface-2); font-weight: 600; color: var(--muted); font-size: 13px; }
+  tr:last-child td { border-bottom: 0; }
+  td .sub { color: var(--muted); font-size: 13px; }
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+  .tag.ok { background: var(--brand-soft); color: var(--brand); }
+  .tag.no { background: var(--surface-2); color: var(--muted); }
+  .tag.pending { background: var(--accent-soft); color: var(--ink); }
+  .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .empty { padding: 24px; color: var(--muted); text-align: center; }
+  .login { max-width: 380px; margin: 60px auto; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
+  .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .field label { font-weight: 600; font-size: 14px; }
+  .field input { font: inherit; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); }
+  .err { background: var(--err-bg); color: var(--err); border-radius: 10px; padding: 10px 14px; font-size: 14px; margin-bottom: 12px; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 12px 20px;
+    border-radius: 12px; font-weight: 600; font-size: 14px; max-width: calc(100% - 32px); z-index: 10; }
+  dialog { border: 0; border-radius: 18px; padding: 24px; width: min(480px, calc(100% - 32px)); background: var(--surface); color: var(--ink); }
+  dialog::backdrop { background: rgba(0,0,0,.45); }
+  dialog h3 { margin: 0 0 6px; }
+  dialog p { color: var(--muted); margin: 0 0 14px; font-size: 14px; }
+  dialog .row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px; }
+  .copy { display: flex; gap: 8px; }
+  .copy input { flex: 1; font: inherit; font-size: 13px; padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); }
+  label.check { display: flex; gap: 8px; align-items: center; font-size: 14px; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="logo" href="/">Bentuk<span>Badan</span><small>Admin</small></a>
+  <div id="hdr"></div>
+</div></header>
+
+<main class="wrap">
+  <div id="loginBox" class="login hidden">
+    <h1 style="font-size:24px">Log masuk admin</h1>
+    <div id="loginErr"></div>
+    <form id="loginForm">
+      <div class="field"><label for="lEmail">E-mel</label><input id="lEmail" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="lPass">Kata laluan</label><input id="lPass" type="password" required autocomplete="current-password"></div>
+      <button class="btn" type="submit" style="width:100%;padding:12px">Log masuk</button>
+    </form>
+  </div>
+
+  <div id="denied" class="login hidden">
+    <h1 style="font-size:24px">Bukan akaun admin</h1>
+    <p style="color:var(--muted)">Tambah e-mel anda dalam <code>ADMIN_EMAILS</code> di fail <code>.env</code> server, kemudian restart server.</p>
+    <a class="btn ghost" href="/">Kembali ke laman utama</a>
+  </div>
+
+  <div id="dash" class="hidden">
+    <h1>Papan pemuka</h1>
+    <div id="notices"></div>
+    <div class="stats" id="stats"></div>
+
+    <h2>Pelanggan</h2>
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="Cari nama, e-mel atau telefon…">
+      <select id="fPaid"><option value="all">Semua</option><option value="paid">Dah bayar</option><option value="unpaid">Belum bayar</option></select>
+      <a class="btn ghost" href="/api/admin/export.csv">Muat turun CSV</a>
+    </div>
+    <div class="card"><table><thead><tr><th>Pelanggan</th><th>Telefon</th><th>Status</th><th>Daftar</th><th>Tindakan</th></tr></thead><tbody id="users"></tbody></table></div>
+
+    <h2>Pesanan</h2>
+    <div class="card"><table><thead><tr><th>No. pesanan</th><th>E-mel</th><th>Jumlah</th><th>Kaedah</th><th>Status</th><th>Tarikh</th><th></th></tr></thead><tbody id="orders"></tbody></table></div>
+  </div>
+</main>
+
+<dialog id="dlg"><div id="dlgBody"></div></dialog>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmtDate = (d) => d ? new Date(d).toLocaleString("ms-MY", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "–";
+const rm = (n) => "RM" + Number(n).toLocaleString("ms-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+let data = null;
+
+async function api(path, body) {
+  const opts = body === undefined ? {} : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) };
+  const res = await fetch(path, { credentials: "same-origin", ...opts });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(out.error || "Ralat"), { status: res.status });
+  return out;
+}
+function toast(msg) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.append(t);
+  setTimeout(() => t.remove(), 3000);
+}
+function show(id) { ["loginBox", "denied", "dash"].forEach((x) => $("#" + x).classList.toggle("hidden", x !== id)); }
+
+async function load() {
+  try { data = await api("/api/admin/summary"); }
+  catch (e) {
+    $("#hdr").innerHTML = e.status === 403 ? '<button class="btn ghost" id="out">Log keluar</button>' : "";
+    return show(e.status === 403 ? "denied" : "loginBox");
+  }
+  $("#hdr").innerHTML = '<a class="btn ghost" href="/" style="margin-right:6px">Lihat laman</a><button class="btn ghost" id="out">Log keluar</button>';
+  show("dash"); render();
+}
+
+function render() {
+  const s = data.stats;
+  $("#stats").innerHTML = [
+    [rm(s.revenueRm), "Jumlah jualan"], [s.paidUsers, "Pelanggan berbayar"], [s.users, "Akaun berdaftar"], [s.pendingOrders, "Pesanan belum selesai"],
+  ].map(([b, t]) => `<div class="stat"><b>${esc(b)}</b><span>${t}</span></div>`).join("");
+  const n = [];
+  if (data.payment !== "toyyibpay") n.push(data.payment === "demo" ? "⚠️ Mod demo aktif: pembelian tidak melibatkan bayaran sebenar." : "⚠️ ToyyibPay belum disambung. Butang beli tidak berfungsi.");
+  if (!data.mail) n.push("✉️ E-mel belum disambung (RESEND_API_KEY). Pelanggan tak dapat e-mel lupa kata laluan. Guna butang “Pautan kata laluan” di bawah dan hantar sendiri.");
+  $("#notices").innerHTML = n.map((x) => `<div class="notice">${esc(x)}</div>`).join("");
+  renderUsers(); renderOrders();
+}
+
+function renderUsers() {
+  const q = $("#q").value.trim().toLowerCase(), f = $("#fPaid").value;
+  const list = data.users.filter((u) => (f === "all" || (f === "paid") === u.paid) &&
+    (!q || [u.name, u.email, u.phone].some((v) => String(v).toLowerCase().includes(q))));
+  $("#users").innerHTML = list.length ? list.map((u) => `<tr>
+    <td><b>${esc(u.name)}</b><div class="sub">${esc(u.email)}</div>${u.note ? `<div class="sub">📝 ${esc(u.note)}</div>` : ""}</td>
+    <td><a href="https://wa.me/${esc(waNumber(u.phone))}" target="_blank" rel="noopener">${esc(u.phone)}</a></td>
+    <td>${u.paid ? `<span class="tag ok">Dah bayar</span><div class="sub">${fmtDate(u.paidAt)}</div>` : '<span class="tag no">Belum bayar</span>'}</td>
+    <td>${fmtDate(u.createdAt)}</td>
+    <td><div class="actions">
+      ${u.paid ? `<button class="btn xs warn" data-revoke="${u.id}">Tarik akses</button>` : `<button class="btn xs" data-grant="${u.id}">Beri akses</button>`}
+      <button class="btn xs ghost" data-reset="${u.id}">Pautan kata laluan</button>
+    </div></td></tr>`).join("") : '<tr><td colspan="5" class="empty">Tiada pelanggan.</td></tr>';
+}
+function renderOrders() {
+  const label = { paid: ["ok", "Berjaya"], pending: ["pending", "Menunggu"], failed: ["no", "Gagal"], refunded: ["no", "Dipulangkan"] };
+  const gw = { toyyibpay: "ToyyibPay", demo: "Demo", manual: "Manual" };
+  $("#orders").innerHTML = data.orders.length ? data.orders.map((o) => {
+    const [cls, txt] = label[o.status] || ["no", o.status];
+    return `<tr><td><code>${esc(o.id)}</code>${o.billCode ? `<div class="sub">Bil: ${esc(o.billCode)}</div>` : ""}</td><td>${esc(o.email)}</td>
+      <td>${rm((o.amountCents || 0) / 100)}</td><td>${esc(gw[o.gateway] || o.gateway)}${o.note ? `<div class="sub">${esc(o.note)}</div>` : ""}</td>
+      <td><span class="tag ${cls}">${txt}</span></td><td>${fmtDate(o.paidAt || o.createdAt)}</td>
+      <td>${o.status === "pending" && o.billCode ? `<button class="btn xs ghost" data-verify="${esc(o.id)}">Semak status</button>` : ""}</td></tr>`;
+  }).join("") : '<tr><td colspan="7" class="empty">Tiada pesanan lagi.</td></tr>';
+}
+function waNumber(p) { const d = String(p || "").replace(/\D/g, ""); return d.startsWith("0") ? "6" + d : d; }
+
+function dialog(html, onReady) {
+  $("#dlgBody").innerHTML = html; $("#dlg").showModal(); onReady && onReady();
+}
+const closeDlg = () => $("#dlg").close();
+
+document.addEventListener("click", async (e) => {
+  const t = e.target.closest("button, a"); if (!t) return;
+  if (t.id === "out") { await api("/api/logout", {}).catch(() => {}); location.reload(); }
+  if (t.dataset.cancel !== undefined) closeDlg();
+
+  if (t.dataset.grant) {
+    const u = data.users.find((x) => x.id === t.dataset.grant);
+    dialog(`<h3>Beri akses kepada ${esc(u.name)}</h3><p>Guna ini untuk bayaran di luar ToyyibPay (contoh pindahan bank) atau akses percuma.</p>
+      <form id="gForm"><div class="field"><label for="gAmt">Jumlah diterima (RM)</label><input id="gAmt" type="number" min="0" step="0.01" value="0"></div>
+      <div class="field"><label for="gNote">Nota</label><input id="gNote" maxlength="200" placeholder="Contoh: Bayar melalui Maybank 12/11"></div>
+      <div class="row"><button type="button" class="btn ghost" data-cancel>Batal</button><button class="btn">Beri akses</button></div></form>`, () => {
+      $("#gForm").addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        await act(`/api/admin/users/${u.id}/access`, { paid: true, amountRm: $("#gAmt").value, note: $("#gNote").value }, "Akses diberi.");
+      });
+    });
+  }
+  if (t.dataset.revoke) {
+    const u = data.users.find((x) => x.id === t.dataset.revoke);
+    dialog(`<h3>Tarik akses ${esc(u.name)}?</h3><p>Pelanggan tak lagi boleh baca kandungan premium.</p>
+      <form id="rForm"><label class="check"><input type="checkbox" id="rRef"> Wang dah dipulangkan (keluarkan daripada jumlah jualan)</label>
+      <div class="field"><label for="rNote">Nota</label><input id="rNote" maxlength="200" placeholder="Sebab"></div>
+      <div class="row"><button type="button" class="btn ghost" data-cancel>Batal</button><button class="btn warn">Tarik akses</button></div></form>`, () => {
+      $("#rForm").addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        await act(`/api/admin/users/${u.id}/access`, { paid: false, refunded: $("#rRef").checked, note: $("#rNote").value }, "Akses ditarik balik.");
+      });
+    });
+  }
+  if (t.dataset.reset) {
+    const u = data.users.find((x) => x.id === t.dataset.reset);
+    try {
+      const r = await api(`/api/admin/users/${u.id}/reset-link`, {});
+      const wa = `https://wa.me/${waNumber(u.phone)}?text=${encodeURIComponent(`Hai ${u.name}, tekan pautan ini untuk tetapkan kata laluan baharu BentukBadan (sah 1 jam): ${r.link}`)}`;
+      dialog(`<h3>Pautan kata laluan untuk ${esc(u.name)}</h3><p>Sah selama ${r.expiresInMinutes} minit dan hanya boleh diguna sekali. Hantar kepada pelanggan sahaja.</p>
+        <div class="copy"><input id="lnk" readonly value="${esc(r.link)}"><button class="btn" id="cpy" type="button">Salin</button></div>
+        <div class="row" style="margin-top:14px"><a class="btn ghost" href="${esc(wa)}" target="_blank" rel="noopener">Hantar melalui WhatsApp</a><button class="btn ghost" data-cancel>Tutup</button></div>`, () => {
+        $("#cpy").addEventListener("click", async () => {
+          try { await navigator.clipboard.writeText($("#lnk").value); toast("Pautan disalin."); } catch { $("#lnk").select(); }
+        });
+      });
+    } catch (err) { toast(err.message); }
+  }
+  if (t.dataset.verify) {
+    t.disabled = true;
+    try { const r = await api(`/api/admin/orders/${t.dataset.verify}/verify`, {}); toast(r.status === "paid" ? "Bayaran disahkan. Akses dibuka." : "Belum dibayar di ToyyibPay."); await load(); }
+    catch (err) { toast(err.message); t.disabled = false; }
+  }
+});
+
+async function act(path, body, okMsg) {
+  try { await api(path, body); closeDlg(); toast(okMsg); await load(); }
+  catch (err) { toast(err.message); }
+}
+
+$("#q").addEventListener("input", renderUsers);
+$("#fPaid").addEventListener("change", renderUsers);
+$("#loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  try { await api("/api/login", { email: $("#lEmail").value, password: $("#lPass").value }); $("#loginErr").innerHTML = ""; load(); }
+  catch (err) { $("#loginErr").innerHTML = `<div class="err">${esc(err.message)}</div>`; }
+});
+load();
+</script>
+</body>
+</html>

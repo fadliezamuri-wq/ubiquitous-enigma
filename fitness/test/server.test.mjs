@@ -7,12 +7,17 @@ import path from "node:path";
 import { createApp, loadConfig } from "../server.mjs";
 
 // ---- ToyyibPay palsu ----
-const fake = { bills: [], paid: new Map(), down: false };
+const fake = { bills: [], paid: new Map(), down: false, emails: [] };
 const gateway = http.createServer((req, res) => {
   let body = ""; req.on("data", (c) => (body += c));
   req.on("end", () => {
     const f = Object.fromEntries(new URLSearchParams(body));
     res.setHeader("content-type", "application/json");
+    if (req.url === "/emails") {
+      assert.equal(req.headers.authorization, "Bearer re_test");
+      fake.emails.push(JSON.parse(body));
+      return res.end(JSON.stringify({ id: "em_" + fake.emails.length }));
+    }
     if (fake.down) { res.statusCode = 500; return res.end("down"); }
     if (req.url.endsWith("/createBill")) {
       const code = "bill" + (fake.bills.length + 1);
@@ -36,7 +41,8 @@ before(async () => {
   const gw = await listen(gateway);
   dataDir = fs.mkdtempSync(path.join(os.tmpdir(), "bb-"));
   const cfg = loadConfig({ SESSION_SECRET: "x".repeat(32), DATA_DIR: dataDir, PRICE_RM: "49", BASE_URL: "https://contoh.my",
-    TOYYIBPAY_BASE: gw, TOYYIBPAY_SECRET_KEY: "rahsia", TOYYIBPAY_CATEGORY_CODE: "kat1" });
+    TOYYIBPAY_BASE: gw, TOYYIBPAY_SECRET_KEY: "rahsia", TOYYIBPAY_CATEGORY_CODE: "kat1",
+    RESEND_API_KEY: "re_test", MAIL_FROM: "BentukBadan <hai@contoh.my>", RESEND_BASE: gw, ADMIN_EMAILS: "Admin@Contoh.my, bos@contoh.my" });
   app = createApp(cfg);
   base = await listen(app);
 });
@@ -152,6 +158,8 @@ test("bayaran sah disahkan melalui API ToyyibPay → akses dibuka", async () => 
   const ret = await call("/bayaran/kembali?status_id=1&billcode=bill1");
   assert.equal(ret.location, "/?bayar=berjaya");
   assert.equal((await call("/api/checkout", { body: {}, cookie: sid })).data.paid, true);
+  const welcome = await waitForEmail((m) => m.to[0] === user.email && /dibuka/.test(m.subject));
+  assert.match(welcome.html, /https:\/\/contoh\.my\/#panduan/);
 });
 
 test("gateway rosak → ralat 502 yang jelas", async () => {
@@ -170,4 +178,120 @@ test("path traversal disekat", async () => {
 test("mod demo hanya jika tiada gateway dan tidak dalam production", () => {
   assert.throws(() => loadConfig({ NODE_ENV: "production", SESSION_SECRET: "s", DEMO_MODE: "1" }));
   assert.throws(() => loadConfig({ NODE_ENV: "production" }), /SESSION_SECRET/);
+});
+
+async function waitForEmail(pred) {
+  for (let i = 0; i < 50; i++) {
+    const m = fake.emails.find(pred); if (m) return m;
+    await new Promise((r) => setTimeout(r, 20));
+  }
+  assert.fail("e-mel tidak dihantar");
+}
+
+/* ---------- Lupa kata laluan ---------- */
+test("lupa kata laluan: e-mel tak berdaftar dapat balasan sama, tiada e-mel dihantar", async () => {
+  const before = fake.emails.length;
+  const a = await call("/api/forgot", { body: { email: "tiada@contoh.my" } });
+  const b = await call("/api/forgot", { body: { email: user.email } });
+  assert.equal(a.status, 200); assert.deepEqual(a.data, b.data);
+  await waitForEmail((m) => m.to[0] === user.email && /kata laluan/i.test(m.subject));
+  assert.equal(fake.emails.filter((m) => m.to[0] === "tiada@contoh.my").length, 0);
+  assert.ok(fake.emails.length > before);
+});
+
+test("tetapkan semula kata laluan: token sekali guna, sesi lama terbatal", async () => {
+  const mail = [...fake.emails].reverse().find((m) => m.to[0] === user.email && /kata laluan/i.test(m.subject));
+  const token = mail.text.match(/\?reset=([\w-]+)/)[1];
+  const oldSid = (await call("/api/login", { body: { email: user.email, password: user.password } })).cookie;
+  assert.equal((await call("/api/reset", { body: { token, password: "pendek" } })).status, 400);
+  assert.equal((await call("/api/reset", { body: { token: "salah", password: "baharu12345" } })).status, 400);
+  const r = await call("/api/reset", { body: { token, password: "baharu12345" } });
+  assert.equal(r.status, 200);
+  assert.equal(r.data.user.paid, true);
+  assert.equal((await call("/api/me", { cookie: r.cookie })).data.user.email, user.email);
+  assert.equal((await call("/api/me", { cookie: oldSid })).data.user, null, "sesi lama mesti terbatal");
+  assert.equal((await call("/api/reset", { body: { token, password: "lagisekali1" } })).status, 400, "token tak boleh guna dua kali");
+  assert.equal((await call("/api/login", { body: { email: user.email, password: user.password } })).status, 401);
+  sid = (await call("/api/login", { body: { email: user.email, password: "baharu12345" } })).cookie;
+  user.password = "baharu12345";
+});
+
+test("token tamat tempoh ditolak", async () => {
+  await call("/api/forgot", { body: { email: "siti@contoh.my" } });
+  const mail = await waitForEmail((m) => m.to[0] === "siti@contoh.my");
+  const token = mail.text.match(/\?reset=([\w-]+)/)[1];
+  const realNow = Date.now;
+  Date.now = () => realNow() + 2 * 60 * 60 * 1000;
+  try { assert.equal((await call("/api/reset", { body: { token, password: "baharu12345" } })).status, 400); }
+  finally { Date.now = realNow; }
+});
+
+/* ---------- Admin ---------- */
+let adminSid;
+test("admin: bukan admin ditolak, admin (ADMIN_EMAILS) diterima", async () => {
+  assert.equal((await call("/api/admin/summary")).status, 401);
+  assert.equal((await call("/api/admin/summary", { cookie: sid })).status, 403);
+  const r = await call("/api/register", { body: { name: "Pemilik", email: "admin@contoh.my", phone: "0199999999", password: "adminkuat123" } });
+  adminSid = r.cookie;
+  assert.equal(r.data.user.admin, true);
+  const s = await call("/api/admin/summary", { cookie: adminSid });
+  assert.equal(s.status, 200);
+  assert.equal(s.data.stats.users, 3);
+  assert.equal(s.data.stats.paidUsers, 1);
+  assert.equal(s.data.stats.revenueRm, 49);
+  assert.equal(s.data.users[0].hash, undefined, "hash kata laluan tak boleh didedahkan");
+  assert.equal(s.data.users[0].salt, undefined);
+  assert.equal((await call("/admin")).status, 200);
+});
+
+test("admin: beri dan tarik balik akses secara manual", async () => {
+  const s = await call("/api/admin/summary", { cookie: adminSid });
+  const siti = s.data.users.find((u) => u.email === "siti@contoh.my");
+  assert.equal((await call(`/api/admin/users/${siti.id}/access`, { body: { paid: true }, cookie: sid })).status, 403);
+  const g = await call(`/api/admin/users/${siti.id}/access`, { body: { paid: true, amountRm: 49, note: "Pindahan bank" }, cookie: adminSid });
+  assert.equal(g.data.user.paid, true);
+  let st = (await call("/api/admin/summary", { cookie: adminSid })).data.stats;
+  assert.equal(st.revenueRm, 98);
+  await call(`/api/admin/users/${siti.id}/access`, { body: { paid: false, refunded: true }, cookie: adminSid });
+  st = (await call("/api/admin/summary", { cookie: adminSid })).data.stats;
+  assert.equal(st.revenueRm, 49);
+  assert.equal(st.paidUsers, 1);
+});
+
+test("admin: pautan kata laluan manual berfungsi", async () => {
+  const s = await call("/api/admin/summary", { cookie: adminSid });
+  const siti = s.data.users.find((u) => u.email === "siti@contoh.my");
+  const r = await call(`/api/admin/users/${siti.id}/reset-link`, { body: {}, cookie: adminSid });
+  const token = r.data.link.match(/\?reset=([\w-]+)/)[1];
+  assert.equal((await call("/api/reset", { body: { token, password: "sitibaharu1" } })).status, 200);
+});
+
+test("admin: eksport CSV selamat daripada formula Excel", async () => {
+  await call("/api/register", { body: { name: "=HYPERLINK(\"x\")", email: "jahat@contoh.my", phone: "0111111111", password: "abcdefgh1" } });
+  const r = await call("/api/admin/export.csv", { cookie: adminSid });
+  assert.equal(r.status, 200);
+  assert.match(r.data, /"'=HYPERLINK\(""x""\)"/);
+  assert.equal((await call("/api/admin/export.csv", { cookie: sid })).status, 403);
+});
+
+test("admin: semak status pesanan tertunda dengan ToyyibPay", async () => {
+  const s = await call("/api/admin/summary", { cookie: adminSid });
+  const jahat = s.data.users.find((u) => u.email === "jahat@contoh.my");
+  const login = await call("/api/login", { body: { email: "jahat@contoh.my", password: "abcdefgh1" } });
+  const co = await call("/api/checkout", { body: {}, cookie: login.cookie });
+  const code = co.data.url.split("/").pop();
+  const order = (await call("/api/admin/summary", { cookie: adminSid })).data.orders.find((o) => o.billCode === code);
+  assert.equal((await call(`/api/admin/orders/${order.id}/verify`, { body: {}, cookie: adminSid })).data.status, "pending");
+  fake.paid.set(code, "49.00");
+  assert.equal((await call(`/api/admin/orders/${order.id}/verify`, { body: {}, cookie: adminSid })).data.status, "paid");
+  assert.ok((await call("/api/admin/summary", { cookie: adminSid })).data.users.find((u) => u.id === jahat.id).paid);
+});
+
+test("pesanan yang dipulangkan wang tak dibuka semula oleh callback lewat", async () => {
+  const s = await call("/api/admin/summary", { cookie: adminSid });
+  const jahat = s.data.users.find((u) => u.email === "jahat@contoh.my");
+  await call(`/api/admin/users/${jahat.id}/access`, { body: { paid: false, refunded: true }, cookie: adminSid });
+  const order = s.data.orders.find((o) => o.userId === jahat.id);
+  await call("/api/toyyibpay/callback", { form: { billcode: order.billCode, status: "1" } });
+  assert.equal((await call("/api/admin/summary", { cookie: adminSid })).data.users.find((u) => u.id === jahat.id).paid, false);
 });

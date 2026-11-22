@@ -602,7 +602,7 @@ $("#moduleGrid").addEventListener("click", (e) => {
 function renderNav() {
   const u = state.user;
   $("#navAuth").innerHTML = u
-    ? `<span class="user-chip"><span class="who">${esc(u.name)}</span><button class="linkbtn" type="button" id="logoutBtn">Log keluar</button>
+    ? `<span class="user-chip">${u.admin ? '<a class="linkbtn" href="/admin">Admin</a>' : ""}<span class="who">${esc(u.name)}</span><button class="linkbtn" type="button" id="logoutBtn">Log keluar</button>
        ${u.paid ? '<a class="btn sm" href="#panduan">Panduan Saya</a>' : '<button class="btn sm" type="button" data-buy>Beli Akses</button>'}</span>`
     : `<span class="user-chip"><button class="linkbtn" type="button" data-login>Log masuk</button><button class="btn sm" type="button" data-buy>Beli Akses</button></span>`;
   $("#memberBar").classList.toggle("hidden", !isPaid());
@@ -610,6 +610,7 @@ function renderNav() {
 document.addEventListener("click", async (e) => {
   if (e.target.closest("[data-buy]")) { e.preventDefault(); startBuy(); }
   else if (e.target.closest("[data-login]")) { e.preventDefault(); openAuth("login"); }
+  else if (e.target.closest("[data-forgot]")) { e.preventDefault(); openForgot(); }
   else if (e.target.closest("#logoutBtn")) {
     await api("/api/logout", {}).catch(() => {});
     state.user = null; state.premium = null; refresh();
@@ -627,7 +628,7 @@ function openAuth(mode, afterAuth) {
       ${reg ? `<div class="field"><label for="fName">Nama penuh</label><input id="fName" name="name" required autocomplete="name"></div>` : ""}
       <div class="field"><label for="fEmail">E-mel</label><input id="fEmail" name="email" type="email" required autocomplete="email"></div>
       ${reg ? `<div class="field"><label for="fPhone">No. telefon</label><input id="fPhone" name="phone" type="tel" required autocomplete="tel" placeholder="0123456789"></div>` : ""}
-      <div class="field"><label for="fPass">Kata laluan</label><input id="fPass" name="password" type="password" required minlength="8" autocomplete="${reg ? "new-password" : "current-password"}">${reg ? '<small class="muted">Sekurang-kurangnya 8 aksara.</small>' : ""}</div>
+      <div class="field"><label for="fPass">Kata laluan</label><input id="fPass" name="password" type="password" required minlength="8" autocomplete="${reg ? "new-password" : "current-password"}">${reg ? '<small class="muted">Sekurang-kurangnya 8 aksara.</small>' : '<button type="button" class="linkbtn" data-forgot style="align-self:flex-start;margin-top:4px">Lupa kata laluan?</button>'}</div>
       <button class="btn block" type="submit" style="margin-top:8px">${reg ? (afterAuth ? "Daftar & teruskan ke bayaran" : "Daftar") : "Log masuk"}</button>
     </form>`);
   $("#authForm .auth-tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (b) openAuth(b.dataset.mode, afterAuth); });
@@ -644,6 +645,56 @@ function openAuth(mode, afterAuth) {
       if (afterAuth && !user.paid) afterAuth(); else closeModal();
     } catch (err) {
       $("#authErr").innerHTML = `<div class="form-err">${esc(err.message)}</div>`;
+      btn.disabled = false;
+    }
+  });
+}
+
+function openForgot() {
+  openModal(`
+    <div class="head"><div class="eyebrow">Akaun</div><h2>Lupa kata laluan</h2>
+      <div class="muted">Masukkan e-mel akaun anda. Kami akan hantar pautan untuk tetapkan kata laluan baharu.</div></div>
+    <form class="content" id="forgotForm" novalidate>
+      <div id="forgotMsg"></div>
+      <div class="field"><label for="fgEmail">E-mel</label><input id="fgEmail" name="email" type="email" required autocomplete="email"></div>
+      <button class="btn block" type="submit">Hantar pautan</button>
+      <p style="text-align:center;margin:14px 0 0"><button type="button" class="linkbtn" data-login>← Kembali ke log masuk</button></p>
+    </form>`);
+  $("#forgotForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("[type=submit]"); btn.disabled = true;
+    try {
+      const r = await api("/api/forgot", { email: $("#fgEmail").value });
+      $("#forgotMsg").innerHTML = `<div class="paywall" style="margin:0 0 14px;text-align:left"><p style="margin:0">✉️ ${esc(r.message)}</p></div>`;
+    } catch (err) {
+      $("#forgotMsg").innerHTML = `<div class="form-err">${esc(err.message)}</div>`;
+      btn.disabled = false;
+    }
+  });
+}
+function openReset(token) {
+  openModal(`
+    <div class="head"><div class="eyebrow">Akaun</div><h2>Kata laluan baharu</h2>
+      <div class="muted">Pilih kata laluan baharu untuk akaun anda.</div></div>
+    <form class="content" id="resetForm" novalidate>
+      <div id="resetErr"></div>
+      <div class="field"><label for="rsPass">Kata laluan baharu</label><input id="rsPass" type="password" required minlength="8" autocomplete="new-password"><small class="muted">Sekurang-kurangnya 8 aksara.</small></div>
+      <div class="field"><label for="rsPass2">Ulang kata laluan</label><input id="rsPass2" type="password" required minlength="8" autocomplete="new-password"></div>
+      <button class="btn block" type="submit">Simpan & log masuk</button>
+    </form>`);
+  $("#resetForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("[type=submit]");
+    if ($("#rsPass").value !== $("#rsPass2").value) { $("#resetErr").innerHTML = '<div class="form-err">Kata laluan tak sama.</div>'; return; }
+    btn.disabled = true;
+    try {
+      const { user } = await api("/api/reset", { token, password: $("#rsPass").value });
+      state.user = user; await loadPremium(); refresh();
+      openModal(`<div class="content success"><div class="tick">✓</div><h2 style="padding:0">Kata laluan dikemas kini</h2>
+        <p class="muted">Anda dah log masuk. Sesi di peranti lain telah dilog keluar.</p><button class="btn" type="button" id="okBtn">Teruskan</button></div>`);
+      $("#okBtn").addEventListener("click", closeModal);
+    } catch (err) {
+      $("#resetErr").innerHTML = `<div class="form-err">${esc(err.message)}</div>`;
       btn.disabled = false;
     }
   });
@@ -727,7 +778,10 @@ function refresh() {
     return;
   }
   refresh();
-  const status = new URLSearchParams(location.search).get("bayar");
+  const qs = new URLSearchParams(location.search);
+  const resetToken = qs.get("reset");
+  if (resetToken) { history.replaceState(null, "", location.pathname); openReset(resetToken); return; }
+  const status = qs.get("bayar");
   if (status) {
     history.replaceState(null, "", location.pathname + location.hash);
     if (status === "berjaya") afterPaid();

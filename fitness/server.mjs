@@ -7,6 +7,7 @@ import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { createStore } from "./lib/store.mjs";
 import { createToyyibPay } from "./lib/toyyibpay.mjs";
+import { createMailer, resetEmail, welcomeEmail } from "./lib/mail.mjs";
 import { RECIPES, publicRecipe } from "./content/recipes.mjs";
 import { MODULES, publicModule } from "./content/modules.mjs";
 
@@ -38,6 +39,8 @@ export function loadConfig(env = process.env) {
       categoryCode: env.TOYYIBPAY_CATEGORY_CODE,
     } : null,
     demoMode: env.DEMO_MODE === "1",
+    mail: { apiKey: env.RESEND_API_KEY, from: env.MAIL_FROM, base: env.RESEND_BASE || "https://api.resend.com" },
+    adminEmails: String(env.ADMIN_EMAILS || "").split(",").map((s) => s.trim().toLowerCase()).filter(Boolean),
   };
   if (cfg.toyyib && cfg.demoMode) cfg.demoMode = false; // gateway sebenar sentiasa diutamakan
   if (production && cfg.demoMode) throw new Error("DEMO_MODE tidak dibenarkan dalam production.");
@@ -106,36 +109,65 @@ const STATIC_TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", 
 export function createApp(cfg, { fetchImpl = fetch } = {}) {
   const store = createStore(cfg.dataDir);
   const pay = cfg.toyyib ? createToyyibPay({ ...cfg.toyyib, fetchImpl }) : null;
+  const mailer = createMailer({ ...cfg.mail, fetchImpl });
   const publicDir = path.join(HERE, "public");
   const loginLimit = rateLimiter(10, 15 * 60 * 1000);
   const registerLimit = rateLimiter(10, 60 * 60 * 1000);
+  const forgotLimit = rateLimiter(5, 60 * 60 * 1000);
 
   function sign(v) { return crypto.createHmac("sha256", cfg.sessionSecret).update(v).digest("base64url"); }
-  function sessionCookie(userId) {
+  // `sv` (versi sesi) dinaikkan bila kata laluan ditukar, jadi semua sesi lama terbatal.
+  function sessionCookie(user) {
     const exp = Date.now() + SESSION_DAYS * 864e5;
-    const v = `${b64(userId)}.${exp}`;
+    const v = `${b64(user.id)}.${user.sv || 0}.${exp}`;
     return `sid=${v}.${sign(v)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${SESSION_DAYS * 86400}${cfg.secureCookie ? "; Secure" : ""}`;
   }
   const clearCookie = `sid=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${cfg.secureCookie ? "; Secure" : ""}`;
   function currentUser(req) {
     const sid = parseCookies(req).sid; if (!sid) return null;
-    const parts = sid.split("."); if (parts.length !== 3) return null;
-    const [uid, exp, sig] = parts;
-    const expected = sign(`${uid}.${exp}`);
+    const parts = sid.split("."); if (parts.length !== 4) return null;
+    const [uid, sv, exp, sig] = parts;
+    const expected = sign(`${uid}.${sv}.${exp}`);
     if (sig.length !== expected.length || !crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
     if (Number(exp) < Date.now()) return null;
-    return store.userById(Buffer.from(uid, "base64url").toString()) || null;
+    const user = store.userById(Buffer.from(uid, "base64url").toString());
+    return user && String(user.sv || 0) === sv ? user : null;
   }
   const clientIp = (req) => (cfg.trustProxy && String(req.headers["x-forwarded-for"] || "").split(",")[0].trim()) || req.socket.remoteAddress;
-  const userView = (u) => u && { name: u.name, email: u.email, paid: !!u.paid };
+  const isAdmin = (u) => !!u && cfg.adminEmails.includes(u.email);
+  const userView = (u) => u && { name: u.name, email: u.email, paid: !!u.paid, ...(isAdmin(u) ? { admin: true } : {}) };
+  const sha256 = (s) => crypto.createHash("sha256").update(s).digest("hex");
+
+  function createResetLink(user) {
+    const token = crypto.randomBytes(32).toString("base64url");
+    store.updateUser(user, { resetHash: sha256(token), resetExp: Date.now() + 60 * 60 * 1000 });
+    return `${cfg.baseUrl}/?reset=${token}`;
+  }
+  function sendMail(to, msg) {
+    mailer.send({ to, ...msg }).catch((e) => console.error("[e-mel gagal]", e.message));
+  }
 
   async function verifyOrder(order) {
-    if (!order || order.status === "paid") return order?.status === "paid";
-    if (!pay || !order.billCode) return false;
+    if (!order) return false;
+    if (order.status === "paid") return true;
+    // Pesanan yang dah dipulangkan wang / gagal tak dibuka semula oleh callback lewat.
+    if (order.status !== "pending" || !pay || !order.billCode) return false;
     const paid = await pay.isBillPaid(order.billCode, { orderId: order.id, amountCents: order.amountCents });
-    if (paid) store.markPaid(order);
+    if (paid && store.markPaid(order)) {
+      const user = store.userById(order.userId);
+      if (user) sendMail(user.email, welcomeEmail({ name: user.name, link: `${cfg.baseUrl}/#panduan` }));
+    }
     return paid;
   }
+
+  function requireAdmin(req, res) {
+    const u = currentUser(req);
+    if (!u) { json(res, 401, { error: "Sila log masuk." }); return null; }
+    if (!isAdmin(u)) { json(res, 403, { error: "Bukan admin." }); return null; }
+    return u;
+  }
+  const adminUserView = (u) => ({ id: u.id, name: u.name, email: u.email, phone: u.phone, paid: !!u.paid, paidAt: u.paidAt || null,
+    createdAt: u.createdAt, note: u.note || "" });
 
   const routes = {
     "GET /api/config": (req, res) => json(res, 200, {
@@ -163,7 +195,7 @@ export function createApp(cfg, { fetchImpl = fetch } = {}) {
       if (store.userByEmail(email)) return json(res, 409, { error: "E-mel ini dah didaftarkan. Sila log masuk." });
       const { salt, hash } = hashPassword(password);
       const user = store.addUser({ name, email, phone, salt, hash });
-      json(res, 201, { user: userView(user) }, { "set-cookie": sessionCookie(user.id) });
+      json(res, 201, { user: userView(user) }, { "set-cookie": sessionCookie(user) });
     },
 
     "POST /api/login": async (req, res) => {
@@ -175,10 +207,63 @@ export function createApp(cfg, { fetchImpl = fetch } = {}) {
       const ok = user ? verifyPassword(String(b.password || ""), user.salt, user.hash)
         : (verifyPassword(String(b.password || ""), "0".repeat(32), "0".repeat(128)), false);
       if (!ok) return json(res, 401, { error: "E-mel atau kata laluan salah." });
-      json(res, 200, { user: userView(user) }, { "set-cookie": sessionCookie(user.id) });
+      json(res, 200, { user: userView(user) }, { "set-cookie": sessionCookie(user) });
     },
 
     "POST /api/logout": (req, res) => json(res, 200, { ok: true }, { "set-cookie": clearCookie }),
+
+    // Balasan sentiasa sama supaya orang tak boleh teka e-mel mana yang berdaftar.
+    "POST /api/forgot": async (req, res) => {
+      const b = await readJson(req);
+      const email = String(b.email || "").trim().toLowerCase();
+      const msg = { ok: true, message: "Jika e-mel ini berdaftar, pautan untuk tetapkan semula kata laluan telah dihantar. Semak peti masuk dan folder spam." };
+      if (!forgotLimit(clientIp(req)) || !forgotLimit(`e|${email}`)) return json(res, 429, { error: "Terlalu banyak permintaan. Cuba lagi dalam sejam." });
+      const user = store.userByEmail(email);
+      if (user) sendMail(user.email, resetEmail({ name: user.name, link: createResetLink(user) }));
+      json(res, 200, msg);
+    },
+
+    "POST /api/reset": async (req, res) => {
+      const b = await readJson(req);
+      const password = String(b.password || "");
+      const user = b.token ? store.userByResetHash(sha256(String(b.token))) : null;
+      if (!user || !(user.resetExp > Date.now())) return json(res, 400, { error: "Pautan tidak sah atau dah tamat tempoh. Minta pautan baharu." });
+      if (password.length < 8 || password.length > 200) return json(res, 400, { error: "Kata laluan mesti sekurang-kurangnya 8 aksara." });
+      const { salt, hash } = hashPassword(password);
+      store.updateUser(user, { salt, hash, resetHash: null, resetExp: null, sv: (user.sv || 0) + 1 });
+      json(res, 200, { user: userView(user) }, { "set-cookie": sessionCookie(user) });
+    },
+
+    /* ---------- Admin (akaun dalam ADMIN_EMAILS) ---------- */
+    "GET /admin": (req, res, url) => serveStatic(req, res, new URL("/admin.html", url)),
+
+    "GET /api/admin/summary": (req, res) => {
+      if (!requireAdmin(req, res)) return;
+      const users = store.allUsers(), orders = store.allOrders();
+      const paidOrders = orders.filter((o) => o.status === "paid");
+      json(res, 200, {
+        stats: {
+          users: users.length,
+          paidUsers: users.filter((u) => u.paid).length,
+          revenueRm: paidOrders.reduce((s, o) => s + (o.amountCents || 0), 0) / 100,
+          pendingOrders: orders.filter((o) => o.status === "pending").length,
+        },
+        payment: pay ? "toyyibpay" : cfg.demoMode ? "demo" : "none",
+        mail: mailer.enabled,
+        users: users.map(adminUserView).reverse(),
+        orders: orders.map((o) => ({ ...o, email: store.userById(o.userId)?.email || "" })).reverse(),
+      });
+    },
+
+    "GET /api/admin/export.csv": (req, res) => {
+      if (!requireAdmin(req, res)) return;
+      // Elak "CSV injection" bila dibuka dalam Excel.
+      const cell = (v) => { let s = String(v ?? ""); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
+      const rows = [["Nama", "E-mel", "Telefon", "Dah bayar", "Tarikh bayar", "Tarikh daftar", "Nota"],
+        ...store.allUsers().map((u) => [u.name, u.email, u.phone, u.paid ? "Ya" : "Tidak", u.paidAt || "", u.createdAt, u.note || ""])];
+      res.writeHead(200, { "content-type": "text/csv; charset=utf-8", "content-disposition": 'attachment; filename="pelanggan-bentukbadan.csv"', "cache-control": "no-store" });
+      res.end("﻿" + rows.map((r) => r.map(cell).join(",")).join("\r\n"));
+    },
 
     "GET /api/premium": (req, res) => {
       const user = currentUser(req);
@@ -237,6 +322,45 @@ export function createApp(cfg, { fetchImpl = fetch } = {}) {
     },
   };
 
+  const paramRoutes = [
+    // Beri / tarik balik akses secara manual (contoh: bayar melalui pindahan bank, atau pulang wang).
+    ["POST", /^\/api\/admin\/users\/([\w-]+)\/access$/, async (req, res, [id]) => {
+      const b = await readJson(req);
+      if (!requireAdmin(req, res)) return;
+      const user = store.userById(id);
+      if (!user) return json(res, 404, { error: "Pengguna tidak dijumpai." });
+      const note = String(b.note || "").slice(0, 200);
+      if (b.paid) {
+        if (!user.paid) {
+          const amountCents = Math.max(0, Math.round(Number(b.amountRm || 0) * 100));
+          store.markPaid(store.addOrder({ userId: user.id, amountCents, gateway: "manual", note }));
+        }
+      } else {
+        for (const o of store.allOrders()) if (o.userId === user.id && o.status === "paid" && b.refunded) store.updateOrder(o, { status: "refunded" });
+        store.updateUser(user, { paid: false, paidAt: null });
+      }
+      if (note) store.updateUser(user, { note });
+      json(res, 200, { user: adminUserView(user) });
+    }],
+    // Jana pautan tetapkan semula kata laluan untuk dihantar sendiri (WhatsApp dsb.).
+    ["POST", /^\/api\/admin\/users\/([\w-]+)\/reset-link$/, async (req, res, [id]) => {
+      await readJson(req);
+      if (!requireAdmin(req, res)) return;
+      const user = store.userById(id);
+      if (!user) return json(res, 404, { error: "Pengguna tidak dijumpai." });
+      json(res, 200, { link: createResetLink(user), expiresInMinutes: 60 });
+    }],
+    // Semak semula status bayaran dengan ToyyibPay (jika callback terlepas).
+    ["POST", /^\/api\/admin\/orders\/([\w-]+)\/verify$/, async (req, res, [id]) => {
+      await readJson(req);
+      if (!requireAdmin(req, res)) return;
+      const order = store.orderById(id);
+      if (!order) return json(res, 404, { error: "Pesanan tidak dijumpai." });
+      try { await verifyOrder(order); } catch (e) { return json(res, 502, { error: "Tak dapat hubungi ToyyibPay: " + e.message }); }
+      json(res, 200, { status: order.status });
+    }],
+  ];
+
   function serveStatic(req, res, url) {
     let rel = decodeURIComponent(url.pathname);
     if (rel.endsWith("/")) rel += "index.html";
@@ -257,6 +381,10 @@ export function createApp(cfg, { fetchImpl = fetch } = {}) {
     const handler = routes[`${req.method} ${url.pathname}`];
     try {
       if (handler) return await handler(req, res, url);
+      for (const [method, re, fn] of paramRoutes) {
+        const m = req.method === method && url.pathname.match(re);
+        if (m) return await fn(req, res, m.slice(1));
+      }
       if (url.pathname.startsWith("/api/")) return json(res, 404, { error: "Tidak dijumpai" });
       if (req.method === "GET" || req.method === "HEAD") return serveStatic(req, res, url);
       json(res, 405, { error: "Kaedah tidak dibenarkan" });

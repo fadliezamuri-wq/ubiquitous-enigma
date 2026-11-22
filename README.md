@@ -54,11 +54,16 @@ hanya dihantar oleh server kepada akaun yang dah bayar, jadi tak boleh dibuka de
 - 6 modul panduan penuh: pelan makan kurus & bina otot, program gym 12 minggu, latihan di rumah, plateau
 - Daftar / log masuk (kata laluan di-hash dengan scrypt, sesi cookie HttpOnly bertandatangan)
 - Bayaran disahkan terus dengan API ToyyibPay (`getBillTransactions`), bukan dengan parameter URL
+- Lupa kata laluan melalui e-mel (Resend): pautan sekali guna, sah 1 jam, log keluar semua peranti lain
+- E-mel terima kasih automatik selepas bayaran berjaya
+- Halaman admin di `/admin`: jualan, senarai pelanggan, cari, beri/tarik akses (pindahan bank, pulang wang),
+  pautan kata laluan manual + butang WhatsApp, semak status pesanan ToyyibPay, muat turun CSV
 
 ### Cuba di komputer
 
 ```sh
-npm run fitness:demo     # http://localhost:3000, bayaran demo (tiada duit sebenar)
+ADMIN_EMAILS=anda@contoh.com npm run fitness:demo   # http://localhost:3000, bayaran demo
+                                                    # e-mel dicetak ke terminal
 npm run test:fitness     # ujian server + aliran bayaran dengan ToyyibPay palsu
 ```
 
@@ -69,14 +74,18 @@ npm run test:fitness     # ujian server + aliran bayaran dengan ToyyibPay palsu
 3. `cp fitness/.env.example fitness/.env` dan isi semua nilai.
 4. Deploy ke host Node.js (Render, Railway, VPS) dengan HTTPS dan cakera kekal untuk `fitness/data/`.
    Jalankan `npm run fitness`.
-5. Buat satu pembelian ujian di sandbox, kemudian tukar `TOYYIBPAY_BASE=https://toyyibpay.com` dan kunci live.
+5. Daftar akaun biasa di laman anda dengan e-mel dalam `ADMIN_EMAILS`, kemudian buka `/admin`.
+6. (Pilihan) Daftar di [Resend](https://resend.com), sahkan domain, isi `RESEND_API_KEY` dan `MAIL_FROM`.
+   Tanpa ini, laman tetap jalan, tapi pelanggan tak dapat e-mel. Guna butang "Pautan kata laluan" di admin.
+7. Buat satu pembelian ujian di sandbox, kemudian tukar `TOYYIBPAY_BASE=https://toyyibpay.com` dan kunci live.
 
 Struktur:
 
 ```
 fitness/server.mjs          Server HTTP + API
-fitness/lib/                Klien ToyyibPay, pangkalan data fail JSON
+fitness/lib/                Klien ToyyibPay, e-mel (Resend), pangkalan data fail JSON
 fitness/content/            Resepi & modul (edit di sini untuk tambah kandungan)
 fitness/public/index.html   Laman depan
+fitness/public/admin.html   Halaman admin
 fitness/data/               Data pelanggan (git-ignored, buat backup!)
 ```
