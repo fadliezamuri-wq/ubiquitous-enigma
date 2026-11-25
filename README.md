@@ -59,6 +59,14 @@ hanya dihantar oleh server kepada akaun yang dah bayar, jadi tak boleh dibuka de
 - Halaman admin di `/admin`: jualan, senarai pelanggan, cari, beri/tarik akses (pindahan bank, pulang wang),
   pautan kata laluan manual + butang WhatsApp, semak status pesanan ToyyibPay, muat turun CSV
 
+### Buku resepi PDF (100 hidangan Malaysia)
+
+`npm run buku` menjana `fitness/buku/keluaran/BentukBadan-100-Hidangan.pdf` (108 halaman A4):
+kulit, cara guna, kandungan, 4 bab (sarapan, makan tengah hari, makan malam, snek) dan 100 resepi
+dengan bahan, kalori, protein, karbohidrat, lemak, masa dan cara penyediaan. Resepi disunting dalam
+`fitness/buku/resepi.mjs`; gambar diletak dalam `fitness/buku/gambar/` (lihat BACA.md di situ).
+Pembeli muat turun buku ini melalui `/api/premium/buku`.
+
 ### Cuba di komputer
 
 ```sh

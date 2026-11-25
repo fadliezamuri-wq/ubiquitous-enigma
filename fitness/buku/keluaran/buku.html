@@ -1,0 +1,3049 @@
+<!doctype html>
+<html lang="ms"><head><meta charset="utf-8">
+<title>BentukBadan: 100 Hidangan Turun Lemak, Bina Otot</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Kalam:wght@700&family=Montserrat:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --kuning: #ffd523; --hitam: #1d1a1a; --hijau: #1f8a4c; --kelabu: #5d6b62; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Montserrat, sans-serif; color: var(--hitam); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .hal { width: 210mm; height: 297mm; position: relative; overflow: hidden; page-break-after: always; background: #fff; }
+  h1, .pita, .tajuk-kulit, .bab h1 { font-family: "Archivo Black", sans-serif; }
+
+  /* Kulit */
+  .kulit { display: flex; flex-direction: column; }
+  .kulit .atas { background: var(--kuning); padding: 14mm 14mm 10mm; text-align: center; }
+  .kulit .logo { font-size: 15pt; }
+  .kulit .sub { font-family: "Archivo Black"; font-size: 15pt; line-height: 1.25; margin: 7mm 0 4mm; }
+  .tajuk-kulit { font-size: 46pt; line-height: 1; letter-spacing: -.01em; }
+  .kulit .gambar { flex: 1; margin-top: 3mm; background: #ddd center/cover no-repeat; }
+  .kulit .bawah { background: var(--hitam); color: #fff; text-align: center; padding: 12mm; font-family: "Archivo Black"; font-size: 17pt; letter-spacing: .02em; }
+  .logo { font-family: "Archivo Black"; letter-spacing: -.01em; }
+  .logo em { font-style: normal; color: var(--hijau); }
+
+  /* Pengenalan & kandungan */
+  .teks { padding: 18mm 18mm 16mm; }
+  .teks h1 { font-size: 30pt; margin: 0 0 6mm; line-height: 1.05; }
+  .teks p, .teks li { font-size: 10.5pt; line-height: 1.6; }
+  .teks h2 { font-family: Kalam, cursive; font-size: 19pt; margin: 7mm 0 2mm; }
+  .kotak { background: var(--kuning); padding: 6mm 7mm; margin-top: 6mm; }
+  .kotak p { margin: 0; }
+  .kand { padding: 14mm 16mm; }
+  .kand h1 { font-size: 26pt; margin: 0 0 4mm; }
+  .kand-grid { columns: 2; column-gap: 8mm; }
+  .kand-bah { break-inside: avoid-column; margin-bottom: 3mm; }
+  .kand-tajuk { font-family: "Archivo Black"; font-size: 10pt; background: var(--kuning); padding: 1.5mm 2.5mm; display: flex; gap: 2mm; align-items: baseline; }
+  .kand-tajuk em { margin-left: auto; font-family: Montserrat; font-style: normal; font-size: 7pt; font-weight: 600; }
+  .kand ol { margin: 1.5mm 0 0; padding-left: 7mm; }
+  .kand li { font-size: 7.2pt; line-height: 1.35; padding: .35mm 0; }
+  .kand li span { font-weight: 600; }
+  .kand li i { font-style: normal; color: var(--kelabu); margin-left: 1.5mm; font-size: 6.5pt; }
+
+  /* Pembahagi bab */
+  .bab { background: var(--hitam); color: #fff; display: flex; flex-direction: column; justify-content: flex-end; padding: 22mm 18mm; }
+  .bab .gambar { position: absolute; inset: 0; background: center/cover no-repeat; opacity: .45; }
+  .bab > * { position: relative; }
+  .bab .bil { font-family: "Archivo Black"; font-size: 80pt; color: var(--kuning); line-height: 1; }
+  .bab h1 { font-size: 46pt; margin: 2mm 0 4mm; line-height: 1; }
+  .bab p { font-size: 13pt; max-width: 140mm; margin: 0; }
+
+  /* Halaman resepi */
+  .pita { background: var(--kuning); height: 36mm; display: grid; place-items: center; font-size: 30pt; letter-spacing: .01em; }
+  .isi { padding: 8mm 13mm 0; }
+  .no { font-size: 8pt; font-weight: 700; color: var(--kelabu); letter-spacing: .08em; }
+  .resepi h1 { font-size: 27pt; line-height: 1.05; margin: 2mm 0 0; text-transform: uppercase; min-height: 20mm; display: flex; align-items: flex-end; }
+  hr { border: 0; border-top: 1px solid var(--hitam); width: 82%; margin: 6mm 0 6mm; }
+  .grid { display: grid; grid-template-columns: 1fr 87mm; gap: 6mm; }
+  .resepi h2 { font-family: Kalam, cursive; font-size: 20pt; margin: 0 0 2mm; font-weight: 700; }
+  .kiri ul { margin: 0 0 7mm; padding-left: 5mm; }
+  .kiri li { font-size: 9.3pt; font-weight: 600; line-height: 1.45; margin-bottom: 1mm; }
+  .makro li { font-weight: 500; }
+  .masa { display: flex; align-items: center; gap: 4mm; font-family: Kalam, cursive; font-size: 21pt; font-weight: 700; }
+  .jam { width: 16mm; height: 16mm; }
+  .foto { margin: 0; border: 1px solid var(--hitam); height: 118mm; background: #eee; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .kosong { height: 100%; display: grid; place-items: center; color: #999; }
+  .cara { margin-top: 7mm; background: #faf6e1; padding: 5mm 7mm; }
+  .cara h2 { font-size: 17pt !important; }
+  .cara ol { margin: 0; padding-left: 5mm; }
+  .cara li { font-size: 9.3pt; line-height: 1.5; margin-bottom: 1mm; }
+  .kaki { position: absolute; bottom: 7mm; left: 13mm; right: 13mm; display: flex; justify-content: space-between; align-items: center; font-size: 9pt; font-weight: 700; }
+  .kaki .logo { font-size: 11pt; }
+
+  @media screen { body { background: #888; } .hal { margin: 10px auto; box-shadow: 0 4px 20px rgba(0,0,0,.3); } }
+</style></head><body>
+
+<section class="hal kulit">
+  <div class="atas">
+    <div class="logo">Bentuk<em>Badan</em></div>
+    <div class="sub">100 HIDANGAN MALAYSIA UNTUK MEMBAKAR LEMAK PERUT, LEMAK DADA DAN LEMAK PINGGANG</div>
+    <div class="tajuk-kulit">BUKU RESEPI</div>
+  </div>
+  <div class="gambar" style=""></div>
+  <div class="bawah">OLEH PASUKAN BENTUKBADAN</div>
+</section>
+
+<section class="hal teks">
+  <h1>Cara Menggunakan Buku Ini</h1>
+  <p>Buku ini mengandungi 100 resepi masakan Malaysia yang telah diubah suai supaya tinggi protein dan sederhana kalori. Setiap resepi disertakan senarai bahan, nilai kalori dan makronutrien, masa penyediaan serta cara penyediaan langkah demi langkah.</p>
+  <h2>Untuk menurunkan lemak</h2>
+  <p>Ambil makanan 300 hingga 500 kcal di bawah keperluan tenaga harian (TDEE) anda. Pilih tiga hidangan dan satu snek daripada buku ini yang jumlahnya hampir dengan sasaran kalori anda. Utamakan protein sebanyak 1.8 hingga 2.2 g bagi setiap kilogram berat badan.</p>
+  <h2>Untuk membina otot</h2>
+  <p>Ambil makanan 200 hingga 300 kcal melebihi TDEE anda dan lakukan latihan bebanan sekurang-kurangnya tiga kali seminggu. Tambahkan satu snek atau besarkan saiz hidangan nasi untuk mencapai sasaran kalori.</p>
+  <h2>Cara membaca nilai nutrisi</h2>
+  <p>Semua nilai adalah bagi <b>satu hidangan</b> dan merupakan anggaran berdasarkan sukatan bahan yang disenaraikan. Jenama bahan dan cara memasak boleh mengubah nilai sebenar. Gunakan penimbang dapur untuk ketepatan yang lebih baik.</p>
+  <div class="kotak"><p><b>Contoh sehari untuk turun lemak:</b> Sarapan resepi 1 (470 kcal) + Makan Tengah Hari resepi 26 (480 kcal) + Snek resepi 84 (290 kcal) + Makan Malam resepi 54 (330 kcal) = <b>1,570 kcal</b>, protein 162 g.</p></div>
+  <p style="margin-top:8mm;font-size:8.5pt;color:#5d6b62">Penafian: Kandungan buku ini adalah untuk tujuan pendidikan dan bukan pengganti nasihat perubatan. Dapatkan nasihat doktor atau pakar dietetik sebelum membuat perubahan besar pada pemakanan, terutamanya jika anda menghidap penyakit kronik, hamil atau sedang menyusu. Gambar dalam buku ini dijana menggunakan AI dan tidak menggambarkan individu sebenar.</p>
+</section>
+
+<section class="hal kand">
+  <h1>Kandungan</h1>
+  <div class="kand-grid">
+  <div class="kand-bah">
+    <div class="kand-tajuk"><span>01</span>Sarapan<em>Resepi 1–25</em></div>
+    <ol start="1"><li><span>Nasi Lemak Sihat Putih Telur</span><i>470 kcal · 32 g protein</i></li><li><span>Roti Canai Gandum Penuh dengan Dal</span><i>395 kcal · 22 g protein</i></li><li><span>Bubur Nasi Ayam Halia</span><i>370 kcal · 34 g protein</i></li><li><span>Lempeng Kelapa Putih Telur</span><i>335 kcal · 24 g protein</i></li><li><span>Roti Jala Telur dengan Kari Ayam</span><i>430 kcal · 36 g protein</i></li><li><span>Mi Goreng Mamak Ringan</span><i>440 kcal · 30 g protein</i></li><li><span>Oat Kurma Tinggi Protein</span><i>435 kcal · 33 g protein</i></li><li><span>Telur Dadar Sayur &amp; Roti Gandum</span><i>365 kcal · 28 g protein</i></li><li><span>Roti Bakar Telur Separuh Masak &amp; Kaya Ringan</span><i>325 kcal · 20 g protein</i></li><li><span>Putu Mayam Gandum &amp; Telur Rebus</span><i>310 kcal · 16 g protein</i></li><li><span>Nasi Kerabu Ikan Bakar</span><i>415 kcal · 34 g protein</i></li><li><span>Lontong Ringan Telur</span><i>390 kcal · 22 g protein</i></li><li><span>Sandwic Sardin Putih Telur</span><i>340 kcal · 32 g protein</i></li><li><span>Smoothie Pisang Milo Protein</span><i>340 kcal · 30 g protein</i></li><li><span>Kuih Ketayap Protein</span><i>330 kcal · 24 g protein</i></li><li><span>Mihun Sup Bebola Ikan</span><i>355 kcal · 28 g protein</i></li><li><span>Roti Telur Ayam Cincang</span><i>365 kcal · 34 g protein</i></li><li><span>Bihun Goreng Putih Telur</span><i>385 kcal · 26 g protein</i></li><li><span>Tosai Telur &amp; Sambar</span><i>345 kcal · 20 g protein</i></li><li><span>Oat Masin Ikan Bilis</span><i>305 kcal · 24 g protein</i></li><li><span>Pancake Pisang Gula Melaka Protein</span><i>415 kcal · 34 g protein</i></li><li><span>Murtabak Ayam Ringan</span><i>420 kcal · 36 g protein</i></li><li><span>Nasi Goreng Cina Putih Telur</span><i>385 kcal · 28 g protein</i></li><li><span>Yogurt Greek Mangga &amp; Granola</span><i>300 kcal · 22 g protein</i></li><li><span>Kuih Lapis Telur Kukus (Puding Telur Protein)</span><i>265 kcal · 26 g protein</i></li></ol>
+  </div>
+  <div class="kand-bah">
+    <div class="kand-tajuk"><span>02</span>Makan Tengah Hari<em>Resepi 26–50</em></div>
+    <ol start="26"><li><span>Nasi Ayam Panggang Kunyit</span><i>480 kcal · 42 g protein</i></li><li><span>Nasi Campur Ikan Bakar &amp; Sayur Kangkung</span><i>460 kcal · 38 g protein</i></li><li><span>Ayam Masak Merah Ringan &amp; Nasi</span><i>510 kcal · 38 g protein</i></li><li><span>Ayam Percik Air Fryer &amp; Ubi Keledek</span><i>470 kcal · 40 g protein</i></li><li><span>Daging Masak Kicap &amp; Nasi</span><i>545 kcal · 38 g protein</i></li><li><span>Nasi Briyani Ayam Ringan</span><i>535 kcal · 40 g protein</i></li><li><span>Mi Kari Ayam Ringan</span><i>480 kcal · 34 g protein</i></li><li><span>Laksa Penang Ringan</span><i>395 kcal · 30 g protein</i></li><li><span>Soto Ayam</span><i>400 kcal · 36 g protein</i></li><li><span>Nasi Ulam Ayam Bakar</span><i>450 kcal · 40 g protein</i></li><li><span>Kuey Teow Sup Daging</span><i>415 kcal · 36 g protein</i></li><li><span>Ikan Siakap Masak Tiga Rasa &amp; Nasi</span><i>465 kcal · 38 g protein</i></li><li><span>Nasi Kandar Ringan</span><i>525 kcal · 40 g protein</i></li><li><span>Ayam Kurma &amp; Nasi Perang</span><i>505 kcal · 40 g protein</i></li><li><span>Udang Masak Lemak Cili Api &amp; Nasi</span><i>445 kcal · 32 g protein</i></li><li><span>Nasi Tomato Ayam Panggang</span><i>515 kcal · 40 g protein</i></li><li><span>Kerabu Mihun Ayam</span><i>375 kcal · 32 g protein</i></li><li><span>Gulai Ikan Tongkol &amp; Nasi</span><i>490 kcal · 40 g protein</i></li><li><span>Mi Bandung Ringan</span><i>435 kcal · 34 g protein</i></li><li><span>Nasi Dagang Ikan Tongkol Ringan</span><i>500 kcal · 36 g protein</i></li><li><span>Ayam Black Pepper &amp; Nasi Perang</span><i>485 kcal · 42 g protein</i></li><li><span>Tomyam Campur &amp; Nasi</span><i>405 kcal · 36 g protein</i></li><li><span>Nasi Goreng Kampung Ayam</span><i>445 kcal · 34 g protein</i></li><li><span>Asam Pedas Ikan Pari &amp; Nasi</span><i>430 kcal · 38 g protein</i></li><li><span>Chicken Chop Air Fryer &amp; Kentang</span><i>465 kcal · 44 g protein</i></li></ol>
+  </div>
+  <div class="kand-bah">
+    <div class="kand-tajuk"><span>03</span>Makan Malam<em>Resepi 51–75</em></div>
+    <ol start="51"><li><span>Ikan Siakap Stim Limau</span><i>240 kcal · 36 g protein</i></li><li><span>Sup Ayam Sayur</span><i>245 kcal · 30 g protein</i></li><li><span>Ikan Bakar Air Asam &amp; Ulam</span><i>270 kcal · 35 g protein</i></li><li><span>Ayam Goreng Berempah Air Fryer &amp; Salad</span><i>330 kcal · 42 g protein</i></li><li><span>Tauhu Sumbat Bakar</span><i>270 kcal · 24 g protein</i></li><li><span>Sotong Masak Hitam &amp; Sayur</span><i>245 kcal · 32 g protein</i></li><li><span>Kerabu Ayam Mangga</span><i>270 kcal · 30 g protein</i></li><li><span>Daging Bakar Air Asam (Daging Panggang)</span><i>320 kcal · 40 g protein</i></li><li><span>Udang Bakar Madu &amp; Brokoli</span><i>245 kcal · 34 g protein</i></li><li><span>Sup Tulang Rusuk Ringan</span><i>310 kcal · 34 g protein</i></li><li><span>Telur Bistik Ayam</span><i>325 kcal · 36 g protein</i></li><li><span>Ikan Kukus Halia &amp; Sayur Sawi</span><i>215 kcal · 34 g protein</i></li><li><span>Ayam Masak Lemak Cili Api &amp; Pucuk Ubi</span><i>310 kcal · 36 g protein</i></li><li><span>Salad Tuna Telur</span><i>275 kcal · 32 g protein</i></li><li><span>Sup Ikan Batu Pahat</span><i>230 kcal · 34 g protein</i></li><li><span>Ayam Panggang Madu &amp; Kacang Buncis</span><i>320 kcal · 40 g protein</i></li><li><span>Daging Masak Lada Hitam &amp; Sayur Campur</span><i>325 kcal · 38 g protein</i></li><li><span>Ikan Kembung Masak Asam Rebus</span><i>265 kcal · 34 g protein</i></li><li><span>Ayam Kicap Halia &amp; Bok Choy</span><i>290 kcal · 38 g protein</i></li><li><span>Tempe &amp; Tauhu Sambal Kurang Minyak</span><i>295 kcal · 26 g protein</i></li><li><span>Ketam Masak Cili Ringan</span><i>230 kcal · 30 g protein</i></li><li><span>Sate Ayam Air Fryer (10 cucuk)</span><i>315 kcal · 40 g protein</i></li><li><span>Sup Cendawan Ayam Krim Ringan</span><i>240 kcal · 30 g protein</i></li><li><span>Ikan Bawal Panggang Serai</span><i>275 kcal · 36 g protein</i></li><li><span>Ayam Teriyaki Malaysia &amp; Kubis</span><i>305 kcal · 40 g protein</i></li></ol>
+  </div>
+  <div class="kand-bah">
+    <div class="kand-tajuk"><span>04</span>Snek<em>Resepi 76–100</em></div>
+    <ol start="76"><li><span>Kuih Keria Ubi Keledek Bakar</span><i>195 kcal · 6 g protein</i></li><li><span>Karipap Ayam Air Fryer (3 biji)</span><i>265 kcal · 18 g protein</i></li><li><span>Popia Basah Udang</span><i>205 kcal · 16 g protein</i></li><li><span>Cucur Udang Bakar</span><i>220 kcal · 18 g protein</i></li><li><span>Edamame Garam Laut</span><i>195 kcal · 17 g protein</i></li><li><span>Yogurt Greek &amp; Buah Naga</span><i>175 kcal · 18 g protein</i></li><li><span>Ais Krim Protein Milo</span><i>295 kcal · 30 g protein</i></li><li><span>Telur Rebus Sambal (2 biji)</span><i>170 kcal · 13 g protein</i></li><li><span>Nuget Ayam Air Fryer</span><i>290 kcal · 46 g protein</i></li><li><span>Pisang Goreng Air Fryer</span><i>210 kcal · 3 g protein</i></li><li><span>Kek Pisang Protein</span><i>270 kcal · 22 g protein</i></li><li><span>Rojak Buah &amp; Kuah Ringan</span><i>190 kcal · 4 g protein</i></li><li><span>Muffin Telur Sayur (3 biji)</span><i>200 kcal · 22 g protein</i></li><li><span>Kacang Kuda Rebus</span><i>235 kcal · 12 g protein</i></li><li><span>Smoothie Hijau Protein</span><i>250 kcal · 28 g protein</i></li><li><span>Otak-otak Bakar (4 keping)</span><i>175 kcal · 20 g protein</i></li><li><span>Lepat Pisang Oat</span><i>210 kcal · 6 g protein</i></li><li><span>Puding Chia Mangga</span><i>240 kcal · 10 g protein</i></li><li><span>Roti Bakar Mentega Kacang &amp; Pisang</span><i>280 kcal · 12 g protein</i></li><li><span>Keropok Lekor Bakar (Sederhana)</span><i>180 kcal · 14 g protein</i></li><li><span>Shake Kurma Susu Protein</span><i>325 kcal · 32 g protein</i></li><li><span>Jagung Rebus Mentega Ringan</span><i>175 kcal · 5 g protein</i></li><li><span>Kuih Seri Muka Protein</span><i>295 kcal · 16 g protein</i></li><li><span>Tauhu Bakar Kuah Kacang Mini</span><i>195 kcal · 16 g protein</i></li><li><span>Ais Krim Protein Biskut Coklat</span><i>355 kcal · 35 g protein</i></li></ol>
+  </div></div>
+</section>
+
+
+<section class="hal bab">
+  <div class="gambar" style=""></div>
+  <div class="bil">01</div>
+  <h1>SARAPAN</h1>
+  <p>Mulakan hari dengan protein tinggi supaya kenyang lebih lama. 25 resepi.</p>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 1 / 100</div>
+    <h1>Nasi Lemak Sihat Putih Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi putih dimasak dengan 2 sudu besar santan ringan dan daun pandan</li><li>Putih daripada 4 biji telur, digoreng dengan semburan minyak</li><li>1 biji telur rebus</li><li>20 g ikan bilis, dibakar dalam air fryer</li><li>2 sudu besar sambal tumis kurang minyak</li><li>Timun dihiris</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 58 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 470 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak nasi bersama santan ringan, daun pandan dan sedikit garam.</li><li>Goreng putih telur dalam kuali tidak melekat dengan semburan minyak. Bakar ikan bilis dalam air fryer pada suhu 180°C selama 6 minit.</li><li>Hidangkan nasi bersama putih telur, telur rebus, ikan bilis, sambal dan timun.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>1</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 2 / 100</div>
+    <h1>Roti Canai Gandum Penuh dengan Dal</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 keping roti canai gandum penuh (beku)</li><li>100 g kuah dal (kacang dal, lobak merah, kentang)</li><li>1 biji telur rebus</li><li>100 ml susu soya tanpa gula</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 22 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 11 g</li>
+          <li><b>Jumlah Kalori:</b> 395 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Panaskan roti canai di atas kuali tanpa minyak sehingga garing.</li><li>Masak kuah dal dengan rempah kari dan sayur sehingga pekat.</li><li>Hidangkan bersama telur rebus dan segelas susu soya.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>2</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 3 / 100</div>
+    <h1>Bubur Nasi Ayam Halia</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>50 g beras (dimasak menjadi bubur)</li><li>150 g dada ayam, dicincang</li><li>1 inci halia, dihiris halus</li><li>Daun bawang dan bawang goreng sedikit</li><li>1 sudu kecil kicap rendah garam</li><li>600 ml air stok ayam</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 45 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 370 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak beras dengan stok ayam di atas api perlahan selama 20 minit sehingga menjadi bubur.</li><li>Masukkan ayam cincang dan halia, kacau sehingga ayam masak.</li><li>Perasakan dengan kicap, lada putih dan taburkan daun bawang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>3</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 4 / 100</div>
+    <h1>Lempeng Kelapa Putih Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>40 g tepung gandum penuh</li><li>20 g kelapa parut</li><li>Putih daripada 4 biji telur</li><li>1 biji pisang, dilenyek</li><li>Secubit garam</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 24 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 335 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaul semua bahan sehingga menjadi adunan pekat.</li><li>Tuang ke dalam kuali tidak melekat yang dipanaskan dengan semburan minyak.</li><li>Masak 2 minit pada setiap belah dan hidangkan panas.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>4</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 5 / 100</div>
+    <h1>Roti Jala Telur dengan Kari Ayam</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>50 g tepung gandum</li><li>1 biji telur + 100 ml susu rendah lemak</li><li>Secubit kunyit</li><li>150 g kari ayam (ayam tanpa kulit, santan ringan)</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 44 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 430 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Pukul tepung, telur, susu dan kunyit sehingga licin. Masukkan ke dalam acuan roti jala.</li><li>Jala adunan di atas kuali panas dan lipat selepas 1 minit.</li><li>Hidangkan bersama kari ayam yang dimasak dengan santan ringan.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>5</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 6 / 100</div>
+    <h1>Mi Goreng Mamak Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>120 g mi kuning, dicelur</li><li>100 g udang atau ayam</li><li>1 biji telur</li><li>Sawi, taugeh dan tomato</li><li>1 sudu besar sos cili, 1 sudu kecil kicap</li><li>1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 11 g</li>
+          <li><b>Jumlah Kalori:</b> 440 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih dengan 1 sudu kecil minyak, masukkan udang hingga masak.</li><li>Pecahkan telur dan kacau, kemudian masukkan mi dan sos.</li><li>Masukkan sayur, gaul atas api besar selama 2 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>6</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 7 / 100</div>
+    <h1>Oat Kurma Tinggi Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>50 g oat gulung</li><li>200 ml susu rendah lemak</li><li>1 skop (30 g) serbuk protein whey</li><li>3 biji kurma, dicincang</li><li>1 sudu kecil biji chia</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 33 g</li>
+          <li><b>Karbohidrat:</b> 58 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 435 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>10 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak oat bersama susu selama 4 minit.</li><li>Tutup api, kacau serbuk protein ke dalam oat.</li><li>Hiaskan dengan kurma dan biji chia.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>7</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 8 / 100</div>
+    <h1>Telur Dadar Sayur &amp; Roti Gandum</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>3 biji telur</li><li>Bayam, bawang besar dan tomato</li><li>2 keping roti gandum penuh</li><li>Semburan minyak, garam dan lada</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 28 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 15 g</li>
+          <li><b>Jumlah Kalori:</b> 365 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Pukul telur bersama garam dan lada.</li><li>Tumis sayur dengan semburan minyak, tuang telur dan masak sehingga masak.</li><li>Hidangkan bersama roti gandum yang dibakar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>8</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 9 / 100</div>
+    <h1>Roti Bakar Telur Separuh Masak &amp; Kaya Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 keping roti gandum penuh</li><li>2 biji telur separuh masak</li><li>1 sudu kecil kaya kurang gula</li><li>Kicap rendah garam dan lada putih</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 20 g</li>
+          <li><b>Karbohidrat:</b> 34 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 325 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>10 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar roti dan sapu kaya dengan nipis.</li><li>Rendam telur dalam air panas selama 6 minit.</li><li>Perasakan telur dengan kicap dan lada. Hidangkan dengan roti.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>9</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 10 / 100</div>
+    <h1>Putu Mayam Gandum &amp; Telur Rebus</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>80 g putu mayam (mihun beras)</li><li>1 sudu besar kelapa parut</li><li>1 sudu kecil gula merah</li><li>2 biji telur rebus</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 16 g</li>
+          <li><b>Karbohidrat:</b> 48 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 310 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Kukus putu mayam selama 5 minit.</li><li>Taburkan kelapa parut dan sedikit gula merah.</li><li>Hidangkan bersama telur rebus sebagai sumber protein.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>10</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 11 / 100</div>
+    <h1>Nasi Kerabu Ikan Bakar</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi biru (bunga telang)</li><li>150 g ikan kembung, dibakar</li><li>Ulam: kacang panjang, taugeh, daun kesum</li><li>1 sudu besar kerisik</li><li>Budu atau sambal tumis sedikit</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 415 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak nasi dengan bunga telang.</li><li>Perap ikan dengan garam dan kunyit, kemudian bakar selama 15 minit.</li><li>Susun nasi, ulam, ikan dan kerisik. Hidangkan dengan budu.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>11</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 12 / 100</div>
+    <h1>Lontong Ringan Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi impit</li><li>Kuah lodeh ringan (kobis, lobak, kacang panjang, santan ringan)</li><li>1 biji telur rebus</li><li>50 g tempe, dibakar</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 22 g</li>
+          <li><b>Karbohidrat:</b> 46 g</li>
+          <li><b>Lemak:</b> 13 g</li>
+          <li><b>Jumlah Kalori:</b> 390 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak sayur lodeh dengan santan ringan dan air.</li><li>Bakar tempe dalam air fryer sehingga garing.</li><li>Hidangkan nasi impit dengan kuah lodeh, telur dan tempe.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>12</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 13 / 100</div>
+    <h1>Sandwic Sardin Putih Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 keping roti gandum penuh</li><li>1/2 tin sardin dalam sos tomato</li><li>Putih daripada 2 biji telur rebus, dicincang</li><li>Bawang besar dan cili hijau</li><li>Perahan limau nipis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 340 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>10 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Lenyek sardin bersama bawang, cili dan limau nipis.</li><li>Gaulkan putih telur cincang.</li><li>Sapukan inti pada roti dan bakar sebentar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>13</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 14 / 100</div>
+    <h1>Smoothie Pisang Milo Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 biji pisang</li><li>250 ml susu rendah lemak</li><li>1 skop (30 g) whey coklat</li><li>1 sudu kecil serbuk Milo</li><li>Ais</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 42 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 340 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masukkan semua bahan ke dalam pengisar.</li><li>Kisar sehingga licin.</li><li>Minum segera.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>14</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 15 / 100</div>
+    <h1>Kuih Ketayap Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>40 g tepung gandum</li><li>1 biji telur</li><li>1/2 skop whey vanila</li><li>150 ml susu rendah lemak</li><li>40 g kelapa parut dimasak dengan gula merah (inti)</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 24 g</li>
+          <li><b>Karbohidrat:</b> 38 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 330 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Pukul tepung, telur, whey dan susu. Tambah sedikit jus pandan.</li><li>Dadar nipis di atas kuali tidak melekat.</li><li>Isikan inti kelapa dan gulung.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>15</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 16 / 100</div>
+    <h1>Mihun Sup Bebola Ikan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>60 g mihun</li><li>150 g bebola ikan</li><li>Sawi dan lobak merah</li><li>Stok ikan bilis rendah garam</li><li>Daun sup dan bawang goreng sedikit</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 28 g</li>
+          <li><b>Karbohidrat:</b> 50 g</li>
+          <li><b>Lemak:</b> 5 g</li>
+          <li><b>Jumlah Kalori:</b> 355 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Didihkan stok bersama bawang putih.</li><li>Masukkan bebola ikan dan sayur, masak 5 minit.</li><li>Tuangkan ke atas mihun yang telah dicelur.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>16</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 17 / 100</div>
+    <h1>Roti Telur Ayam Cincang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 keping roti gandum penuh</li><li>2 biji telur</li><li>80 g ayam cincang</li><li>Bawang besar dan daun bawang</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 365 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Pukul telur bersama ayam cincang dan bawang.</li><li>Celup roti ke dalam campuran telur.</li><li>Goreng dengan semburan minyak sehingga ayam masak.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>17</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 18 / 100</div>
+    <h1>Bihun Goreng Putih Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>60 g bihun, direndam</li><li>Putih daripada 4 biji telur</li><li>60 g udang kecil</li><li>Kobis, lobak merah, taugeh</li><li>1 sudu kecil minyak, kicap dan sos tiram</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 26 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 385 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih dengan minyak, masukkan udang.</li><li>Masukkan putih telur, kacau hancur.</li><li>Masukkan bihun, sayur dan sos. Gaul sehingga sebati.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>18</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 19 / 100</div>
+    <h1>Tosai Telur &amp; Sambar</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 keping tosai (adunan siap)</li><li>1 biji telur</li><li>100 g sambar sayur</li><li>1 sudu besar chutney kelapa</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 20 g</li>
+          <li><b>Karbohidrat:</b> 46 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 345 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Ratakan adunan tosai di atas kuali panas.</li><li>Pecahkan telur di atasnya dan ratakan.</li><li>Hidangkan bersama sambar dan chutney.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>19</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 20 / 100</div>
+    <h1>Oat Masin Ikan Bilis</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>50 g oat segera</li><li>20 g ikan bilis, dicuci</li><li>1 biji telur</li><li>Bawang putih, daun bawang</li><li>300 ml air</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 24 g</li>
+          <li><b>Karbohidrat:</b> 34 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 305 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>10 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih dan ikan bilis dengan sedikit air.</li><li>Masukkan air dan oat, masak 3 minit.</li><li>Pecahkan telur dan kacau. Taburkan daun bawang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>20</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 21 / 100</div>
+    <h1>Pancake Pisang Gula Melaka Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>Putih daripada 4 biji telur</li><li>1 skop whey vanila</li><li>40 g oat dikisar</li><li>1 biji pisang</li><li>1 sudu kecil sirap gula melaka</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 54 g</li>
+          <li><b>Lemak:</b> 7 g</li>
+          <li><b>Jumlah Kalori:</b> 415 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Kisar putih telur, whey, oat dan separuh pisang.</li><li>Masak adunan di atas kuali tidak melekat, 2 minit pada setiap belah.</li><li>Hiaskan dengan baki pisang dan sirap gula melaka.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>21</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 22 / 100</div>
+    <h1>Murtabak Ayam Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 keping kulit popia besar atau roti canai nipis</li><li>120 g ayam cincang</li><li>2 biji telur</li><li>Bawang besar, daun bawang, serbuk kari</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 13 g</li>
+          <li><b>Jumlah Kalori:</b> 420 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis ayam cincang bersama bawang dan serbuk kari.</li><li>Gaul ayam dengan telur, letakkan di tengah kulit dan lipat.</li><li>Bakar dalam air fryer pada suhu 190°C selama 10 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>22</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 23 / 100</div>
+    <h1>Nasi Goreng Cina Putih Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi sejuk</li><li>Putih daripada 4 biji telur</li><li>50 g ayam dihiris</li><li>Kacang pis dan lobak merah</li><li>1 sudu kecil minyak, garam dan lada putih</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 28 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 7 g</li>
+          <li><b>Jumlah Kalori:</b> 385 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih dan ayam dengan minyak.</li><li>Masukkan putih telur, kacau hancur.</li><li>Masukkan nasi dan sayur, gaul atas api besar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>23</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 24 / 100</div>
+    <h1>Yogurt Greek Mangga &amp; Granola</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g yogurt Greek rendah lemak</li><li>100 g mangga, dipotong dadu</li><li>20 g granola</li><li>1 sudu kecil madu</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 22 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 300 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masukkan yogurt ke dalam mangkuk.</li><li>Susun mangga dan granola di atasnya.</li><li>Siram sedikit madu.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>24</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SARAPAN</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 25 / 100</div>
+    <h1>Kuih Lapis Telur Kukus (Puding Telur Protein)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>3 biji telur</li><li>200 ml susu rendah lemak</li><li>1/2 skop whey vanila</li><li>1 sudu kecil gula perang</li><li>Jus pandan</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 26 g</li>
+          <li><b>Karbohidrat:</b> 22 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 265 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Pukul semua bahan dan tapis.</li><li>Tuang ke dalam mangkuk tahan panas.</li><li>Kukus atas api perlahan selama 20 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>25</span></footer>
+</section>
+
+<section class="hal bab">
+  <div class="gambar" style=""></div>
+  <div class="bil">02</div>
+  <h1>MAKAN TENGAH HARI</h1>
+  <p>Hidangan Malaysia yang mengenyangkan dengan sukatan nasi yang jelas. 25 resepi.</p>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 26 / 100</div>
+    <h1>Nasi Ayam Panggang Kunyit</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g dada ayam tanpa kulit</li><li>150 g nasi putih</li><li>1 sudu kecil serbuk kunyit</li><li>1 ulas bawang putih</li><li>1 sudu kecil minyak zaitun</li><li>Timun dan tomato</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 42 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 480 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dengan kunyit, bawang putih, garam dan lada selama 15 minit.</li><li>Panggang di atas kuali leper, 6 hingga 7 minit pada setiap belah.</li><li>Hiris ayam dan hidangkan bersama nasi, timun dan tomato.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>26</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 27 / 100</div>
+    <h1>Nasi Campur Ikan Bakar &amp; Sayur Kangkung</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi putih</li><li>180 g ikan tenggiri, dibakar</li><li>Kangkung goreng belacan (1 sudu kecil minyak)</li><li>Sambal kicap</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 460 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ikan dengan kunyit dan garam, kemudian bakar.</li><li>Tumis kangkung dengan belacan dan sedikit minyak.</li><li>Hidangkan bersama nasi dan sambal kicap.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>27</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 28 / 100</div>
+    <h1>Ayam Masak Merah Ringan &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g ayam tanpa kulit</li><li>150 g nasi putih</li><li>2 sudu besar cili kisar</li><li>3 sudu besar puri tomato</li><li>Bawang besar, bawang putih, halia, serai</li><li>2 sudu kecil minyak</li><li>Kacang pis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 58 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 510 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>40 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar ayam dalam air fryer selama 15 minit.</li><li>Tumis bahan kisar dan cili dengan 2 sudu kecil minyak sehingga garing.</li><li>Masukkan puri tomato, sedikit air dan ayam. Reneh 10 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>28</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 29 / 100</div>
+    <h1>Ayam Percik Air Fryer &amp; Ubi Keledek</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g peha ayam tanpa kulit</li><li>200 g ubi keledek</li><li>Kuah percik ringan: cili kering, serai, halia, 3 sudu besar santan ringan</li><li>Kacang buncis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 50 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 470 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dengan separuh kuah percik selama 30 minit.</li><li>Masak ayam dan ubi keledek dalam air fryer pada suhu 200°C selama 20 minit.</li><li>Sapukan baki kuah dan hidangkan bersama buncis rebus.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>29</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 30 / 100</div>
+    <h1>Daging Masak Kicap &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g daging batang pinang</li><li>150 g nasi putih</li><li>2 sudu besar kicap manis, 1 sudu besar kicap cair</li><li>Bawang besar, cili merah, halia</li><li>2 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 62 g</li>
+          <li><b>Lemak:</b> 16 g</li>
+          <li><b>Jumlah Kalori:</b> 545 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Hiris daging nipis dan perap dengan kicap cair.</li><li>Tumis halia dan bawang, masukkan daging atas api besar.</li><li>Masukkan kicap manis dan cili, reneh 5 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>30</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 31 / 100</div>
+    <h1>Nasi Briyani Ayam Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>70 g beras basmati</li><li>150 g ayam tanpa kulit</li><li>Rempah briyani, yogurt 2 sudu besar</li><li>Bawang besar, halia, bawang putih</li><li>1 sudu kecil minyak sapi</li><li>Acar timun</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 65 g</li>
+          <li><b>Lemak:</b> 13 g</li>
+          <li><b>Jumlah Kalori:</b> 535 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>45 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dengan yogurt dan rempah briyani.</li><li>Tumis bawang dengan minyak sapi, masukkan ayam dan masak.</li><li>Masukkan beras dan air, masak sehingga nasi kembang. Hidangkan dengan acar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>31</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 32 / 100</div>
+    <h1>Mi Kari Ayam Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>100 g mi kuning</li><li>120 g ayam, dihiris</li><li>Kuah kari: pes kari, 80 ml santan ringan + 200 ml susu rendah lemak</li><li>Taugeh, tauhu pok 2 keping</li><li>Daun kesum</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 480 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis pes kari, masukkan ayam.</li><li>Masukkan campuran santan dan susu, reneh 10 minit.</li><li>Tuang ke atas mi dan taugeh. Hiaskan dengan daun kesum.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>32</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 33 / 100</div>
+    <h1>Laksa Penang Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>100 g mi laksa</li><li>150 g ikan kembung, direbus dan diisi</li><li>Asam keping, bunga kantan, serai</li><li>Timun, nanas, daun pudina</li><li>1 sudu kecil petis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 395 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus ikan, asingkan isi dan tapis air rebusan.</li><li>Masak semula air rebusan dengan asam keping, bunga kantan dan isi ikan.</li><li>Tuang kuah ke atas mi dan hiaskan dengan ulam serta petis.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>33</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 34 / 100</div>
+    <h1>Soto Ayam</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g dada ayam</li><li>150 g nasi impit</li><li>Rempah soto: halia, lengkuas, bunga lawang, kayu manis</li><li>Taugeh dan daun sup</li><li>Sambal kicap</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 48 g</li>
+          <li><b>Lemak:</b> 7 g</li>
+          <li><b>Jumlah Kalori:</b> 400 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>40 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus ayam bersama rempah sehingga empuk, kemudian carik.</li><li>Tapis kuah dan perasakan.</li><li>Hidangkan nasi impit, ayam dan taugeh bersama kuah panas.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>34</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 35 / 100</div>
+    <h1>Nasi Ulam Ayam Bakar</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi putih</li><li>Ulam cincang: daun kesum, daun kunyit, serai, bunga kantan</li><li>150 g ayam bakar tanpa kulit</li><li>1 sudu besar kerisik</li><li>Ikan masin goreng 10 g</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 450 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaul nasi dengan ulam cincang dan kerisik.</li><li>Bakar ayam yang diperap dengan kunyit dan garam.</li><li>Hidangkan bersama sedikit ikan masin.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>35</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 36 / 100</div>
+    <h1>Kuey Teow Sup Daging</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>120 g kuey teow</li><li>120 g daging, dihiris nipis</li><li>Rempah sup, halia, bawang putih</li><li>Sawi dan taugeh</li><li>Daun sup, cili padi</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 50 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 415 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus daging bersama rempah sup selama 25 minit.</li><li>Celur kuey teow, sawi dan taugeh.</li><li>Tuang sup ke atas kuey teow dan taburkan daun sup.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>36</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 37 / 100</div>
+    <h1>Ikan Siakap Masak Tiga Rasa &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g isi ikan siakap, dibakar</li><li>150 g nasi putih</li><li>Sos tiga rasa: cili, tomato, asam jawa, sedikit gula</li><li>Bawang besar dan lada benggala</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 58 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 465 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar ikan dalam air fryer sehingga garing tanpa digoreng.</li><li>Masak sos tiga rasa bersama bawang dan lada benggala.</li><li>Tuang sos ke atas ikan dan hidangkan bersama nasi.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>37</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 38 / 100</div>
+    <h1>Nasi Kandar Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi putih</li><li>120 g ayam goreng kunyit (air fryer)</li><li>Kuah campur kari (2 sudu besar)</li><li>Bendi rebus dan kobis</li><li>1 biji telur rebus</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 60 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 525 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar ayam berperap kunyit dalam air fryer.</li><li>Rebus bendi dan kobis.</li><li>Hidangkan nasi dengan ayam, telur, sayur dan sedikit kuah kari.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>38</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 39 / 100</div>
+    <h1>Ayam Kurma &amp; Nasi Perang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g ayam tanpa kulit</li><li>150 g nasi perang</li><li>Rempah kurma, 60 ml santan ringan + 100 ml susu rendah lemak</li><li>Kentang kecil, lobak merah</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 505 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>40 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis rempah kurma bersama bawang.</li><li>Masukkan ayam, kentang dan lobak, kemudian campuran santan dan susu.</li><li>Reneh sehingga ayam empuk. Hidangkan dengan nasi perang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>39</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 40 / 100</div>
+    <h1>Udang Masak Lemak Cili Api &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g udang</li><li>150 g nasi putih</li><li>80 ml santan ringan + 120 ml susu rendah lemak</li><li>Cili api, kunyit hidup, bawang merah (dikisar)</li><li>Serai, nanas</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 445 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak bahan kisar dengan sedikit air sehingga wangi.</li><li>Masukkan santan, susu, serai dan nanas.</li><li>Masukkan udang dan masak 4 minit sahaja.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>40</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 41 / 100</div>
+    <h1>Nasi Tomato Ayam Panggang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>70 g beras basmati</li><li>3 sudu besar puri tomato, rempah empat sekawan</li><li>150 g ayam panggang</li><li>1 sudu kecil minyak sapi</li><li>Acar nanas</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 62 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 515 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>40 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis rempah dan bawang dengan minyak sapi, masukkan puri tomato.</li><li>Masukkan beras dan air, masak sehingga kembang.</li><li>Hidangkan bersama ayam panggang dan acar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>41</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 42 / 100</div>
+    <h1>Kerabu Mihun Ayam</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>60 g mihun</li><li>130 g dada ayam rebus, dicarik</li><li>Taugeh, kacang panjang, daun kesum</li><li>Kerisik 1 sudu besar, limau kasturi</li><li>Sambal belacan sedikit</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 46 g</li>
+          <li><b>Lemak:</b> 7 g</li>
+          <li><b>Jumlah Kalori:</b> 375 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Celur mihun dan taugeh.</li><li>Gaulkan semua bahan dengan perahan limau dan sambal.</li><li>Taburkan kerisik sebelum dihidangkan.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>42</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 43 / 100</div>
+    <h1>Gulai Ikan Tongkol &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g ikan tongkol</li><li>150 g nasi putih</li><li>Pes gulai, asam keping, 60 ml santan ringan</li><li>Bendi dan terung</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 490 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis pes gulai, masukkan air dan asam keping.</li><li>Masukkan ikan, bendi dan terung, reneh 10 minit.</li><li>Masukkan santan ringan dan hidangkan bersama nasi.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>43</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 44 / 100</div>
+    <h1>Mi Bandung Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>100 g mi kuning</li><li>80 g udang + 50 g daging hiris</li><li>1 biji telur</li><li>Kuah: cili kisar, udang kering, puri tomato</li><li>Sawi</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 54 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 435 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis cili kisar dan udang kering.</li><li>Masukkan air, puri tomato, udang dan daging.</li><li>Pecahkan telur, masukkan sawi. Tuang ke atas mi.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>44</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 45 / 100</div>
+    <h1>Nasi Dagang Ikan Tongkol Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi dagang (beras dengan halba)</li><li>150 g gulai ikan tongkol</li><li>Acar timun dan lobak</li><li>1 biji telur rebus</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 62 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 500 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>45 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Kukus beras bersama halba dan sedikit santan ringan.</li><li>Masak gulai ikan dengan santan ringan.</li><li>Hidangkan nasi dengan gulai, telur dan acar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>45</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 46 / 100</div>
+    <h1>Ayam Black Pepper &amp; Nasi Perang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>160 g dada ayam, dipotong dadu</li><li>150 g nasi perang</li><li>Sos lada hitam, sos tiram</li><li>Lada benggala, bawang besar</li><li>1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 42 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 11 g</li>
+          <li><b>Jumlah Kalori:</b> 485 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis ayam dengan minyak sehingga perang.</li><li>Masukkan sayur dan sos, gaul atas api besar.</li><li>Hidangkan bersama nasi perang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>46</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 47 / 100</div>
+    <h1>Tomyam Campur &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi putih</li><li>80 g udang, 80 g sotong, 50 g ikan</li><li>Pes tomyam, serai, daun limau purut</li><li>Cendawan, tomato</li><li>Perahan limau nipis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 405 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Didihkan air dengan pes tomyam, serai dan daun limau purut.</li><li>Masukkan makanan laut, cendawan dan tomato.</li><li>Perasakan dengan limau nipis dan hidangkan bersama nasi.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>47</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 48 / 100</div>
+    <h1>Nasi Goreng Kampung Ayam</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g nasi sejuk</li><li>100 g ayam hiris</li><li>1 biji telur</li><li>Kangkung, ikan bilis 10 g</li><li>Cili padi, bawang putih, 1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 55 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 445 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih, cili padi dan ikan bilis.</li><li>Masukkan ayam dan telur, kacau hingga masak.</li><li>Masukkan nasi dan kangkung, gaul atas api besar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>48</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 49 / 100</div>
+    <h1>Asam Pedas Ikan Pari &amp; Nasi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g ikan pari</li><li>150 g nasi putih</li><li>Pes asam pedas, asam jawa</li><li>Bendi, tomato, daun kesum</li><li>1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 52 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 430 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis pes asam pedas dengan minyak.</li><li>Masukkan air asam jawa dan biarkan mendidih.</li><li>Masukkan ikan, bendi, tomato dan daun kesum. Reneh 10 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>49</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN TENGAH HARI</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 50 / 100</div>
+    <h1>Chicken Chop Air Fryer &amp; Kentang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g peha ayam tanpa kulit</li><li>150 g kentang, dipotong</li><li>Sos cendawan ringan (susu rendah lemak, cendawan)</li><li>Salad kobis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 44 g</li>
+          <li><b>Karbohidrat:</b> 45 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 465 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dengan lada hitam dan garam.</li><li>Masak ayam dan kentang dalam air fryer pada suhu 200°C selama 20 minit.</li><li>Hidangkan dengan sos cendawan dan salad.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>50</span></footer>
+</section>
+
+<section class="hal bab">
+  <div class="gambar" style=""></div>
+  <div class="bil">03</div>
+  <h1>MAKAN MALAM</h1>
+  <p>Rendah karbohidrat dan tinggi protein untuk pemulihan otot semasa tidur. 25 resepi.</p>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 51 / 100</div>
+    <h1>Ikan Siakap Stim Limau</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>220 g ikan siakap</li><li>Perahan 3 biji limau nipis</li><li>Bawang putih, cili padi, serai</li><li>Sedikit sos ikan dan gula perang</li><li>Daun ketumbar</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 8 g</li>
+          <li><b>Lemak:</b> 7 g</li>
+          <li><b>Jumlah Kalori:</b> 240 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Letakkan ikan di dalam pinggan dan taburkan serai yang diketuk.</li><li>Campurkan limau, bawang putih, cili, sos ikan dan gula, kemudian tuang ke atas ikan.</li><li>Kukus selama 12 hingga 15 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>51</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 52 / 100</div>
+    <h1>Sup Ayam Sayur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g ayam tanpa kulit</li><li>Lobak merah, kentang kecil, kobis</li><li>Rempah sup, halia, bawang putih</li><li>Daun sup</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 18 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 245 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih, halia dan rempah sup dengan sedikit air.</li><li>Masukkan ayam dan air, reneh 20 minit.</li><li>Masukkan sayur dan masak sehingga lembut.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>52</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 53 / 100</div>
+    <h1>Ikan Bakar Air Asam &amp; Ulam</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g ikan kembung atau tilapia</li><li>Air asam: cili, bawang merah, asam jawa, kicap</li><li>Ulam: kacang botol, timun, pucuk paku</li><li>Limau nipis</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 35 g</li>
+          <li><b>Karbohidrat:</b> 12 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 270 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Lumurkan ikan dengan garam dan kunyit.</li><li>Bakar dalam air fryer pada suhu 200°C selama 15 minit.</li><li>Hidangkan bersama air asam dan ulam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>53</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 54 / 100</div>
+    <h1>Ayam Goreng Berempah Air Fryer &amp; Salad</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g peha ayam tanpa kulit</li><li>Rempah: kunyit, jintan manis, ketumbar, serai</li><li>Salad, timun, tomato</li><li>Perahan limau</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 42 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 330 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dengan rempah selama 30 minit.</li><li>Masak dalam air fryer pada suhu 200°C selama 18 minit.</li><li>Hidangkan bersama salad.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>54</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 55 / 100</div>
+    <h1>Tauhu Sumbat Bakar</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 keping tauhu keras</li><li>Timun, lobak merah dan taugeh, dihiris halus</li><li>1 biji telur rebus</li><li>Kuah kacang ringan</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 24 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 13 g</li>
+          <li><b>Jumlah Kalori:</b> 270 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar tauhu dalam air fryer pada suhu 200°C selama 12 minit.</li><li>Belah tengah tauhu dan isikan sayur serta telur.</li><li>Hidangkan bersama kuah kacang yang dicairkan dengan air asam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>55</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 56 / 100</div>
+    <h1>Sotong Masak Hitam &amp; Sayur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g sotong</li><li>Dakwat sotong, bawang besar, cili kering kisar</li><li>1 sudu kecil minyak</li><li>Brokoli rebus</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 7 g</li>
+          <li><b>Jumlah Kalori:</b> 245 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang dan cili kisar dengan minyak.</li><li>Masukkan sotong dan dakwatnya, masak 5 minit.</li><li>Hidangkan bersama brokoli rebus.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>56</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 57 / 100</div>
+    <h1>Kerabu Ayam Mangga</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g dada ayam rebus, dicarik</li><li>1/2 biji mangga muda</li><li>Bawang merah, cili padi, daun kesum</li><li>Limau nipis, sedikit sos ikan</li><li>1 sudu besar kerisik</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 20 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 270 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus ayam bersama halia, sejukkan dan carik.</li><li>Gaul mangga, bawang, cili dan daun kesum.</li><li>Masukkan ayam, perasakan dan taburkan kerisik.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>57</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 58 / 100</div>
+    <h1>Daging Bakar Air Asam (Daging Panggang)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g daging batang pinang</li><li>Perapan: kicap, lada hitam, bawang putih</li><li>Air asam: cili, asam jawa, bawang merah</li><li>Ulam timun dan kacang botol</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 8 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 320 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap daging selama 30 minit.</li><li>Panggang di atas kuali leper, 4 minit pada setiap belah.</li><li>Hiris dan hidangkan bersama air asam dan ulam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>58</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 59 / 100</div>
+    <h1>Udang Bakar Madu &amp; Brokoli</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g udang besar</li><li>1 sudu kecil madu, kicap, bawang putih</li><li>150 g brokoli</li><li>Bijan sedikit</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 16 g</li>
+          <li><b>Lemak:</b> 5 g</li>
+          <li><b>Jumlah Kalori:</b> 245 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap udang dengan madu, kicap dan bawang putih.</li><li>Bakar dalam air fryer pada suhu 200°C selama 8 minit.</li><li>Hidangkan bersama brokoli kukus dan taburkan bijan.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>59</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 60 / 100</div>
+    <h1>Sup Tulang Rusuk Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g tulang rusuk lembu (buang lemak)</li><li>Rempah sup, kayu manis, bunga lawang</li><li>Lobak merah, kentang kecil</li><li>Daun sup dan bawang goreng sedikit</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 12 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 310 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>60 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus tulang dan buang buih serta lemak yang terapung.</li><li>Masukkan rempah dan reneh 45 minit.</li><li>Masukkan sayur dan masak sehingga lembut.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>60</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 61 / 100</div>
+    <h1>Telur Bistik Ayam</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g ayam hiris</li><li>2 biji telur rebus</li><li>Kuah bistik: kicap, sos tomato, bawang besar, cuka sedikit</li><li>Kacang pis, kentang kecil</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 325 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang dan ayam sehingga masak.</li><li>Masukkan kuah bistik dan air, reneh 10 minit.</li><li>Masukkan telur, kacang pis dan kentang rebus.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>61</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 62 / 100</div>
+    <h1>Ikan Kukus Halia &amp; Sayur Sawi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g isi ikan kerapu atau tilapia</li><li>Halia dihiris, daun bawang</li><li>1 sudu besar kicap rendah garam</li><li>Sawi</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 6 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 215 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Letakkan halia di atas ikan.</li><li>Kukus selama 12 minit.</li><li>Siram kicap dan taburkan daun bawang. Hidangkan dengan sawi rebus.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>62</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 63 / 100</div>
+    <h1>Ayam Masak Lemak Cili Api &amp; Pucuk Ubi</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>170 g ayam tanpa kulit</li><li>Pucuk ubi</li><li>60 ml santan ringan + 120 ml susu rendah lemak</li><li>Cili api dan kunyit hidup dikisar</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 12 g</li>
+          <li><b>Lemak:</b> 13 g</li>
+          <li><b>Jumlah Kalori:</b> 310 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus bahan kisar dengan sedikit air.</li><li>Masukkan ayam dan masak sehingga empuk.</li><li>Masukkan pucuk ubi, santan dan susu. Reneh sebentar.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>63</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 64 / 100</div>
+    <h1>Salad Tuna Telur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 tin tuna dalam air</li><li>1 biji telur rebus</li><li>Salad, timun, tomato ceri</li><li>1 sudu besar yogurt Greek</li><li>Perahan lemon, lada hitam</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 10 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 275 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>10 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaulkan tuna dengan yogurt, lemon dan lada.</li><li>Susun sayur di dalam mangkuk.</li><li>Letakkan tuna dan telur di atasnya.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>64</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 65 / 100</div>
+    <h1>Sup Ikan Batu Pahat</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g isi ikan pari atau tenggiri</li><li>Tomato, sawi masin, halia</li><li>Stok ikan bilis</li><li>Cili padi, daun sup</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 10 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 230 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Didihkan stok bersama halia dan sawi masin.</li><li>Masukkan ikan dan tomato, masak 6 minit.</li><li>Hidangkan dengan cili padi dan daun sup.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>65</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 66 / 100</div>
+    <h1>Ayam Panggang Madu &amp; Kacang Buncis</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>180 g dada ayam</li><li>1 sudu kecil madu, kicap, bawang putih</li><li>150 g kacang buncis</li><li>1 sudu kecil minyak zaitun</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 18 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 320 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dengan madu, kicap dan bawang putih.</li><li>Panggang di atas kuali leper sehingga masak.</li><li>Tumis kacang buncis dengan minyak zaitun.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>66</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 67 / 100</div>
+    <h1>Daging Masak Lada Hitam &amp; Sayur Campur</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>160 g daging batang pinang</li><li>Sos lada hitam, sos tiram</li><li>Brokoli, lobak merah, cendawan</li><li>1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 13 g</li>
+          <li><b>Jumlah Kalori:</b> 325 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap daging dengan sos tiram.</li><li>Tumis daging atas api besar sehingga perang.</li><li>Masukkan sayur dan sos lada hitam, gaul 2 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>67</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 68 / 100</div>
+    <h1>Ikan Kembung Masak Asam Rebus</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 ekor ikan kembung (200 g)</li><li>Asam keping, cili padi, bawang merah</li><li>Bendi, tomato</li><li>Serai</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 34 g</li>
+          <li><b>Karbohidrat:</b> 10 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 265 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Didihkan air bersama asam keping, cili dan bawang.</li><li>Masukkan ikan, bendi dan tomato.</li><li>Reneh 10 minit dan perasakan dengan garam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>68</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 69 / 100</div>
+    <h1>Ayam Kicap Halia &amp; Bok Choy</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>170 g peha ayam tanpa kulit</li><li>Halia dihiris, bawang putih</li><li>Kicap pekat dan kicap cair</li><li>Bok choy</li><li>1 sudu kecil minyak bijan</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 38 g</li>
+          <li><b>Karbohidrat:</b> 12 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 290 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis halia dan bawang putih dengan minyak bijan.</li><li>Masukkan ayam dan kicap, reneh sehingga empuk.</li><li>Celur bok choy dan hidangkan bersama.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>69</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 70 / 100</div>
+    <h1>Tempe &amp; Tauhu Sambal Kurang Minyak</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>100 g tempe</li><li>1 keping tauhu keras</li><li>2 sudu besar sambal tumis</li><li>Kacang panjang</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 26 g</li>
+          <li><b>Karbohidrat:</b> 16 g</li>
+          <li><b>Lemak:</b> 14 g</li>
+          <li><b>Jumlah Kalori:</b> 295 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar tempe dan tauhu dalam air fryer sehingga garing.</li><li>Panaskan sambal dengan sedikit air.</li><li>Gaul tempe, tauhu dan kacang panjang ke dalam sambal.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>70</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 71 / 100</div>
+    <h1>Ketam Masak Cili Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 ekor ketam (anggaran 150 g isi)</li><li>Cili kisar, puri tomato, bawang putih</li><li>1 biji putih telur</li><li>1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 230 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang putih dan cili kisar dengan minyak.</li><li>Masukkan ketam dan puri tomato, tutup dan masak 10 minit.</li><li>Masukkan putih telur dan kacau sehingga pekat.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>71</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 72 / 100</div>
+    <h1>Sate Ayam Air Fryer (10 cucuk)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g dada ayam, dipotong kecil</li><li>Perapan: kunyit, serai, jintan, sedikit gula</li><li>Kuah kacang ringan 2 sudu besar</li><li>Timun dan bawang besar</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 16 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 315 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam semalaman dan cucuk pada lidi.</li><li>Masak dalam air fryer pada suhu 200°C selama 12 minit.</li><li>Hidangkan bersama kuah kacang, timun dan bawang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>72</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 73 / 100</div>
+    <h1>Sup Cendawan Ayam Krim Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>130 g dada ayam, dipotong dadu</li><li>150 g cendawan butang</li><li>200 ml susu rendah lemak</li><li>Bawang besar, bawang putih</li><li>1 sudu kecil tepung jagung</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 16 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 240 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis bawang dan ayam sehingga masak.</li><li>Masukkan cendawan dan susu.</li><li>Pekatkan dengan tepung jagung yang dibancuh.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>73</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 74 / 100</div>
+    <h1>Ikan Bawal Panggang Serai</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 ekor ikan bawal (anggaran 220 g)</li><li>Serai, kunyit hidup, bawang putih (dikisar)</li><li>Daun pisang</li><li>Kubis rebus</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 36 g</li>
+          <li><b>Karbohidrat:</b> 6 g</li>
+          <li><b>Lemak:</b> 12 g</li>
+          <li><b>Jumlah Kalori:</b> 275 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Lumurkan ikan dengan bahan kisar.</li><li>Bungkus dengan daun pisang dan panggang selama 15 minit.</li><li>Hidangkan bersama kubis rebus.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>74</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>MAKAN MALAM</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 75 / 100</div>
+    <h1>Ayam Teriyaki Malaysia &amp; Kubis</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>170 g dada ayam</li><li>Sos: kicap, madu, halia, bawang putih</li><li>Kubis dan lobak merah dihiris</li><li>Bijan</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 40 g</li>
+          <li><b>Karbohidrat:</b> 16 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 305 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Perap ayam dalam sos selama 15 minit.</li><li>Masak di atas kuali leper sehingga berkilat.</li><li>Hidangkan bersama kubis tumis dan taburkan bijan.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>75</span></footer>
+</section>
+
+<section class="hal bab">
+  <div class="gambar" style=""></div>
+  <div class="bil">04</div>
+  <h1>SNEK</h1>
+  <p>Kudapan tradisional dan moden versi sihat apabila lapar di antara waktu makan. 25 resepi.</p>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 76 / 100</div>
+    <h1>Kuih Keria Ubi Keledek Bakar</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g ubi keledek, direbus dan dilenyek</li><li>30 g tepung gandum</li><li>1 sudu kecil gula perang</li><li>Semburan minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 6 g</li>
+          <li><b>Karbohidrat:</b> 36 g</li>
+          <li><b>Lemak:</b> 3 g</li>
+          <li><b>Jumlah Kalori:</b> 195 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Uli ubi keledek bersama tepung sehingga lembut.</li><li>Bentukkan menjadi gelang kecil.</li><li>Bakar dalam air fryer pada suhu 180°C selama 12 minit, taburkan gula perang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>76</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 77 / 100</div>
+    <h1>Karipap Ayam Air Fryer (3 biji)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>3 keping kulit karipap</li><li>80 g ayam cincang</li><li>Kentang, bawang, serbuk kari</li><li>Semburan minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 18 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 265 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak inti ayam, kentang dan serbuk kari.</li><li>Isikan ke dalam kulit dan kelim.</li><li>Sembur minyak dan bakar dalam air fryer pada suhu 180°C selama 12 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>77</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 78 / 100</div>
+    <h1>Popia Basah Udang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 keping kulit popia</li><li>60 g udang rebus</li><li>Sengkuang, taugeh, salad</li><li>Sos cili manis ringan</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 16 g</li>
+          <li><b>Karbohidrat:</b> 26 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 205 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masak sengkuang dan taugeh sebentar.</li><li>Susun salad, sayur dan udang di atas kulit popia.</li><li>Gulung dan potong. Hidangkan bersama sos.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>78</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 79 / 100</div>
+    <h1>Cucur Udang Bakar</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>40 g tepung gandum</li><li>80 g udang kecil</li><li>Daun kucai, bawang merah, taugeh</li><li>1 biji putih telur</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 18 g</li>
+          <li><b>Karbohidrat:</b> 28 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 220 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaul semua bahan bersama sedikit air.</li><li>Senduk ke dalam acuan muffin silikon.</li><li>Bakar dalam air fryer pada suhu 190°C selama 12 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>79</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 80 / 100</div>
+    <h1>Edamame Garam Laut</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g edamame beku</li><li>Garam laut dan cili serpih</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 17 g</li>
+          <li><b>Karbohidrat:</b> 14 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 195 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>8 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus edamame selama 5 minit.</li><li>Toskan dan taburkan garam laut.</li><li>Tambahkan cili serpih jika suka pedas.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>80</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 81 / 100</div>
+    <h1>Yogurt Greek &amp; Buah Naga</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>170 g yogurt Greek rendah lemak</li><li>100 g buah naga merah</li><li>1 sudu kecil madu</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 18 g</li>
+          <li><b>Karbohidrat:</b> 24 g</li>
+          <li><b>Lemak:</b> 1 g</li>
+          <li><b>Jumlah Kalori:</b> 175 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Potong buah naga menjadi dadu.</li><li>Susun di atas yogurt.</li><li>Siram dengan madu.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>81</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 82 / 100</div>
+    <h1>Ais Krim Protein Milo</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 skop whey coklat</li><li>200 ml susu rendah lemak</li><li>1 sudu besar serbuk Milo</li><li>1 biji pisang beku</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 30 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 295 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit + 3 jam beku</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Kisar semua bahan sehingga pekat.</li><li>Bekukan selama 3 jam di dalam bekas.</li><li>Kacau setiap jam supaya teksturnya lembut.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>82</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 83 / 100</div>
+    <h1>Telur Rebus Sambal (2 biji)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 biji telur rebus</li><li>1 sudu besar sambal tumis kurang minyak</li><li>Timun</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 13 g</li>
+          <li><b>Karbohidrat:</b> 5 g</li>
+          <li><b>Lemak:</b> 11 g</li>
+          <li><b>Jumlah Kalori:</b> 170 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus telur selama 10 minit.</li><li>Panaskan sambal dengan sedikit air.</li><li>Siramkan sambal ke atas telur dan hidangkan bersama timun.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>83</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 84 / 100</div>
+    <h1>Nuget Ayam Air Fryer</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>200 g dada ayam cincang</li><li>30 g serbuk roti</li><li>Bawang putih, lada hitam, garam</li><li>Semburan minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 46 g</li>
+          <li><b>Karbohidrat:</b> 18 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 290 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>20 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaul ayam bersama perasa dan bentukkan nuget.</li><li>Salutkan dengan serbuk roti.</li><li>Bakar dalam air fryer pada suhu 200°C selama 10 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>84</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 85 / 100</div>
+    <h1>Pisang Goreng Air Fryer</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 biji pisang raja</li><li>20 g tepung beras + 10 g tepung gandum</li><li>Air dan secubit garam</li><li>Semburan minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 3 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 210 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bancuh tepung dengan air sehingga menjadi adunan cair.</li><li>Salut pisang dengan adunan.</li><li>Sembur minyak dan bakar pada suhu 200°C selama 12 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>85</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 86 / 100</div>
+    <h1>Kek Pisang Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 biji pisang masak</li><li>1 biji telur</li><li>1/2 skop whey vanila</li><li>30 g oat dikisar</li><li>1/2 sudu kecil serbuk penaik</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 22 g</li>
+          <li><b>Karbohidrat:</b> 32 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 270 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>35 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Lenyek pisang dan gaul semua bahan.</li><li>Tuang ke dalam acuan kecil.</li><li>Bakar dalam air fryer pada suhu 160°C selama 20 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>86</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 87 / 100</div>
+    <h1>Rojak Buah &amp; Kuah Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>Jambu batu, nanas, sengkuang, timun</li><li>2 sudu besar kuah rojak (dicairkan dengan air asam)</li><li>1 sudu kecil kacang tumbuk</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 4 g</li>
+          <li><b>Karbohidrat:</b> 34 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 190 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>10 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Potong buah dan sayur.</li><li>Cairkan kuah rojak dengan air asam jawa.</li><li>Gaul dan taburkan kacang tumbuk.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>87</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 88 / 100</div>
+    <h1>Muffin Telur Sayur (3 biji)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>3 biji telur + 2 biji putih telur</li><li>Bayam, lada benggala, bawang</li><li>30 g ayam hiris</li><li>Garam dan lada</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 22 g</li>
+          <li><b>Karbohidrat:</b> 6 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 200 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Pukul telur dan putih telur.</li><li>Masukkan sayur dan ayam ke dalam acuan muffin.</li><li>Tuang telur dan bakar pada suhu 170°C selama 15 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>88</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 89 / 100</div>
+    <h1>Kacang Kuda Rebus</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g kacang kuda rebus</li><li>Bawang besar, cili hijau</li><li>Daun kari, biji sawi</li><li>1 sudu kecil minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 12 g</li>
+          <li><b>Karbohidrat:</b> 38 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 235 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Tumis biji sawi dan daun kari dengan minyak.</li><li>Masukkan bawang dan cili.</li><li>Gaulkan kacang kuda dan perasakan dengan garam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>89</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 90 / 100</div>
+    <h1>Smoothie Hijau Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 genggam bayam</li><li>1/2 biji pisang, 1/2 biji epal hijau</li><li>1 skop whey vanila</li><li>200 ml air kelapa</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 28 g</li>
+          <li><b>Karbohidrat:</b> 26 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 250 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Masukkan semua bahan ke dalam pengisar.</li><li>Kisar sehingga licin.</li><li>Minum segera.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>90</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 91 / 100</div>
+    <h1>Otak-otak Bakar (4 keping)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>150 g isi ikan tenggiri dikisar</li><li>1 biji putih telur</li><li>Rempah: cili kering, kunyit, serai, bawang</li><li>Daun pisang</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 20 g</li>
+          <li><b>Karbohidrat:</b> 10 g</li>
+          <li><b>Lemak:</b> 6 g</li>
+          <li><b>Jumlah Kalori:</b> 175 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>25 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaul ikan bersama rempah dan putih telur.</li><li>Bungkus dengan daun pisang.</li><li>Bakar di atas kuali leper selama 8 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>91</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 92 / 100</div>
+    <h1>Lepat Pisang Oat</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 biji pisang, dilenyek</li><li>30 g oat dikisar</li><li>1 sudu besar kelapa parut</li><li>Daun pisang</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 6 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 3 g</li>
+          <li><b>Jumlah Kalori:</b> 210 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>30 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Gaul pisang, oat dan kelapa.</li><li>Bungkus dengan daun pisang.</li><li>Kukus selama 20 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>92</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 93 / 100</div>
+    <h1>Puding Chia Mangga</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>2 sudu besar biji chia</li><li>150 ml susu rendah lemak</li><li>100 g mangga</li><li>1 sudu kecil madu</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 10 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 240 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit + 4 jam rendam</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rendam biji chia dalam susu dan madu.</li><li>Simpan di dalam peti sejuk selama 4 jam.</li><li>Hiaskan dengan mangga.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>93</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 94 / 100</div>
+    <h1>Roti Bakar Mentega Kacang &amp; Pisang</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 keping roti gandum penuh</li><li>1 sudu besar mentega kacang</li><li>1/2 biji pisang</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 12 g</li>
+          <li><b>Karbohidrat:</b> 38 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 280 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar roti.</li><li>Sapukan mentega kacang.</li><li>Susun hirisan pisang di atasnya.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>94</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 95 / 100</div>
+    <h1>Keropok Lekor Bakar (Sederhana)</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>100 g keropok lekor</li><li>Sos cili</li><li>Semburan minyak</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 14 g</li>
+          <li><b>Karbohidrat:</b> 24 g</li>
+          <li><b>Lemak:</b> 3 g</li>
+          <li><b>Jumlah Kalori:</b> 180 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Potong keropok lekor menjadi kepingan.</li><li>Sembur dengan minyak.</li><li>Bakar dalam air fryer pada suhu 200°C selama 10 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>95</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 96 / 100</div>
+    <h1>Shake Kurma Susu Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>4 biji kurma tanpa biji</li><li>250 ml susu rendah lemak</li><li>1 skop whey vanila</li><li>Ais</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 32 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 325 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rendam kurma dalam susu selama 5 minit.</li><li>Kisar bersama whey dan ais.</li><li>Minum segera.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>96</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 97 / 100</div>
+    <h1>Jagung Rebus Mentega Ringan</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 tongkol jagung</li><li>1 sudu kecil mentega</li><li>Secubit garam</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 5 g</li>
+          <li><b>Karbohidrat:</b> 30 g</li>
+          <li><b>Lemak:</b> 4 g</li>
+          <li><b>Jumlah Kalori:</b> 175 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Rebus jagung selama 10 minit.</li><li>Sapukan mentega.</li><li>Taburkan sedikit garam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>97</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 98 / 100</div>
+    <h1>Kuih Seri Muka Protein</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>60 g beras pulut</li><li>Lapisan atas: 1 biji telur, 1/2 skop whey, jus pandan, 50 ml santan ringan</li><li>1 sudu kecil gula</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 16 g</li>
+          <li><b>Karbohidrat:</b> 40 g</li>
+          <li><b>Lemak:</b> 8 g</li>
+          <li><b>Jumlah Kalori:</b> 295 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>45 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Kukus pulut sehingga masak dan padatkan di dalam loyang.</li><li>Pukul bahan lapisan atas dan tuang ke atas pulut.</li><li>Kukus atas api perlahan selama 20 minit.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>98</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 99 / 100</div>
+    <h1>Tauhu Bakar Kuah Kacang Mini</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>1 keping tauhu keras</li><li>Timun dan taugeh</li><li>1 sudu besar kuah kacang</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 16 g</li>
+          <li><b>Karbohidrat:</b> 10 g</li>
+          <li><b>Lemak:</b> 10 g</li>
+          <li><b>Jumlah Kalori:</b> 195 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>15 minit</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Bakar tauhu dalam air fryer selama 10 minit.</li><li>Potong dan susun sayur.</li><li>Hidangkan bersama kuah kacang.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>99</span></footer>
+</section>
+<section class="hal resepi">
+  <header class="pita"><span>SNEK</span></header>
+  <div class="isi">
+    <div class="no">RESEPI 100 / 100</div>
+    <h1>Ais Krim Protein Biskut Coklat</h1>
+    <hr>
+    <div class="grid">
+      <div class="kiri">
+        <h2>Bahan-bahan</h2>
+        <ul><li>35 g serbuk whey</li><li>200 ml susu rendah lemak</li><li>3 keping biskut coklat berkrim</li></ul>
+        <h2>Kalori &amp; Makronutrien</h2>
+        <ul class="makro">
+          <li><b>Protein:</b> 35 g</li>
+          <li><b>Karbohidrat:</b> 34 g</li>
+          <li><b>Lemak:</b> 9 g</li>
+          <li><b>Jumlah Kalori:</b> 355 kcal</li>
+        </ul>
+        <div class="masa"><svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
+<path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span>5 minit + 4 jam beku</span></div>
+      </div>
+      <figure class="foto"><div class="kosong">Gambar</div></figure>
+    </div>
+    <div class="cara">
+      <h2>Cara Penyediaan</h2>
+      <ol><li>Kisar whey bersama susu.</li><li>Hancurkan biskut dan gaulkan.</li><li>Bekukan sekurang-kurangnya 4 jam.</li></ol>
+    </div>
+  </div>
+  <footer class="kaki"><span class="logo">Bentuk<em>Badan</em></span><span>100</span></footer>
+</section>
+
+</body></html>

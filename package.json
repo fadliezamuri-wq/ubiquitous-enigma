@@ -12,7 +12,8 @@
     "test": "tsc -p tsconfig.test.json && node --test \"dist-test/tests/**/*.test.js\"",
     "fitness": "node --env-file-if-exists=fitness/.env fitness/server.mjs",
     "fitness:demo": "DEMO_MODE=1 node fitness/server.mjs",
-    "test:fitness": "node --test \"fitness/test/*.test.mjs\""
+    "test:fitness": "node --test \"fitness/test/*.test.mjs\"",
+    "buku": "node fitness/buku/bina.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

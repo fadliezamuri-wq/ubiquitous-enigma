@@ -275,6 +275,20 @@ export function createApp(cfg, { fetchImpl = fetch } = {}) {
       });
     },
 
+    // Buku resepi PDF (100 hidangan) untuk pembeli sahaja. Jana dengan: npm run buku
+    "GET /api/premium/buku": (req, res) => {
+      const user = currentUser(req);
+      if (!user) return json(res, 401, { error: "Sila log masuk." });
+      if (!user.paid) return json(res, 403, { error: "Akses Penuh belum dibeli." });
+      const file = path.join(HERE, "buku", "keluaran", "BentukBadan-100-Hidangan.pdf");
+      fs.stat(file, (err, st) => {
+        if (err) return json(res, 404, { error: "Buku belum dijana." });
+        res.writeHead(200, { "content-type": "application/pdf", "content-length": st.size, "cache-control": "private, no-store",
+          "content-disposition": 'attachment; filename="BentukBadan-100-Hidangan.pdf"' });
+        fs.createReadStream(file).pipe(res);
+      });
+    },
+
     "POST /api/checkout": async (req, res) => {
       await readJson(req); // paksa JSON (perlindungan CSRF)
       const user = currentUser(req);

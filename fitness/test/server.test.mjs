@@ -295,3 +295,13 @@ test("pesanan yang dipulangkan wang tak dibuka semula oleh callback lewat", asyn
   await call("/api/toyyibpay/callback", { form: { billcode: order.billCode, status: "1" } });
   assert.equal((await call("/api/admin/summary", { cookie: adminSid })).data.users.find((u) => u.id === jahat.id).paid, false);
 });
+
+test("buku PDF hanya untuk pembeli", async () => {
+  assert.equal((await call("/api/premium/buku")).status, 401);
+  const unpaid = await call("/api/register", { body: { name: "Belum Bayar", email: "belum@contoh.my", phone: "0122222222", password: "abcdefgh1" } });
+  assert.equal((await call("/api/premium/buku", { cookie: unpaid.cookie })).status, 403);
+  const r = await fetch(base + "/api/premium/buku", { headers: { cookie: sid } });
+  assert.ok([200, 404].includes(r.status));
+  if (r.status === 200) assert.equal(r.headers.get("content-type"), "application/pdf");
+  assert.notEqual((await call("/buku/keluaran/BentukBadan-100-Hidangan.pdf")).status, 200, "PDF tak boleh dicapai secara terus");
+});
