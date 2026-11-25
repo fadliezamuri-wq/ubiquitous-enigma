@@ -221,12 +221,18 @@ ${bahagian.map((b, i) => `
 </section>
 ${b.halaman}`).join("\n")}
 
-${Object.keys(kredit).length ? `
+${(() => {
+  const e = Object.entries(kredit).sort((a, b) => a[0] - b[0]);
+  const SAIZ = 50;
+  const muka = [];
+  for (let i = 0; i < e.length; i += SAIZ) muka.push(e.slice(i, i + SAIZ));
+  return muka.map((bah, i) => `
 <section class="hal teks kredit">
-  <h1>Kredit Foto</h1>
-  <p style="font-size:8.5pt">Foto resepi daripada Wikimedia Commons dan Pexels, digunakan di bawah lesen yang dinyatakan. Foto ialah hiasan dan mungkin berbeza daripada hidangan versi sihat dalam buku ini. Foto lain: Pexels (Lesen Pexels).</p>
-  <ol class="kredit-senarai">${Object.entries(kredit).sort((a, b) => a[0] - b[0]).map(([n, k]) => `<li value="${n}"><b>${esc(RESEPI[n - 1].nama)}</b>: ${esc(k.artist)}, ${esc(k.license)}${k.page ? `, ${esc(decodeURI(k.page).replace(/^https?:\/\//, ""))}` : ""}</li>`).join("")}</ol>
-</section>` : ""}
+  <h1>Kredit Foto${muka.length > 1 ? ` (${i + 1}/${muka.length})` : ""}</h1>
+  ${i === 0 ? `<p style="font-size:8.5pt">Foto resepi daripada Wikimedia Commons dan Pexels, digunakan di bawah lesen yang dinyatakan. Foto ialah hiasan dan mungkin berbeza daripada hidangan versi sihat dalam buku ini. Foto lain: Pexels (Lesen Pexels).</p>` : ""}
+  <ol class="kredit-senarai">${bah.map(([n, k]) => `<li value="${n}"><b>${esc(RESEPI[n - 1].nama)}</b>: ${esc(k.artist)}, ${esc(k.license)}${k.page ? `, ${esc(decodeURI(k.page).replace(/^https?:\/\//, ""))}` : ""}</li>`).join("")}</ol>
+</section>`).join("");
+})()}
 </body></html>`;
 
 const htmlPath = path.join(OUT, "buku.html");

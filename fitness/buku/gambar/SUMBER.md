@@ -20,3 +20,10 @@ Lesen tidak membenarkan foto dijual semula tanpa diubah suai sebagai produk ters
 | 12.jpg | Mangkuk tuna dan telur | https://www.pexels.com/photo/6632286/ |
 | 13.jpg | Wanita bertudung memasak | https://www.pexels.com/photo/4910234/ |
 | bab1.jpg | Lelaki Asia bersenam di gim (halaman 4) | https://www.pexels.com/photo/6551053/ |
+
+## Foto resepi (`resepi/<nombor>.jpg`)
+
+97 foto hidangan daripada Wikimedia Commons, berlesen CC0 / domain awam / CC BY / CC BY-SA.
+Nama jurugambar, lesen dan pautan setiap foto ada dalam `resepi/kredit.json` dan dicetak
+pada halaman "Kredit Foto" di hujung buku. Foto diperkecil kepada 720px (pengubahsuaian dibenarkan oleh lesen).
+Resepi 20, 88 dan 96 tiada foto padanan berlesen bebas, jadi guna foto umum Pexels.
