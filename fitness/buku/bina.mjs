@@ -28,8 +28,27 @@ const KATEGORI = [
 const jam = `<svg viewBox="0 0 48 48" class="jam" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/>
 <path d="M24 11v14l9 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`;
 
+// Foto makanan hanya dipadankan dengan resepi yang sama jenis supaya tidak mengelirukan.
+// Resepi lain menggunakan foto umum (orang berotot / bekal makanan sihat) secara bergilir.
+const PADANAN = [
+  [/^nasi lemak/i, "02.jpg"],
+  [/^nasi ayam|^nasi tomato ayam/i, "03.jpg"],
+  [/ikan bakar|bawal panggang/i, "05.jpg"],
+  [/^sate/i, "06.jpg"],
+  [/^udang bakar/i, "09.jpg"],
+  [/tuna/i, "12.jpg"],
+];
+const UMUM = ["01.jpg", "04.jpg", "07.jpg", "08.jpg", "10.jpg", "11.jpg", "13.jpg"].filter((f) => dalam.includes(f));
+let giliran = 0;
+function pilihGambar(r) {
+  const padan = PADANAN.find(([re, f]) => re.test(r.nama) && dalam.includes(f));
+  if (padan) return padan[1];
+  const senarai = UMUM.length ? UMUM : dalam;
+  return senarai.length ? senarai[giliran++ % senarai.length] : null;
+}
+
 function halamanResepi(r, nombor) {
-  const g = dalam.length ? dalam[(nombor - 1) % dalam.length] : null;
+  const g = pilihGambar(r, nombor);
   return `<section class="hal resepi">
   <header class="pita"><span>${esc(r.label.toUpperCase())}</span></header>
   <div class="isi">
@@ -171,7 +190,7 @@ const html = `<!doctype html>
   <h2>Cara membaca nilai nutrisi</h2>
   <p>Semua nilai adalah bagi <b>satu hidangan</b> dan merupakan anggaran berdasarkan sukatan bahan yang disenaraikan. Jenama bahan dan cara memasak boleh mengubah nilai sebenar. Gunakan penimbang dapur untuk ketepatan yang lebih baik.</p>
   <div class="kotak"><p><b>Contoh sehari untuk turun lemak:</b> ${contoh.map((i) => `${esc(RESEPI[i].label)} resepi ${i + 1} (${fmt(RESEPI[i].kalori)} kcal)`).join(" + ")} = <b>${fmt(contoh.reduce((t, i) => t + RESEPI[i].kalori, 0))} kcal</b>, protein ${contoh.reduce((t, i) => t + RESEPI[i].protein, 0)} g.</p></div>
-  <p style="margin-top:8mm;font-size:8.5pt;color:#5d6b62">Penafian: Kandungan buku ini adalah untuk tujuan pendidikan dan bukan pengganti nasihat perubatan. Dapatkan nasihat doktor atau pakar dietetik sebelum membuat perubahan besar pada pemakanan, terutamanya jika anda menghidap penyakit kronik, hamil atau sedang menyusu. Gambar dalam buku ini dijana menggunakan AI dan tidak menggambarkan individu sebenar.</p>
+  <p style="margin-top:8mm;font-size:8.5pt;color:#5d6b62">Penafian: Kandungan buku ini adalah untuk tujuan pendidikan dan bukan pengganti nasihat perubatan. Dapatkan nasihat doktor atau pakar dietetik sebelum membuat perubahan besar pada pemakanan, terutamanya jika anda menghidap penyakit kronik, hamil atau sedang menyusu. Foto dalam buku ini diperoleh daripada Pexels.com dan digunakan di bawah Lesen Pexels. Individu dalam foto tidak berkaitan dengan BentukBadan dan tidak menyokong produk ini. Foto digunakan sebagai hiasan dan bukan gambar sebenar resepi.</p>
 </section>
 
 <section class="hal kand">

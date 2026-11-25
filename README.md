@@ -65,6 +65,7 @@ hanya dihantar oleh server kepada akaun yang dah bayar, jadi tak boleh dibuka de
 kulit, cara guna, kandungan, 4 bab (sarapan, makan tengah hari, makan malam, snek) dan 100 resepi
 dengan bahan, kalori, protein, karbohidrat, lemak, masa dan cara penyediaan. Resepi disunting dalam
 `fitness/buku/resepi.mjs`; gambar diletak dalam `fitness/buku/gambar/` (lihat BACA.md di situ).
+Foto semasa ialah foto stok Pexels (lesen komersial percuma); senarai sumber dalam `fitness/buku/gambar/SUMBER.md`.
 Pembeli muat turun buku ini melalui `/api/premium/buku`.
 
 ### Cuba di komputer
