@@ -19,3 +19,4 @@ Lesen tidak membenarkan foto dijual semula tanpa diubah suai sebagai produk ters
 | 11.jpg | Bekal nasi dan sayur | https://www.pexels.com/photo/32287751/ |
 | 12.jpg | Mangkuk tuna dan telur | https://www.pexels.com/photo/6632286/ |
 | 13.jpg | Wanita bertudung memasak | https://www.pexels.com/photo/4910234/ |
+| bab1.jpg | Lelaki Asia bersenam di gim (halaman 4) | https://www.pexels.com/photo/6551053/ |

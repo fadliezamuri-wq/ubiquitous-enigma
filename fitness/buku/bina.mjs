@@ -14,7 +14,15 @@ fs.mkdirSync(OUT, { recursive: true });
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const gambar = fs.existsSync(GAMBAR) ? fs.readdirSync(GAMBAR).filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort() : [];
 const kulit = gambar.find((f) => f.startsWith("kulit")) || gambar[0];
-const dalam = gambar.filter((f) => f !== kulit);
+const dalam = gambar.filter((f) => f !== kulit && !f.startsWith("bab"));
+// Foto khusus setiap resepi: gambar/resepi/<nombor>.jpg, kredit dalam gambar/resepi/kredit.json
+const DIR_RESEPI = path.join(GAMBAR, "resepi");
+const kredit = fs.existsSync(path.join(DIR_RESEPI, "kredit.json")) ? JSON.parse(fs.readFileSync(path.join(DIR_RESEPI, "kredit.json"), "utf8")) : {};
+const fotoResepi = (n) => ["jpg", "jpeg", "png", "webp"].map((e) => path.join(DIR_RESEPI, `${n}.${e}`)).find((f) => fs.existsSync(f));
+const fotoBab = (no, i) => {
+  const f = gambar.find((g) => g.startsWith(`bab${no}.`));
+  return f ? src(f) : dalam.length ? src(dalam[(i * 3) % dalam.length]) : null;
+};
 const src = (f) => f ? pathToFileURL(path.join(GAMBAR, f)).href : null;
 const fmt = (n) => n.toLocaleString("ms-MY");
 
@@ -40,11 +48,13 @@ const PADANAN = [
 ];
 const UMUM = ["01.jpg", "04.jpg", "07.jpg", "08.jpg", "10.jpg", "11.jpg", "13.jpg"].filter((f) => dalam.includes(f));
 let giliran = 0;
-function pilihGambar(r) {
+function pilihGambar(r, nombor) {
+  const khusus = fotoResepi(nombor);
+  if (khusus) return pathToFileURL(khusus).href;
   const padan = PADANAN.find(([re, f]) => re.test(r.nama) && dalam.includes(f));
-  if (padan) return padan[1];
+  if (padan) return src(padan[1]);
   const senarai = UMUM.length ? UMUM : dalam;
-  return senarai.length ? senarai[giliran++ % senarai.length] : null;
+  return senarai.length ? src(senarai[giliran++ % senarai.length]) : null;
 }
 
 function halamanResepi(r, nombor) {
@@ -68,7 +78,7 @@ function halamanResepi(r, nombor) {
         </ul>
         <div class="masa">${jam}<span>${typeof r.minit === "number" ? `${r.minit} minit` : esc(r.minit)}</span></div>
       </div>
-      <figure class="foto">${g ? `<img src="${src(g)}" alt="">` : `<div class="kosong">Gambar</div>`}</figure>
+      <figure class="foto">${g ? `<img src="${g}" alt="">` : `<div class="kosong">Gambar</div>`}</figure>
     </div>
     <div class="cara">
       <h2>Cara Penyediaan</h2>
@@ -167,6 +177,10 @@ const html = `<!doctype html>
   .kaki { position: absolute; bottom: 7mm; left: 13mm; right: 13mm; display: flex; justify-content: space-between; align-items: center; font-size: 9pt; font-weight: 700; }
   .kaki .logo { font-size: 11pt; }
 
+  .kredit-senarai { columns: 2; column-gap: 8mm; padding-left: 7mm; margin: 4mm 0 0; }
+  .kredit-senarai li { font-size: 6.3pt !important; line-height: 1.3 !important; margin-bottom: .6mm; break-inside: avoid; word-break: break-all; }
+  .kredit { padding: 14mm 14mm; }
+  .kredit h1 { font-size: 22pt !important; }
   @media screen { body { background: #888; } .hal { margin: 10px auto; box-shadow: 0 4px 20px rgba(0,0,0,.3); } }
 </style></head><body>
 
@@ -200,13 +214,19 @@ const html = `<!doctype html>
 
 ${bahagian.map((b, i) => `
 <section class="hal bab">
-  <div class="gambar" style="${dalam.length ? `background-image:url('${src(dalam[(i * 3) % dalam.length])}')` : ""}"></div>
+  <div class="gambar" style="${fotoBab(b.no, i) ? `background-image:url('${fotoBab(b.no, i)}')` : ""}"></div>
   <div class="bil">${String(b.no).padStart(2, "0")}</div>
   <h1>${esc(b.label.toUpperCase())}</h1>
   <p>${esc(b.ayat)} ${b.list.length} resepi.</p>
 </section>
 ${b.halaman}`).join("\n")}
 
+${Object.keys(kredit).length ? `
+<section class="hal teks kredit">
+  <h1>Kredit Foto</h1>
+  <p style="font-size:8.5pt">Foto resepi daripada Wikimedia Commons dan Pexels, digunakan di bawah lesen yang dinyatakan. Foto ialah hiasan dan mungkin berbeza daripada hidangan versi sihat dalam buku ini. Foto lain: Pexels (Lesen Pexels).</p>
+  <ol class="kredit-senarai">${Object.entries(kredit).sort((a, b) => a[0] - b[0]).map(([n, k]) => `<li value="${n}"><b>${esc(RESEPI[n - 1].nama)}</b>: ${esc(k.artist)}, ${esc(k.license)}${k.page ? `, ${esc(decodeURI(k.page).replace(/^https?:\/\//, ""))}` : ""}</li>`).join("")}</ol>
+</section>` : ""}
 </body></html>`;
 
 const htmlPath = path.join(OUT, "buku.html");
